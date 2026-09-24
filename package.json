@@ -1,0 +1,29 @@
+{
+  "name": "sensogram-method-explorer",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Interactive article companion comparing ESW, EOT/RIFTS, IAW and Morlet wavelet phase sensograms from porous-silicon reflectance spectra. Runs entirely in the browser.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@fontsource/caprasimo": "^5.3.0",
+    "@fontsource/figtree": "^5.3.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0",
+    "vitest": "^5.0.1"
+  }
+}

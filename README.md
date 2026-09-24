@@ -1,25 +1,48 @@
-# CODING AGENTS: READ THIS FIRST
+# Sensogram Method Explorer
 
-This is a **handoff bundle** from Claude Design (claude.ai/design).
+Interactive article companion comparing four ways to turn porous-silicon reflectance
+spectra into sensograms — **ESW**, **EOT (RIFTS)**, **IAW** and **Morlet wavelet phase (MWP)** —
+side by side, on a reproducible synthetic experiment or on the user's own spectra.
+Everything runs in the browser; there is no backend and nothing is uploaded.
 
-A user mocked up designs in HTML/CSS/JS using an AI design tool, then exported this bundle so a coding agent can implement the designs for real.
+## Develop
 
-## What you should do — IMPORTANT
+```sh
+npm ci
+npm run dev        # http://localhost:5173
+npm test           # Vitest numerical + parser tests
+npm run build      # type-check, then static build into dist/
+npm run preview    # serve dist/ locally
+```
 
-**Read the chat transcripts first.** There are 3 chat transcript(s) in `chats/`. The transcripts show the full back-and-forth between the user and the design assistant — they tell you **what the user actually wants** and **where they landed** after iterating. Don't skip them. The final HTML files are the output, but the chat is where the intent lives.
+Requires Node 20+.
 
-**Read `project/Sensogram Method Explorer.dc.html` in full.** The user had this file open when they triggered the handoff, so it's almost certainly the primary design they want built. Read it top to bottom — don't skim. Then **follow its imports**: open every file it pulls in (shared components, CSS, scripts) so you understand how the pieces fit together before you start implementing.
+## Deploy
 
-**If anything is ambiguous, ask the user to confirm before you start implementing.** It's much cheaper to clarify scope up front than to build the wrong thing.
+`npm run build` produces a fully static `dist/` (HTML, JS, CSS, fonts, images and the two
+bundled example datasets under `dist/examples/`). Asset paths are relative (`base: './'`),
+so `dist/` can be served from any directory or sub-path by any static web server
+(nginx, Caddy, Apache, GitHub Pages…). No server-side configuration or routing rules
+are needed — the app has no client-side routes. The bundled examples are fetched over
+HTTP, so open the site through a web server rather than from `file://`.
 
-## About the design files
+## Layout
 
-The design medium is **HTML/CSS/JS** — these are prototypes, not production code. Your job is to **recreate them pixel-perfectly** in whatever technology makes sense for the target codebase (React, Vue, native, whatever fits). Match the visual output; don't copy the prototype's internal structure unless it happens to fit.
-
-**Don't render these files in a browser or take screenshots unless the user asks you to.** Everything you need — dimensions, colors, layout rules — is spelled out in the source. Read the HTML and CSS directly; a screenshot won't tell you anything they don't.
-
-## Bundle contents
-
-- `README.md` — this file
-- `chats/` — conversation transcripts (read these!)
-- `project/` — the `Interferometric sensing prototype` project files (HTML prototypes, assets, components)
+```
+src/
+  analysis/     pure, React-free numerics
+    numeric.ts      FFT, Savitzky–Golay, detrend, interpolation, seeded RNG
+    kdomain.ts      1/λ resampling, RIFTS FFT peak, Morlet wavelet phase
+    methods.ts      ESW and IAW per-spectrum values
+    synthetic.ts    transfer-matrix film models, noisy time series, feature picking
+    metrics.ts      interval statistics (SD, MAD, drift, response, SNR, RMSE)
+    pipeline.ts     the full analysis pass, cooperative yielding, per-method timing
+    edu.ts          noise-free illustration data for Home / Methods
+  io/           parsing (TXT/CSV/TSV/matrix/ZIP), validation + common grid, export
+  components/   Plot (interactive SVG), form controls, method panels
+  pages/        Home, Methods, Experiments (data, spectra, sensograms, overview,
+                diagnostics, export)
+  styles/       Organic design-system tokens + app styles
+public/examples/  bundled PrS-47-MC (multilayer) and SL-P2-MA (single layer) excerpts
+project/, chats/, HANDOFF.md   the Claude Design prototype this app implements
+```

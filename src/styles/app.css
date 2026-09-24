@@ -1,0 +1,63 @@
+/* App-level styles layered on the Organic design system (organic.css). */
+
+.sg-tab{font-family:var(--font-heading);font-size:13.5px;padding:7px 14px;border-radius:999px;border:1px solid transparent;background:transparent;cursor:pointer;color:var(--color-text);white-space:nowrap}
+.seg-opt{white-space:nowrap;position:relative}
+.btn{white-space:nowrap}
+.sg-tab:hover{background:color-mix(in srgb,var(--color-text) 7%,transparent)}
+.sg-tab[aria-selected="true"]{background:var(--color-accent);color:var(--color-bg)}
+.sg-tab:disabled{opacity:.4;cursor:not-allowed}
+.sg-range{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:999px;background:color-mix(in srgb,var(--color-text) 16%,transparent);outline:none;accent-color:var(--color-accent)}
+.sg-range:focus-visible{outline:2px solid var(--color-accent);outline-offset:3px}
+.sg-range::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:999px;background:var(--color-accent);border:2px solid var(--color-bg);box-shadow:var(--shadow-sm);cursor:pointer}
+.sg-range::-moz-range-thumb{width:14px;height:14px;border-radius:999px;background:var(--color-accent);border:2px solid var(--color-bg);cursor:pointer}
+.sg-num{font-variant-numeric:tabular-nums}
+.sg-scroll{scrollbar-width:thin;scrollbar-color:transparent transparent;transition:scrollbar-color .2s}
+.sg-scroll:hover{scrollbar-color:color-mix(in srgb,var(--color-text) 22%,transparent) transparent}
+.sg-scroll::-webkit-scrollbar{width:6px}
+.sg-scroll::-webkit-scrollbar-track{background:transparent}
+.sg-scroll::-webkit-scrollbar-thumb{background:transparent;border-radius:999px}
+.sg-scroll:hover::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--color-text) 22%,transparent)}
+.sg-scroll::-webkit-scrollbar-thumb:active{background:color-mix(in srgb,var(--color-accent) 60%,transparent)}
+a{color:var(--color-accent-700)}
+a:hover{color:var(--color-accent-800)}
+
+/* muted text: set --mute to the ink percentage (defaults to 55 %) */
+.sg-muted{color:color-mix(in srgb,var(--color-text) var(--mute,55%),transparent)}
+.sg-dot{display:inline-block;border-radius:999px;flex:none}
+
+/* hover tints that the prototype expressed as inline style-hover */
+.sg-brand{display:flex;align-items:center;gap:10px;margin-right:auto;background:none;border:none;padding:4px 10px 4px 2px;border-radius:999px;cursor:pointer;color:inherit;font:inherit}
+.sg-brand:hover{background:color-mix(in srgb,var(--color-text) 6%,transparent)}
+.sg-valbtn{background:none;border:none;padding:1px 5px;border-radius:7px;font:inherit;font-size:12px;font-weight:600;cursor:text;color:inherit}
+.sg-valbtn:hover{background:color-mix(in srgb,var(--color-accent) 16%,transparent)}
+.sg-step{width:19px;height:19px;flex:none;display:flex;align-items:center;justify-content:center;background:none;border:1px solid color-mix(in srgb,var(--color-text) 16%,transparent);border-radius:999px;font-size:13px;line-height:1;cursor:pointer;color:inherit;padding:0}
+.sg-step:hover{background:color-mix(in srgb,var(--color-accent) 16%,transparent)}
+.sg-disclose{display:flex;align-items:center;gap:8px;background:none;border:none;padding:0;font:inherit;cursor:pointer;color:inherit;text-align:left}
+.sg-disclose:hover{color:var(--color-accent-700)}
+
+/* plot toolbar */
+.sg-tool{padding:4px;border-radius:999px;line-height:0}
+.sg-tool[data-on="true"]{background:color-mix(in srgb,var(--color-accent) 22%,transparent)}
+.sg-tool:hover,.sg-tool[data-on="true"]:hover{background:color-mix(in srgb,var(--color-accent) 14%,transparent)}
+.sg-plot-svg{width:100%;display:block;background:#fdfaf3;border:1px solid color-mix(in srgb,var(--color-text) 12%,transparent);border-radius:14px;overflow:visible;touch-action:none}
+.sg-reader{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;padding:5px 9px;border-radius:10px;background:color-mix(in srgb,var(--color-accent-2) 10%,transparent);font-size:11.5px;font-variant-numeric:tabular-nums;min-height:23px}
+
+/* hidden radio inside segmented options */
+.seg-opt input{position:absolute;opacity:0;pointer-events:none}
+
+.sg-mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.sg-formula{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:color-mix(in srgb,var(--color-text) 6%,transparent);border-radius:12px;align-self:flex-start;white-space:nowrap;max-width:100%;overflow-x:auto}
+.sg-note{font-size:11px;line-height:1.5}
+
+/* experiments workspace: control column + results; stacks on narrow screens */
+.sg-work{display:grid;grid-template-columns:312px minmax(0,1fr);gap:26px;margin-top:20px;align-items:start}
+.sg-controls{position:sticky;top:74px;max-height:calc(100vh - 92px);overflow-y:auto;overscroll-behavior:contain;padding:2px 8px 16px 2px;margin:-2px -8px 0 -2px;display:flex;flex-direction:column;gap:14px}
+@media (max-width: 860px){
+  .sg-work{grid-template-columns:minmax(0,1fr)}
+  .sg-controls{position:static;max-height:none;overflow:visible;margin:0;padding:0}
+}
+@media (max-width: 520px){
+  .sg-page{padding-left:16px !important;padding-right:16px !important}
+  h1.sg-hero{font-size:36px !important}
+}
+@media (min-width: 600px){ .sg-span2{grid-column:span 2} }
