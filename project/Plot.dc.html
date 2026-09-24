@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/organic-294d1fd7-f409-4ee6-9c79-6121ef98acc2/styles.css">
+  <script src="_ds/organic-294d1fd7-f409-4ee6-9c79-6121ef98acc2/_ds_bundle.js"></script>
+</helmet>
+<div style="{{ g.wrapStyle }}">
+  <div style="{{ g.backdropStyle }}" onClick="{{ shrink }}"></div>
+  <figure style="{{ g.figStyle }}">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:20px">
+      <div style="min-width:0;display:flex;flex-direction:column">
+        <div style="font-family:var(--font-heading);font-size:14px;letter-spacing:-0.01em">{{ plot.title }}</div>
+        <div style="font-size:11px;color:color-mix(in srgb, var(--color-text) 52%, transparent)">{{ plot.note }}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:2px;flex:none">
+        <button class="btn btn-ghost" title="Zoom in (wheel up)" onClick="{{ zoomIn }}" style="padding:4px;border-radius:999px;line-height:0" style-hover="background:color-mix(in srgb,var(--color-accent) 14%,transparent)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+        </button>
+        <button class="btn btn-ghost" title="Zoom out (wheel down)" onClick="{{ zoomOut }}" style="padding:4px;border-radius:999px;line-height:0" style-hover="background:color-mix(in srgb,var(--color-accent) 14%,transparent)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+        </button>
+        <button class="btn btn-ghost" title="Rescale Y to the visible window" onClick="{{ toggleFit }}" style="padding:4px;border-radius:999px;line-height:0;background:{{ g.fitBg }}" style-hover="background:color-mix(in srgb,var(--color-accent) 14%,transparent)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6 12 2 16 6"></path><path d="M8 18 12 22 16 18"></path><line x1="12" y1="2" x2="12" y2="22"></line></svg>
+        </button>
+        <button class="btn btn-ghost" title="Rescale X to the full range" onClick="{{ reset }}" style="padding:4px;border-radius:999px;line-height:0" style-hover="background:color-mix(in srgb,var(--color-accent) 14%,transparent)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8 2 12 6 16"></path><path d="M18 8 22 12 18 16"></path><line x1="2" y1="12" x2="22" y2="12"></line></svg>
+        </button>
+        <button class="btn btn-ghost" title="Data reader — crosshair and values" onClick="{{ toggleReader }}" style="padding:4px;border-radius:999px;line-height:0;background:{{ g.readBg }}" style-hover="background:color-mix(in srgb,var(--color-accent) 14%,transparent)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><line x1="22" y1="12" x2="18" y2="12"></line><line x1="6" y1="12" x2="2" y2="12"></line><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line></svg>
+        </button>
+        <button class="btn btn-ghost" title="Save this figure as a 2× PNG" onClick="{{ savePng }}" style="padding:4px;border-radius:999px;line-height:0" style-hover="background:color-mix(in srgb,var(--color-accent) 14%,transparent)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="M7 11l5 5 5-5"></path><path d="M4 21h16"></path></svg>
+        </button>
+        <button class="btn btn-ghost" title="{{ g.bigTitle }}" onClick="{{ toggleBig }}" style="padding:4px;border-radius:999px;line-height:0" style-hover="background:color-mix(in srgb,var(--color-accent) 14%,transparent)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="{{ g.bigIcon }}"></path></svg>
+        </button>
+      </div>
+    </div>
+    <svg ref="{{ svgRef }}" viewBox="{{ g.viewBox }}" preserveAspectRatio="xMidYMid meet" style="width:100%;display:block;background:#fdfaf3;border:1px solid color-mix(in srgb, var(--color-text) 12%, transparent);border-radius:14px;overflow:visible;touch-action:none">
+      <defs>
+        <clipPath id="{{ g.clipId }}">
+          <rect x="{{ g.clip.x }}" y="{{ g.clip.y }}" width="{{ g.clip.w }}" height="{{ g.clip.h }}"></rect>
+        </clipPath>
+      </defs>
+      <g clip-path="{{ g.clipRef }}">
+      <sc-for list="{{ g.bands }}" as="b" hint-placeholder-count="0">
+        <rect x="{{ b.x }}" y="{{ b.y }}" width="{{ b.w }}" height="{{ b.h }}" fill="{{ b.fill }}"></rect>
+      </sc-for>
+      <sc-for list="{{ g.grid }}" as="gl" hint-placeholder-count="5">
+        <line x1="{{ gl.x1 }}" y1="{{ gl.y1 }}" x2="{{ gl.x2 }}" y2="{{ gl.y2 }}" stroke="#201e1d" stroke-opacity="0.09" stroke-width="1"></line>
+      </sc-for>
+      <sc-for list="{{ g.zero }}" as="z" hint-placeholder-count="0">
+        <line x1="{{ z.x1 }}" y1="{{ z.y1 }}" x2="{{ z.x2 }}" y2="{{ z.y2 }}" stroke="#201e1d" stroke-opacity="0.3" stroke-width="1"></line>
+      </sc-for>
+      <sc-for list="{{ g.series }}" as="s" hint-placeholder-count="2">
+        <path d="{{ s.d }}" fill="none" stroke="{{ s.color }}" stroke-width="{{ s.width }}" stroke-dasharray="{{ s.dash }}" stroke-linejoin="round" stroke-linecap="round" opacity="{{ s.opacity }}"></path>
+      </sc-for>
+      <sc-for list="{{ g.dots }}" as="d" hint-placeholder-count="0">
+        <circle cx="{{ d.x }}" cy="{{ d.y }}" r="{{ d.r }}" fill="{{ d.color }}"></circle>
+      </sc-for>
+      <sc-for list="{{ g.vlines }}" as="v" hint-placeholder-count="0">
+        <line x1="{{ v.x }}" y1="{{ v.y1 }}" x2="{{ v.x }}" y2="{{ v.y2 }}" stroke="{{ v.color }}" stroke-width="1.25" stroke-dasharray="4 3"></line>
+      </sc-for>
+      <sc-for list="{{ g.cross }}" as="c" hint-placeholder-count="0">
+        <line x1="{{ c.x }}" y1="{{ c.y1 }}" x2="{{ c.x }}" y2="{{ c.y2 }}" stroke="#201e1d" stroke-opacity="0.45" stroke-width="1"></line>
+      </sc-for>
+      <sc-for list="{{ g.crossDots }}" as="c" hint-placeholder-count="0">
+        <circle cx="{{ c.x }}" cy="{{ c.y }}" r="3.6" fill="#fdfaf3" stroke="{{ c.color }}" stroke-width="2"></circle>
+      </sc-for>
+      <sc-for list="{{ g.boxes }}" as="b" hint-placeholder-count="0">
+        <rect x="{{ b.x }}" y="{{ b.y }}" width="{{ b.w }}" height="{{ b.h }}" fill="#c67139" fill-opacity="0.13" stroke="#c67139" stroke-width="1" stroke-dasharray="3 3"></rect>
+      </sc-for>
+      </g>
+      <rect x="{{ g.frame.x }}" y="{{ g.frame.y }}" width="{{ g.frame.w }}" height="{{ g.frame.h }}" fill="none" stroke="#201e1d" stroke-opacity="0.55" stroke-width="1.1"></rect>
+      <sc-for list="{{ g.tickMarks }}" as="t" hint-placeholder-count="0">
+        <line x1="{{ t.x1 }}" y1="{{ t.y1 }}" x2="{{ t.x2 }}" y2="{{ t.y2 }}" stroke="#201e1d" stroke-opacity="0.55" stroke-width="1.1"></line>
+      </sc-for>
+      {{ g.axisText }}
+      <rect x="{{ g.clip.x }}" y="{{ g.clip.y }}" width="{{ g.clip.w }}" height="{{ g.clip.h }}" fill="transparent" style="cursor:crosshair" onPointerDown="{{ onDown }}" onPointerMove="{{ onMove }}" onPointerUp="{{ onUp }}" onPointerLeave="{{ onLeave }}" onDoubleClick="{{ reset }}"></rect>
+      <sc-for list="{{ g.vlineHandles }}" as="v" hint-placeholder-count="0">
+        <g style="cursor:col-resize" onPointerDown="{{ v.down }}" onPointerMove="{{ vlineMove }}" onPointerUp="{{ vlineUp }}">
+          <title>{{ v.title }}</title>
+          <rect x="{{ v.x }}" y="{{ v.y }}" width="{{ v.w }}" height="{{ v.h }}" fill="transparent"></rect>
+          <circle cx="{{ v.lineX }}" cy="{{ v.capY }}" r="4.5" fill="{{ v.color }}"></circle>
+        </g>
+      </sc-for>
+      {{ g.markerText }}
+      <sc-for list="{{ g.bandHandles }}" as="b" hint-placeholder-count="0">
+        <g style="cursor:col-resize" onPointerDown="{{ b.down }}" onPointerMove="{{ bandMove }}" onPointerUp="{{ bandUp }}">
+          <title>{{ b.title }}</title>
+          <rect x="{{ b.x }}" y="{{ b.y }}" width="{{ b.w }}" height="{{ b.h }}" fill="transparent"></rect>
+          <line x1="{{ b.lineX }}" y1="{{ b.y }}" x2="{{ b.lineX }}" y2="{{ b.lineY2 }}" stroke="{{ b.color }}" stroke-opacity="0.34" stroke-width="1.5" stroke-dasharray="3 3"></line>
+          <rect x="{{ b.x }}" y="{{ b.y }}" width="{{ b.w }}" height="9" rx="4" fill="{{ b.color }}" fill-opacity="0.34"></rect>
+        </g>
+      </sc-for>
+    </svg>
+    <sc-if value="{{ g.hasRead }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;padding:5px 9px;border-radius:10px;background:color-mix(in srgb,var(--color-accent-2) 10%,transparent);font-size:11.5px;font-variant-numeric:tabular-nums;min-height:23px">
+        <span style="font-weight:600">{{ g.readX }}</span>
+        <sc-for list="{{ g.readRows }}" as="r" hint-placeholder-count="0">
+          <span style="display:flex;align-items:center;gap:5px">
+            <span style="width:9px;height:9px;border-radius:999px;flex:none;background:{{ r.color }}"></span>
+            <span style="color:color-mix(in srgb,var(--color-text) 62%,transparent)">{{ r.label }}</span>
+            <span style="font-weight:600">{{ r.val }}</span>
+          </span>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{ g.hasLegend }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex;flex-wrap:wrap;gap:4px 14px;padding-top:2px">
+        <sc-for list="{{ g.legend }}" as="s" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:6px;font-size:11.5px;white-space:nowrap;flex:none">
+            <svg width="20" height="8" style="display:block;flex:none"><line x1="0" y1="4" x2="20" y2="4" stroke="{{ s.color }}" stroke-width="{{ s.width }}" stroke-dasharray="{{ s.dash }}" stroke-linecap="round"></line></svg>
+            <span>{{ s.label }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{ g.hasData }}" hint-placeholder-val="{{ false }}">
+      <div style="font-size:10.5px;color:color-mix(in srgb,var(--color-text) 40%,transparent)">Drag to zoom a range · shift-drag to pan · wheel to zoom · double-click to reset{{ g.zoomNote }}</div>
+    </sc-if>
+  </figure>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:800,&quot;height&quot;:360},&quot;plot&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;PlotSpec&quot;}}">
+let PIDC = 0;
+
+class Component extends DCLogic {
+  state = { zx: null, fitY: false, big: false, reader: true, hov: null, box: null };
+  pid = ++PIDC;
+  svgRef = React.createRef();
+
+  componentDidMount() {
+    this._wheel = e => {
+      const o = this.props.plot; if (!o || !o.series || !o.series.length) return;
+      e.preventDefault();
+      const gm = this._g; if (!gm) return;
+      const pt = this.pt(e); if (!pt) return;
+      const ax = gm.inv(Math.max(gm.L, Math.min(gm.W - gm.R, pt.sx)));
+      this.zoomAt(ax, e.deltaY > 0 ? 1 / 0.82 : 0.82);
+    };
+    this._key = e => { if (e.key === 'Escape' && this.state.big) this.setState({ big: false }); };
+    const el = this.svgRef.current;
+    if (el) el.addEventListener('wheel', this._wheel, { passive: false });
+    document.addEventListener('keydown', this._key);
+  }
+  componentWillUnmount() {
+    const el = this.svgRef.current;
+    if (el) el.removeEventListener('wheel', this._wheel);
+    document.removeEventListener('keydown', this._key);
+  }
+
+  // ---------- helpers ----------
+  ticks(a, b, n) {
+    if (!(b > a)) return [a];
+    const raw = (b - a) / n, mag = Math.pow(10, Math.floor(Math.log10(raw))), norm = raw / mag;
+    const step = (norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 5 ? 5 : 10) * mag;
+    const out = []; for (let v = Math.ceil(a / step) * step; v <= b + step * 1e-6; v += step) out.push(+v.toFixed(10));
+    return out;
+  }
+  fmtTick(v, span) {
+    const a = Math.abs(span);
+    const d = a >= 100 ? 0 : a >= 10 ? 1 : a >= 1 ? 2 : a >= 0.1 ? 3 : a >= 0.01 ? 4 : 5;
+    return v.toFixed(d);
+  }
+  fmtVal(v, span) {
+    if (!Number.isFinite(v)) return '—';
+    const a = Math.abs(span);
+    const d = a >= 100 ? 1 : a >= 10 ? 2 : a >= 1 ? 3 : a >= 0.1 ? 4 : 5;
+    return v.toFixed(d);
+  }
+  pt(e) {
+    const el = this.svgRef.current; if (!el) return null;
+    const r = el.getBoundingClientRect(); if (!r.width || !r.height) return null;
+    const gm = this._g || { W: 800, H: 270 };
+    return { sx: (e.clientX - r.left) * gm.W / r.width, sy: (e.clientY - r.top) * gm.H / r.height };
+  }
+  setDomain(x0, x1) {
+    const gm = this._g; if (!gm) return;
+    const full = gm.fx1 - gm.fx0, min = full / 400;
+    let a = x0, b = x1;
+    if (b - a < min) { const c = (a + b) / 2; a = c - min / 2; b = c + min / 2; }
+    if (b - a >= full) { this.setState({ zx: null }); return; }
+    if (a < gm.fx0) { b += gm.fx0 - a; a = gm.fx0; }
+    if (b > gm.fx1) { a -= b - gm.fx1; b = gm.fx1; }
+    this.setState({ zx: [Math.max(gm.fx0, a), Math.min(gm.fx1, b)] });
+  }
+  zoomAt(anchor, f) {
+    const gm = this._g; if (!gm) return;
+    this.setDomain(anchor - (anchor - gm.x0) * f, anchor + (gm.x1 - anchor) * f);
+  }
+
+  // ---------- band editing ----------
+  bandDown(e, key, which) {
+    e.stopPropagation();
+    if (e.target.setPointerCapture) e.target.setPointerCapture(e.pointerId);
+    this._bd = { key, which };
+  }
+  bandMove(e) {
+    const bd = this._bd; if (!bd) return;
+    const o = this.props.plot || {}, g = this._g; if (!g || !o.onBand) return;
+    const pt = this.pt(e); if (!pt) return;
+    const band = (o.bands || []).find(x => x.key === bd.key); if (!band) return;
+    const v = g.inv(Math.max(g.L, Math.min(g.W - g.R, pt.sx)));
+    let a = bd.which === 'a' ? v : band.a, b = bd.which === 'b' ? v : band.b;
+    if (a > b) { const t = a; a = b; b = t; }
+    o.onBand(bd.key, Math.max(g.fx0, a), Math.min(g.fx1, b));
+  }
+  bandUp() { this._bd = null; }
+
+  vlineDown(e, key) {
+    e.stopPropagation();
+    if (e.target.setPointerCapture) e.target.setPointerCapture(e.pointerId);
+    this._vd = key;
+  }
+  vlineMove(e) {
+    if (!this._vd) return;
+    const o = this.props.plot || {}, g = this._g;
+    if (!g || !o.onVline) return;
+    const pt = this.pt(e); if (!pt) return;
+    o.onVline(this._vd, g.inv(Math.max(g.L, Math.min(g.W - g.R, pt.sx))));
+  }
+  vlineUp() { this._vd = null; }
+
+  // Writes the figure exactly as shown to a 2x PNG, so a reader can lift any panel
+  // straight into a manuscript without a screenshot tool.
+  savePng() {
+    const el = this.svgRef.current; if (!el) return;
+    const gm = this._g || { W: 800, H: 270 }, scale = 2;
+    const clone = el.cloneNode(true);
+    clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    clone.setAttribute('width', gm.W);
+    clone.setAttribute('height', gm.H);
+    const bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    bg.setAttribute('width', gm.W); bg.setAttribute('height', gm.H); bg.setAttribute('fill', '#fdfaf3');
+    clone.insertBefore(bg, clone.firstChild);
+    const svgText = new XMLSerializer().serializeToString(clone);
+    const url = URL.createObjectURL(new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' }));
+    const img = new Image();
+    img.onload = () => {
+      const cv = document.createElement('canvas');
+      cv.width = gm.W * scale; cv.height = gm.H * scale;
+      const cx = cv.getContext('2d');
+      cx.fillStyle = '#fdfaf3'; cx.fillRect(0, 0, cv.width, cv.height);
+      cx.drawImage(img, 0, 0, cv.width, cv.height);
+      URL.revokeObjectURL(url);
+      const name = ((this.props.plot && this.props.plot.title) || 'figure').replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase() || 'figure';
+      cv.toBlob(b => {
+        const u = URL.createObjectURL(b), a = document.createElement('a');
+        a.href = u; a.download = name + '.png';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(u), 3000);
+      }, 'image/png');
+    };
+    img.onerror = () => URL.revokeObjectURL(url);
+    img.src = url;
+  }
+
+  // ---------- geometry ----------
+  build() {
+    const o = this.props.plot || {};
+    const st = this.state;
+    const W = 800, H = o.h || 270, L = o.L || 66, R = 16, T = 14, B = 34;
+    const ser = (o.series || []).filter(s => s && s.y && s.y.length);
+    const hasData = ser.length > 0;
+
+    let fx0 = o.xmin, fx1 = o.xmax;
+    if (fx0 === undefined) {
+      fx0 = Infinity; fx1 = -Infinity;
+      ser.forEach(s => { const xs = s.x || o.x || []; for (let i = 0; i < xs.length; i++) { const v = xs[i]; if (v < fx0) fx0 = v; if (v > fx1) fx1 = v; } });
+    }
+    if (!(fx1 > fx0)) { fx0 = 0; fx1 = 1; }
+    const x0 = st.zx ? st.zx[0] : fx0, x1 = st.zx ? st.zx[1] : fx1;
+
+    let y0, y1;
+    if (o.ymin !== undefined && !st.fitY) { y0 = o.ymin; y1 = o.ymax; }
+    else {
+      y0 = Infinity; y1 = -Infinity;
+      ser.forEach(s => {
+        const xs = s.x || o.x || [];
+        for (let i = 0; i < s.y.length; i++) {
+          const v = s.y[i]; if (!Number.isFinite(v)) continue;
+          if (st.fitY) { const xv = xs[i]; if (!(xv >= x0 && xv <= x1)) continue; }
+          if (v < y0) y0 = v; if (v > y1) y1 = v;
+        }
+      });
+      if (!(y1 > y0)) { const c = Number.isFinite(y0) ? y0 : 0; y0 = c - 1; y1 = c + 1; }
+      const pad = (y1 - y0) * 0.09; y0 -= pad; y1 += pad;
+    }
+
+    const px = v => L + (v - x0) / (x1 - x0) * (W - L - R);
+    const py = v => T + (1 - (v - y0) / (y1 - y0)) * (H - T - B);
+    const inv = sx => x0 + (sx - L) / (W - L - R) * (x1 - x0);
+
+    const grid = [], xtl = [], ytl = [], tickMarks = [];
+    const MAJ = 6, MIN = 3.5, xR = W - R, yB = H - B;
+    const xv = this.ticks(x0, x1, 6), yv = this.ticks(y0, y1, 5);
+    const tk = (sx, sy, dx, dy, len) => tickMarks.push({ x1: sx, y1: sy, x2: sx + dx * len, y2: sy + dy * len });
+    const minors = (vals, lim) => {
+      if (vals.length < 2) return [];
+      const step = (vals[1] - vals[0]) / 5, out = [];
+      for (let v = vals[0] - step * 4; v <= vals[vals.length - 1] + step * 4 + step * 1e-6; v += step) {
+        if (v < lim[0] || v > lim[1]) continue;
+        if (vals.some(t => Math.abs(t - v) < Math.abs(step) * 1e-3)) continue;
+        out.push(v);
+      }
+      return out;
+    };
+    xv.forEach((v, i) => {
+      const sx = px(v);
+      grid.push({ x1: sx, y1: T, x2: sx, y2: yB });
+      // end labels are anchored inward so they cannot hang outside the frame
+      const anchor = i === 0 && sx < L + 12 ? 'start' : (i === xv.length - 1 && sx > xR - 12 ? 'end' : 'middle');
+      xtl.push({ x: sx, y: yB + 17, anchor, label: o.xfmt ? o.xfmt(v) : this.fmtTick(v, x1 - x0) });
+      tk(sx, yB, 0, -1, MAJ); tk(sx, T, 0, 1, MAJ);
+    });
+    minors(xv, [x0, x1]).forEach(v => { const sx = px(v); tk(sx, yB, 0, -1, MIN); tk(sx, T, 0, 1, MIN); });
+    yv.forEach(v => {
+      const sy = py(v);
+      grid.push({ x1: L, y1: sy, x2: xR, y2: sy });
+      ytl.push({ x: L - 10, y: sy + 4, label: this.fmtTick(v, y1 - y0) });
+      tk(L, sy, 1, 0, MAJ); tk(xR, sy, -1, 0, MAJ);
+    });
+    minors(yv, [y0, y1]).forEach(v => { const sy = py(v); tk(L, sy, 1, 0, MIN); tk(xR, sy, -1, 0, MIN); });
+
+    const series = ser.map(s => {
+      const xs = s.x || o.x; let d = '', pen = false;
+      for (let i = 0; i < s.y.length; i++) {
+        const v = s.y[i];
+        if (!Number.isFinite(v) || !Number.isFinite(xs[i])) { pen = false; continue; }
+        d += (pen ? 'L' : 'M') + px(xs[i]).toFixed(2) + ' ' + py(v).toFixed(2) + ' '; pen = true;
+      }
+      return { d, color: s.color, width: s.width || 1.7, dash: s.dash || '', opacity: s.opacity === undefined ? 1 : s.opacity, label: s.label };
+    });
+
+    const bands = (o.bands || []).map(b => ({ x: px(b.a), y: T, w: Math.max(0, px(b.b) - px(b.a)), h: H - T - B, fill: b.fill }));
+    // draggable band edges: a band carrying a key can be reshaped by pointer
+    const bandHandles = [];
+    if (o.onBand) (o.bands || []).forEach(b => {
+      if (!b.key) return;
+      ['a', 'b'].forEach(which => {
+        const sx = px(b[which]);
+        if (!(sx >= L - 6 && sx <= W - R + 6)) return;
+        bandHandles.push({
+          key: b.key + which, x: sx - 6, y: T, w: 12, h: H - T - B, lineX: sx, lineY2: H - B,
+          color: b.edge || '#201e1d',
+          title: (b.label || 'Interval') + ' ' + (which === 'a' ? 'start' : 'end') + ' \u2014 drag to move',
+          down: e => this.bandDown(e, b.key, which)
+        });
+      });
+    });
+    const zero = (y0 < 0 && y1 > 0 && o.zero !== false) ? [{ x1: L, y1: py(0), x2: W - R, y2: py(0) }] : [];
+    const dots = (o.dots || []).map(d => ({ x: px(d.x), y: py(d.y), r: d.r || 3.4, color: d.color }));
+    const vlines = (o.vlines || []).map(v => ({ x: px(v.x), y1: T, y2: H - B, color: v.color }));
+    // A vline carrying a key can be dragged along x, the same way band edges are.
+    const vlineHandles = [];
+    if (o.onVline) (o.vlines || []).forEach(v => {
+      if (!v.key) return;
+      const sx = px(v.x);
+      if (!(sx >= L - 7 && sx <= W - R + 7)) return;
+      vlineHandles.push({
+        key: v.key, x: sx - 7, y: T, w: 14, h: H - T - B, lineX: sx, capY: T + 5, color: v.color,
+        label: v.label || '', val: v.x,
+        title: (v.label || 'Marker') + ' — drag to move',
+        down: e => this.vlineDown(e, v.key)
+      });
+    });
+    const labels = [];
+    if (o.xlabel) labels.push({ x: L + (W - L - R) / 2, y: H - 4, label: o.xlabel, anchor: 'middle', transform: 'translate(0,0)' });
+    if (o.ylabel) labels.push({ x: 14, y: T + (H - T - B) / 2, label: o.ylabel, anchor: 'middle', transform: 'rotate(-90 14 ' + (T + (H - T - B) / 2) + ')' });
+    const markerText = React.createElement('g', { 'aria-hidden': 'true', style: { pointerEvents: 'none' } },
+      vlineHandles.filter(v => v.label).map((v, i) => {
+        const end = v.lineX > W - R - 70;
+        return React.createElement('text', {
+          key: 'm' + i, x: v.lineX + (end ? -8 : 8), y: T + 9, textAnchor: end ? 'end' : 'start',
+          fontSize: 10.5, fontFamily: 'Figtree, system-ui, sans-serif', fontWeight: 600, fill: v.color
+        }, v.label + ' ' + this.fmtVal(v.val, x1 - x0));
+      }));
+
+    const legend = series.filter(s => s.label).map(s => ({ label: s.label, color: s.color, width: Math.max(2, s.width), dash: s.dash }));
+
+    // SVG text must receive real text children, so the tick numbers and axis titles are
+    // built as elements here rather than through template interpolation.
+    const FONT = 'Figtree, system-ui, sans-serif';
+    const txt = (key, x, y, anchor, size, op, label, transform) => React.createElement('text', {
+      key, x, y, textAnchor: anchor, fontSize: size, fontFamily: FONT,
+      fill: '#201e1d', fillOpacity: op, transform
+    }, label);
+    const axisText = React.createElement('g', { 'aria-hidden': 'true' },
+      xtl.map((t, i) => txt('x' + i, t.x, t.y, t.anchor, 11, 0.62, t.label)),
+      ytl.map((t, i) => txt('y' + i, t.x, t.y, 'end', 11, 0.62, t.label)),
+      labels.map((l, i) => txt('l' + i, l.x, l.y, l.anchor, 11.5, 0.75, l.label, l.transform))
+    );
+
+    // The reader row is always rendered when the reader is on, so the layout does not
+    // jump as the pointer enters and leaves the plot; values fall back to em-dashes.
+    const cross = [], crossDots = [], readRows = [];
+    let readX = '', hasRead = false;
+    if (st.reader && hasData && o.reader !== false && ser.some(s => s.label)) {
+      const live = st.hov !== null && !st.box;
+      const sx = live ? Math.max(L, Math.min(W - R, st.hov)) : null;
+      const xv = live ? inv(sx) : NaN;
+      if (live) cross.push({ x: sx, y1: T, y2: H - B });
+      hasRead = true;
+      const xName = o.xlabel ? o.xlabel.replace(/\s*\(.*\)\s*$/, '') + ' ' : '';
+      readX = xName + (live ? this.fmtVal(xv, x1 - x0) + (o.xunit ? ' ' + o.xunit : '') : '\u2014');
+      ser.forEach((s, si) => {
+        if (!s.label) return;
+        const xs = s.x || o.x; let bi = -1, bd = Infinity;
+        if (live) for (let i = 0; i < s.y.length; i++) { const dd = Math.abs(xs[i] - xv); if (dd < bd) { bd = dd; bi = i; } }
+        const v = bi < 0 ? NaN : s.y[bi];
+        if (live && bi >= 0 && Number.isFinite(v)) crossDots.push({ x: px(xs[bi]), y: py(v), color: s.color });
+        readRows.push({ label: s.label, color: s.color, val: live ? this.fmtVal(v, y1 - y0) : '\u2014' });
+      });
+    }
+
+    const boxes = [];
+    if (st.box && Math.abs(st.box.b - st.box.a) > 3) {
+      const a = Math.min(st.box.a, st.box.b), b = Math.max(st.box.a, st.box.b);
+      boxes.push({ x: Math.max(L, a), y: T, w: Math.min(W - R, b) - Math.max(L, a), h: H - T - B });
+    }
+
+    const zoomed = !!st.zx;
+    const gm = {
+      W, H, L, R, T, B, fx0, fx1, x0, x1, y0, y1, inv,
+      viewBox: '0 0 ' + W + ' ' + H, grid, xt: xtl, yt: ytl, tickMarks, axisText, series, bands, bandHandles, zero, dots, vlines, vlineHandles, markerText, labels,
+      frame: { x: L, y: T, w: W - L - R, h: H - T - B },
+      legend, hasLegend: o.legend !== false && legend.length > 1, hasData,
+      cross, crossDots, readRows, readX, hasRead, boxes,
+      clipId: 'sgclip' + this.pid, clipRef: 'url(#sgclip' + this.pid + ')',
+      clip: { x: L, y: T - 1, w: W - L - R, h: H - T - B + 2 },
+      fitBg: st.fitY ? 'color-mix(in srgb,var(--color-accent) 22%,transparent)' : 'transparent',
+      readBg: st.reader ? 'color-mix(in srgb,var(--color-accent) 22%,transparent)' : 'transparent',
+      bigIcon: st.big ? 'M9 3H3v6M15 21h6v-6M3 3l7 7M21 21l-7-7' : 'M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7',
+      bigTitle: st.big ? 'Shrink (Esc)' : 'Enlarge',
+      zoomNote: zoomed ? ' · showing ' + this.fmtVal(x0, x1 - x0) + '–' + this.fmtVal(x1, x1 - x0) : '',
+      wrapStyle: st.big ? 'position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:26px' : 'width:100%',
+      backdropStyle: st.big ? 'position:absolute;inset:0;background:color-mix(in srgb,#201e1d 52%,transparent);backdrop-filter:blur(3px)' : 'display:none',
+      figStyle: 'display:flex;flex-direction:column;gap:6px;margin:0;width:100%' + (st.big ? ';position:relative;max-width:1500px;background:var(--color-bg);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:20px 22px' : '')
+    };
+    this._g = gm;
+    return gm;
+  }
+
+  renderVals() {
+    const g = this.build();
+    return {
+      g, svgRef: this.svgRef,
+      zoomIn: () => this.zoomAt((g.x0 + g.x1) / 2, 0.62),
+      zoomOut: () => this.zoomAt((g.x0 + g.x1) / 2, 1 / 0.62),
+      reset: () => this.setState({ zx: null, fitY: false, box: null }),
+      toggleFit: () => this.setState(s => ({ fitY: !s.fitY })),
+      toggleReader: () => this.setState(s => ({ reader: !s.reader, hov: null })),
+      toggleBig: () => this.setState(s => ({ big: !s.big })),
+      shrink: () => this.setState({ big: false }),
+      savePng: () => this.savePng(),
+      onDown: e => {
+        if (!g.hasData) return;
+        const p = this.pt(e); if (!p) return;
+        e.target.setPointerCapture && e.target.setPointerCapture(e.pointerId);
+        if (e.shiftKey) this._pan = { sx: p.sx, x0: g.x0, x1: g.x1 };
+        else this.setState({ box: { a: p.sx, b: p.sx }, hov: null });
+      },
+      onMove: e => {
+        const p = this.pt(e); if (!p) return;
+        if (this._pan) {
+          const d = (p.sx - this._pan.sx) / (g.W - g.L - g.R) * (this._pan.x1 - this._pan.x0);
+          this.setDomain(this._pan.x0 - d, this._pan.x1 - d);
+        } else if (this.state.box) this.setState(s => ({ box: { a: s.box.a, b: p.sx } }));
+        else if (this.state.reader) this.setState({ hov: p.sx });
+      },
+      onUp: () => {
+        this._pan = null;
+        const b = this.state.box;
+        if (b && Math.abs(b.b - b.a) > 6) this.setDomain(g.inv(Math.min(b.a, b.b)), g.inv(Math.max(b.a, b.b)));
+        if (b) this.setState({ box: null });
+      },
+      onLeave: () => { this._pan = null; if (this.state.hov !== null || this.state.box) this.setState({ hov: null, box: null }); },
+      bandMove: e => this.bandMove(e),
+      bandUp: () => this.bandUp(),
+      vlineMove: e => this.vlineMove(e),
+      vlineUp: () => this.vlineUp()
+    };
+  }
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,2297 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/organic-294d1fd7-f409-4ee6-9c79-6121ef98acc2/styles.css">
+  <script src="_ds/organic-294d1fd7-f409-4ee6-9c79-6121ef98acc2/_ds_bundle.js"></script>
+  <style>
+    .sg-tab{font-family:var(--font-heading);font-size:13.5px;padding:7px 14px;border-radius:999px;border:1px solid transparent;background:transparent;cursor:pointer;color:var(--color-text);white-space:nowrap}
+    .seg-opt{white-space:nowrap}
+    .btn{white-space:nowrap}
+    .sg-tab:hover{background:color-mix(in srgb,var(--color-text) 7%,transparent)}
+    .sg-tab[aria-selected="true"]{background:var(--color-accent);color:var(--color-bg)}
+    .sg-tab:disabled{opacity:.4;cursor:not-allowed}
+    .sg-range{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:999px;background:color-mix(in srgb,var(--color-text) 16%,transparent);outline:none;accent-color:var(--color-accent)}
+    .sg-range:focus-visible{outline:2px solid var(--color-accent);outline-offset:3px}
+    .sg-range::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:999px;background:var(--color-accent);border:2px solid var(--color-bg);box-shadow:var(--shadow-sm);cursor:pointer}
+    .sg-range::-moz-range-thumb{width:14px;height:14px;border-radius:999px;background:var(--color-accent);border:2px solid var(--color-bg);cursor:pointer}
+    .sg-num{font-variant-numeric:tabular-nums}
+    .sg-scroll{scrollbar-width:thin;scrollbar-color:transparent transparent;transition:scrollbar-color .2s}
+    .sg-scroll:hover{scrollbar-color:color-mix(in srgb,var(--color-text) 22%,transparent) transparent}
+    .sg-scroll::-webkit-scrollbar{width:6px}
+    .sg-scroll::-webkit-scrollbar-track{background:transparent}
+    .sg-scroll::-webkit-scrollbar-thumb{background:transparent;border-radius:999px}
+    .sg-scroll:hover::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--color-text) 22%,transparent)}
+    .sg-scroll::-webkit-scrollbar-thumb:active{background:color-mix(in srgb,var(--color-accent) 60%,transparent)}
+    a{color:var(--color-accent-700)}
+    a:hover{color:var(--color-accent-800)}
+  </style>
+</helmet>
+
+<div style="min-height:100vh;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
+
+  <div style="position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--color-bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid color-mix(in srgb,var(--color-text) 10%,transparent)">
+    <div style="max-width:1440px;margin:0 auto;display:flex;align-items:center;flex-wrap:wrap;gap:10px 18px;padding:10px 26px">
+      <button onClick="{{ goHome }}" title="Home" style="display:flex;align-items:center;gap:10px;margin-right:auto;background:none;border:none;padding:4px 10px 4px 2px;border-radius:999px;cursor:pointer;color:inherit;font:inherit" style-hover="background:color-mix(in srgb,var(--color-text) 6%,transparent)">
+        <svg width="26" height="26" viewBox="0 0 26 26" fill="none" style="display:block;flex:none">
+          <circle cx="13" cy="13" r="12" fill="#c67139" fill-opacity="0.16"></circle>
+          <path d="M2 16 C5 16 5.5 7 8.5 7 C11.5 7 12 19 15 19 C18 19 18.5 9 21.5 9 C23 9 23.5 13 24 14" stroke="#c67139" stroke-width="2.4" stroke-linecap="round"></path>
+        </svg>
+        <span style="font-family:var(--font-heading);font-size:17px;letter-spacing:-0.01em">Sensogram Method Explorer</span>
+      </button>
+      <nav style="display:flex;flex-wrap:wrap;gap:4px">
+        <button class="sg-tab" aria-selected="{{ isHome }}" onClick="{{ goHome }}">Home</button>
+        <button class="sg-tab" aria-selected="{{ isMethods }}" onClick="{{ goMethods }}">Methods</button>
+        <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="5">
+          <button class="sg-tab" aria-selected="{{ t.active }}" onClick="{{ t.go }}">{{ t.label }}</button>
+        </sc-for>
+      </nav>
+    </div>
+  </div>
+
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <div style="max-width:1320px;margin:0 auto;padding:0 26px 90px">
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:44px;align-items:center;padding:60px 0 40px">
+        <div>
+          <span class="tag tag-accent">Interactive article companion</span>
+          <h1 style="font-size:48px;margin:16px 0 0;max-width:13em;text-wrap:pretty">Real-time spectral tracking in porous silicon</h1>
+          <p style="font-size:17px;line-height:1.6;max-width:34em;margin-top:16px;text-wrap:pretty">A porous-silicon biosensor reports every binding event as a small shift of its reflectance spectrum — often smaller than one spectrometer pixel. How that shift is turned into a sensogram decides the detection limit, the baseline noise, and whether the result can be read while the experiment is still running.</p>
+          <p style="font-size:15.5px;line-height:1.6;max-width:36em;margin-top:12px;text-wrap:pretty;color:color-mix(in srgb,var(--color-text) 78%,transparent)">This page runs the four signal-processing methods compared in the manuscript — effective shift in wavelength (ESW), effective optical thickness (EOT), interferogram average over wavelength (IAW) and Morlet wavelet phase (MWP) — side by side on the same spectra, for single-layer films and multilayer microcavities alike.</p>
+          <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:26px">
+            <button class="btn btn-primary" style="border-radius:999px;font-size:15px;padding:11px 22px" onClick="{{ goExp }}">Open synthetic demo</button>
+            <button class="btn btn-secondary" style="border-radius:999px;font-size:15px;padding:11px 22px" onClick="{{ goExpUpload }}">Analyze my data</button>
+            <button class="btn btn-ghost" style="border-radius:999px;font-size:15px;padding:11px 18px" onClick="{{ goMethods }}">How the methods work</button>
+          </div>
+          <p style="font-size:12.5px;color:color-mix(in srgb,var(--color-text) 55%,transparent);margin-top:14px">Everything runs in this browser tab. Nothing is uploaded.</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <dc-import name="Plot" plot="{{ heroSpec }}" hint-size="100%,300px"></dc-import>
+          <dc-import name="Plot" plot="{{ heroSens }}" hint-size="100%,300px"></dc-import>
+        </div>
+      </div>
+
+      <div style="height:1px;background:color-mix(in srgb,var(--color-text) 12%,transparent);margin:24px 0 56px"></div>
+
+      <h2 style="font-size:30px">What the spectrometer sees</h2>
+      <p style="max-width:48em;font-size:16px;line-height:1.65;text-wrap:pretty">White light reflects from the top of the porous film and from each interface inside it, and the returns interfere. As analyte fills the pores, the effective refractive index <em>n</em> rises, the effective optical thickness <strong>EOT = 2nL</strong> grows while the physical thickness <em>L</em> stays fixed, and the whole spectrum red-shifts. A change of amplitude, or a uniform offset with no shift, is not binding — it is noise every method has to reject.</p>
+      <div style="display:flex;flex-direction:column;gap:22px;margin-top:26px">
+        <div class="card elev-sm" style="padding:var(--space-4);display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;align-items:center">
+          <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start">
+            <img src="assets/psi-sl.png" alt="Single porous-silicon layer on a silicon substrate" style="width:100%;max-width:230px;height:auto;display:block">
+            <div class="card-kicker">Single layer</div>
+            <p style="margin:0;font-size:13.5px;line-height:1.55;color:color-mix(in srgb,var(--color-text) 62%,transparent);text-wrap:pretty">One porous film is a Fabry–Pérot interferometer: evenly spaced fringes whose spacing is set by the optical thickness. Every maximum and minimum moves together.</p>
+          </div>
+          <div style="grid-column:span 2;min-width:0">
+            <dc-import name="Plot" plot="{{ eduSL }}" hint-size="100%,300px"></dc-import>
+          </div>
+        </div>
+        <div class="card elev-sm" style="padding:var(--space-4);display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;align-items:center">
+          <div style="display:flex;flex-direction:column;gap:12px;align-items:flex-start">
+            <img src="assets/psi-ml.png" alt="Porous-silicon microcavity: two Bragg mirrors around a defect layer" style="width:100%;max-width:210px;height:auto;display:block">
+            <div class="card-kicker">Multilayer microcavity</div>
+            <p style="margin:0;font-size:13.5px;line-height:1.55;color:color-mix(in srgb,var(--color-text) 62%,transparent);text-wrap:pretty">Two Bragg mirrors around a defect layer open a narrow resonance dip inside the photonic stopband. Tracking that dip directly is limited by the spectrometer's resolution — about 1.5 nm in the near infrared.</p>
+          </div>
+          <div style="grid-column:span 2;min-width:0">
+            <dc-import name="Plot" plot="{{ eduML }}" hint-size="100%,300px"></dc-import>
+          </div>
+        </div>
+      </div>
+      <p style="max-width:48em;font-size:12.5px;line-height:1.55;color:color-mix(in srgb,var(--color-text) 52%,transparent);margin-top:12px">Both panels are computed with a transfer-matrix model of the film; the binding shift is exaggerated so it can be seen at this scale.</p>
+
+      <h2 style="font-size:30px;margin-top:64px">Four signal-processing methods for sensing</h2>
+      <p style="max-width:48em;font-size:16px;line-height:1.65;text-wrap:pretty">Each method collapses a whole spectrum into one number per time point, and the series of those numbers is the sensogram. They differ in which part of the spectrum they read — a pair of pixels, the whole difference curve, a Fourier peak or a phase — and that choice decides what they are sensitive to. The traces come from the default synthetic microcavity run.</p>
+      <div class="card elev-sm" style="margin-top:22px;padding:var(--space-5);gap:18px">
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <sc-for list="{{ methodTabs }}" as="t" hint-placeholder-count="4">
+            <button class="sg-tab" aria-selected="{{ t.active }}" onClick="{{ t.go }}">{{ t.label }}</button>
+          </sc-for>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:28px;align-items:start">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="card-kicker">{{ mth.kicker }}</div>
+            <h3 style="font-size:25px;margin:0;text-wrap:pretty">{{ mth.title }}</h3>
+            <div style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:14px;background:color-mix(in srgb,var(--color-text) 6%,transparent);padding:9px 14px;border-radius:12px;align-self:flex-start;white-space:nowrap;max-width:100%;overflow-x:auto">{{ mth.formula }}</div>
+            <p style="margin:0;font-size:15px;line-height:1.6;text-wrap:pretty">{{ mth.summary }}</p>
+            <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13.5px;line-height:1.5">
+              <div style="font-weight:600">Reads</div><div>{{ mth.reads }}</div>
+              <div style="font-weight:600">Watch for</div><div>{{ mth.watch }}</div>
+            </div>
+            <button class="btn btn-secondary" style="border-radius:999px;font-size:13.5px;padding:8px 16px;align-self:flex-start;margin-top:4px" onClick="{{ goMethods }}">How it works, step by step</button>
+          </div>
+          <dc-import name="Plot" plot="{{ mth.sens }}" hint-size="100%,330px"></dc-import>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:26px;margin-top:64px;align-items:start">
+        <div class="card" style="background:var(--color-accent-2-100);gap:12px;padding:var(--space-6);border-radius:var(--radius-lg)">
+          <div class="card-kicker" style="color:var(--color-accent-2-800)">Local by design</div>
+          <h3 style="font-size:24px;margin:0">Your spectra are processed locally in this browser and are not uploaded.</h3>
+          <p style="margin:0;font-size:14.5px;line-height:1.6;max-width:40em">There is no backend, no account and no database. Parsing, interpolation, FFT, wavelet convolution and every metric run in this page. Close the tab and the data is gone.</p>
+        </div>
+        <div class="card" style="gap:10px">
+          <div class="card-kicker">Method references</div>
+          <sc-for list="{{ methodRefs }}" as="rf" hint-placeholder-count="4">
+            <p style="margin:0;font-size:13px;line-height:1.55"><strong>{{ rf.abbr }}</strong> — {{ rf.text }} <a href="{{ rf.url }}" target="_blank" rel="noopener">{{ rf.doi }}</a></p>
+          </sc-for>
+          <p style="margin:0;font-size:12.5px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">Code and data availability: to be linked on publication.</p>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isMethods }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:1320px;margin:0 auto;padding:44px 26px 90px">
+      <span class="tag tag-accent-2">Methods</span>
+      <h1 style="font-size:40px;margin:14px 0 0;max-width:18em;text-wrap:pretty">How each method reads a spectrum</h1>
+      <p style="max-width:48em;font-size:16px;line-height:1.65;margin-top:14px;text-wrap:pretty">All four start from the same reflectance spectra and end with one number per time point. The figures below follow each one through its steps on a single porous layer, computed without noise and with the binding shift exaggerated, so every step can be seen. The sensogram at the bottom is the method's real output on the synthetic microcavity run.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:22px">
+        <sc-for list="{{ methodTabs }}" as="t" hint-placeholder-count="4">
+          <button class="sg-tab" style="font-size:15px;padding:9px 18px" aria-selected="{{ t.active }}" onClick="{{ t.go }}">{{ t.long }}</button>
+        </sc-for>
+      </div>
+      <div class="card elev-sm" style="margin-top:16px;padding:var(--space-6);gap:22px">
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="card-kicker">{{ mth.kicker }}</div>
+          <h2 style="font-size:30px;margin:0;text-wrap:pretty">{{ mth.title }}</h2>
+          <div style="font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:15px;background:color-mix(in srgb,var(--color-text) 6%,transparent);padding:10px 16px;border-radius:12px;align-self:flex-start;white-space:nowrap;max-width:100%;overflow-x:auto">{{ mth.formula }}</div>
+          <p style="margin:0;font-size:16px;line-height:1.65;max-width:52em;text-wrap:pretty">{{ mth.summary }}</p>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:26px">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <dc-import name="Plot" plot="{{ mth.figA }}" hint-size="100%,300px"></dc-import>
+            <p style="margin:0;font-size:13.5px;line-height:1.55;color:color-mix(in srgb,var(--color-text) 62%,transparent);text-wrap:pretty">{{ mth.capA }}</p>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <dc-import name="Plot" plot="{{ mth.figB }}" hint-size="100%,300px"></dc-import>
+            <p style="margin:0;font-size:13.5px;line-height:1.55;color:color-mix(in srgb,var(--color-text) 62%,transparent);text-wrap:pretty">{{ mth.capB }}</p>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div class="card-kicker">How it is computed</div>
+            <sc-for list="{{ mth.steps }}" as="s" hint-placeholder-count="4">
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.55">
+                <span class="sg-num" style="flex:none;width:24px;height:24px;border-radius:999px;background:var(--color-accent-200);color:var(--color-accent-800);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700">{{ s.n }}</span>
+                <span style="text-wrap:pretty">{{ s.text }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div class="card-kicker" style="color:var(--color-accent-2-800)">Strengths</div>
+            <sc-for list="{{ mth.pros }}" as="s" hint-placeholder-count="3">
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.55">
+                <span style="flex:none;width:8px;height:8px;border-radius:999px;background:var(--color-accent-2);margin-top:7px"></span>
+                <span style="text-wrap:pretty">{{ s }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div class="card-kicker">Limits</div>
+            <sc-for list="{{ mth.cons }}" as="s" hint-placeholder-count="3">
+              <div style="display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.55">
+                <span style="flex:none;width:8px;height:8px;border-radius:999px;background:var(--color-accent);margin-top:7px"></span>
+                <span style="text-wrap:pretty">{{ s }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <dc-import name="Plot" plot="{{ mth.sens }}" hint-size="100%,300px"></dc-import>
+        </div>
+        <sc-for list="{{ mth.refs }}" as="rf" hint-placeholder-count="0">
+          <p style="margin:0;font-size:13px;line-height:1.55;color:color-mix(in srgb,var(--color-text) 62%,transparent)">{{ rf.text }} <a href="{{ rf.url }}" target="_blank" rel="noopener">{{ rf.doi }}</a></p>
+        </sc-for>
+        <div style="display:flex;flex-wrap:wrap;gap:10px">
+          <button class="btn btn-primary" style="border-radius:999px;font-size:14px;padding:9px 18px" onClick="{{ goExp }}">Try it on the synthetic demo</button>
+          <button class="btn btn-secondary" style="border-radius:999px;font-size:14px;padding:9px 18px" onClick="{{ goExpUpload }}">Analyze my data</button>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isExp }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width:1440px;margin:0 auto;padding:22px 26px 90px">
+
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:10px">
+        <div class="seg" style="border-radius:999px">
+          <label class="seg-opt" style="font-size:13px;padding:7px 16px"><input type="radio" name="sgsrc" checked="{{ srcSynth }}" onChange="{{ setSrcSynth }}" style="position:absolute;opacity:0;pointer-events:none">Synthetic example</label>
+          <label class="seg-opt" style="font-size:13px;padding:7px 16px"><input type="radio" name="sgsrc" checked="{{ srcUpload }}" onChange="{{ setSrcUpload }}" style="position:absolute;opacity:0;pointer-events:none">Upload spectra</label>
+        </div>
+        <div style="font-size:12.5px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">{{ srcNote }}</div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:312px minmax(0,1fr);gap:26px;margin-top:20px;align-items:start">
+
+        <div class="sg-scroll" style="position:sticky;top:74px;max-height:calc(100vh - 92px);overflow-y:auto;overscroll-behavior:contain;padding:2px 8px 16px 2px;margin:-2px -8px 0 -2px;display:flex;flex-direction:column;gap:14px">
+          <sc-if value="{{ controlsOn }}" hint-placeholder-val="{{ true }}">
+          <div class="card elev-sm" style="gap:14px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between">
+              <div class="card-kicker">{{ controlsKicker }}</div>
+              <div style="font-size:11px;color:color-mix(in srgb,var(--color-text) 50%,transparent)" class="sg-num">{{ busyLabel }}</div>
+            </div>
+            <sc-for list="{{ sliders }}" as="s" hint-placeholder-count="5">
+              <div class="field" style="display:flex;flex-direction:column;gap:4px">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:22px">
+                  <label style="margin:0;font-size:12px">{{ s.label }}</label>
+                  <span style="display:flex;align-items:center;gap:3px;flex:none"><sc-if value="{{ s.editing }}" hint-placeholder-val="{{ false }}"><input class="input" type="number" min="{{ s.min }}" max="{{ s.max }}" step="{{ s.step }}" defaultValue="{{ s.raw }}" autoFocus="{{ true }}" onKeyDown="{{ s.keyEdit }}" onBlur="{{ s.endEdit }}" style="width:84px;padding:1px 8px;font-size:12px;border-radius:999px;text-align:right"></sc-if><sc-if value="{{ s.reading }}" hint-placeholder-val="{{ true }}"><button class="sg-num" title="Click to type an exact value" onClick="{{ s.beginEdit }}" style="background:none;border:none;padding:1px 5px;border-radius:7px;font:inherit;font-size:12px;font-weight:600;cursor:text;color:inherit" style-hover="background:color-mix(in srgb,var(--color-accent) 16%,transparent)">{{ s.text }}</button></sc-if><button title="One step down" onClick="{{ s.dec }}" style="width:19px;height:19px;flex:none;display:flex;align-items:center;justify-content:center;background:none;border:1px solid color-mix(in srgb,var(--color-text) 16%,transparent);border-radius:999px;font-size:13px;line-height:1;cursor:pointer;color:inherit;padding:0" style-hover="background:color-mix(in srgb,var(--color-accent) 16%,transparent)">−</button><button title="One step up" onClick="{{ s.inc }}" style="width:19px;height:19px;flex:none;display:flex;align-items:center;justify-content:center;background:none;border:1px solid color-mix(in srgb,var(--color-text) 16%,transparent);border-radius:999px;font-size:13px;line-height:1;cursor:pointer;color:inherit;padding:0" style-hover="background:color-mix(in srgb,var(--color-accent) 16%,transparent)">+</button></span>
+                </div>
+                <input class="sg-range" type="range" min="{{ s.min }}" max="{{ s.max }}" step="{{ s.step }}" value="{{ s.value }}" onChange="{{ s.set }}" onInput="{{ s.set }}">
+              </div>
+            </sc-for>
+            <sc-if value="{{ uploadMode }}" hint-placeholder-val="{{ false }}">
+              <div class="field" style="display:flex;flex-direction:column;gap:5px">
+                <label style="margin:0;font-size:12px">Interval between scans</label>
+                <div style="display:flex;gap:7px;align-items:center">
+                  <input class="input" type="number" min="0" step="any" value="{{ dtRaw }}" onChange="{{ setDtRaw }}" onInput="{{ setDtRaw }}" style="width:82px;padding:4px 10px;font-size:12.5px;border-radius:999px;text-align:right">
+                  <div class="seg" style="border-radius:999px;flex:1">
+                    <label class="seg-opt" style="font-size:12px;padding:5px 10px;flex:1;justify-content:center"><input type="radio" name="sgdtu" checked="{{ dtInSec }}" onChange="{{ setDtSec }}" style="position:absolute;opacity:0;pointer-events:none">seconds</label>
+                    <label class="seg-opt" style="font-size:12px;padding:5px 10px;flex:1;justify-content:center"><input type="radio" name="sgdtu" checked="{{ dtInMin }}" onChange="{{ setDtMin }}" style="position:absolute;opacity:0;pointer-events:none">minutes</label>
+                  </div>
+                </div>
+                <div style="font-size:11px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 55%,transparent)">{{ dtNote }}</div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ synthMode }}" hint-placeholder-val="{{ true }}">
+              <div class="field" style="display:flex;flex-direction:column;gap:8px">
+                <label style="margin:0;font-size:12px">Noise sources</label>
+                <sc-for list="{{ noiseRows }}" as="nz" hint-placeholder-count="3">
+                  <div style="display:flex;flex-direction:column;gap:3px">
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                      <label style="display:flex;align-items:center;gap:8px;font-size:12px;cursor:pointer;margin:0;flex:1;min-width:0;line-height:1.3">
+                        <input type="checkbox" checked="{{ nz.on }}" onChange="{{ nz.toggle }}" style="width:15px;height:15px;accent-color:var(--color-accent)">
+                        {{ nz.label }}
+                      </label>
+                      <span style="display:flex;align-items:center;gap:4px;flex:none">
+                        <input class="input" type="number" min="0" step="{{ nz.step }}" value="{{ nz.value }}" onChange="{{ nz.set }}" disabled="{{ nz.off }}" style="width:76px;padding:2px 9px;font-size:12px;border-radius:999px;text-align:right">
+                        <span style="font-size:11px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">{{ nz.unit }}</span>
+                      </span>
+                    </div>
+                    <div style="font-size:11px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 52%,transparent)">{{ nz.note }}</div>
+                  </div>
+                </sc-for>
+              </div>
+              <div class="field" style="display:flex;flex-direction:column;gap:5px">
+                <label style="margin:0;font-size:12px">Film model</label>
+                <div class="seg" style="border-radius:999px">
+                  <label class="seg-opt" style="font-size:12px;padding:5px 10px;flex:1;justify-content:center"><input type="radio" name="sgmodel" checked="{{ modelCavity }}" onChange="{{ setModelCavity }}" style="position:absolute;opacity:0;pointer-events:none">Multilayer</label>
+                  <label class="seg-opt" style="font-size:12px;padding:5px 10px;flex:1;justify-content:center"><input type="radio" name="sgmodel" checked="{{ modelSingle }}" onChange="{{ setModelSingle }}" style="position:absolute;opacity:0;pointer-events:none">Single layer</label>
+                </div>
+                <div style="font-size:11px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 55%,transparent)">{{ modelNote }}</div>
+              </div>
+            </sc-if>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <sc-if value="{{ synthMode }}" hint-placeholder-val="{{ true }}">
+                <button class="btn btn-secondary" style="border-radius:999px;font-size:12.5px;padding:6px 14px" onClick="{{ randomize }}">Randomize noise</button>
+              </sc-if>
+              <sc-if value="{{ hasImported }}" hint-placeholder-val="{{ false }}">
+                <button class="btn btn-secondary" style="border-radius:999px;font-size:12.5px;padding:6px 14px" onClick="{{ toggleImported }}">Use {{ timeSourceNext }}</button>
+              </sc-if>
+              <button class="btn btn-ghost" style="border-radius:999px;font-size:12.5px" onClick="{{ resetDefaults }}">Reset defaults</button>
+            </div>
+          </div>
+
+          <div class="card elev-sm" style="gap:10px">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:8px">
+              <div class="card-kicker">Spectral filter</div>
+              <span class="sg-num" style="font-size:12px;font-weight:600">{{ rangeLabel }}</span>
+            </div>
+            <sc-if value="{{ rangeOn }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:9px">
+                <svg viewBox="{{ rangeTool.viewBox }}" preserveAspectRatio="none" style="width:100%;height:78px;display:block;background:#fdfaf3;border:1px solid color-mix(in srgb,var(--color-text) 12%,transparent);border-radius:12px;cursor:crosshair;touch-action:none" onPointerDown="{{ onBrushDown }}" onPointerMove="{{ onBrushMove }}" onPointerUp="{{ onBrushUp }}" onPointerLeave="{{ onBrushUp }}">
+                  <path d="{{ rangeTool.d }}" fill="none" stroke="#7a8a5e" stroke-width="1.1" stroke-linejoin="round"></path>
+                  <rect x="{{ rangeTool.leftX }}" y="{{ rangeTool.top }}" width="{{ rangeTool.leftW }}" height="{{ rangeTool.plotH }}" fill="#201e1d" fill-opacity="0.12"></rect>
+                  <rect x="{{ rangeTool.rightX }}" y="{{ rangeTool.top }}" width="{{ rangeTool.rightW }}" height="{{ rangeTool.plotH }}" fill="#201e1d" fill-opacity="0.12"></rect>
+                  <line x1="{{ rangeTool.handleA }}" y1="{{ rangeTool.top }}" x2="{{ rangeTool.handleA }}" y2="{{ rangeTool.bottom }}" stroke="#c67139" stroke-width="2"></line>
+                  <line x1="{{ rangeTool.handleB }}" y1="{{ rangeTool.top }}" x2="{{ rangeTool.handleB }}" y2="{{ rangeTool.bottom }}" stroke="#c67139" stroke-width="2"></line>
+                  <line x1="{{ rangeTool.lcX }}" y1="{{ rangeTool.top }}" x2="{{ rangeTool.lcX }}" y2="{{ rangeTool.bottom }}" stroke="#e33d86" stroke-width="1.6" stroke-dasharray="4 3"></line>
+                  <sc-for list="{{ rangeTool.ticks }}" as="t" hint-placeholder-count="5">
+                    <text x="{{ t.x }}" y="{{ t.y }}" text-anchor="middle" font-size="9" font-family="Figtree, system-ui, sans-serif" fill="#201e1d" fill-opacity="0.55">{{ t.label }}</text>
+                  </sc-for>
+                </svg>
+                <div style="font-size:11px;color:color-mix(in srgb,var(--color-text) 58%,transparent)" class="sg-num">{{ rangeMeta }}</div>
+                <sc-for list="{{ rangeSliders }}" as="s" hint-placeholder-count="3">
+                  <div class="field" style="display:flex;flex-direction:column;gap:4px">
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:22px">
+                      <label style="margin:0;font-size:12px">{{ s.label }}</label>
+                      <span style="display:flex;align-items:center;gap:3px;flex:none"><sc-if value="{{ s.editing }}" hint-placeholder-val="{{ false }}"><input class="input" type="number" min="{{ s.min }}" max="{{ s.max }}" step="{{ s.step }}" defaultValue="{{ s.raw }}" autoFocus="{{ true }}" onKeyDown="{{ s.keyEdit }}" onBlur="{{ s.endEdit }}" style="width:84px;padding:1px 8px;font-size:12px;border-radius:999px;text-align:right"></sc-if><sc-if value="{{ s.reading }}" hint-placeholder-val="{{ true }}"><button class="sg-num" title="Click to type an exact value" onClick="{{ s.beginEdit }}" style="background:none;border:none;padding:1px 5px;border-radius:7px;font:inherit;font-size:12px;font-weight:600;cursor:text;color:inherit" style-hover="background:color-mix(in srgb,var(--color-accent) 16%,transparent)">{{ s.text }}</button></sc-if><button title="One step down" onClick="{{ s.dec }}" style="width:19px;height:19px;flex:none;display:flex;align-items:center;justify-content:center;background:none;border:1px solid color-mix(in srgb,var(--color-text) 16%,transparent);border-radius:999px;font-size:13px;line-height:1;cursor:pointer;color:inherit;padding:0" style-hover="background:color-mix(in srgb,var(--color-accent) 16%,transparent)">−</button><button title="One step up" onClick="{{ s.inc }}" style="width:19px;height:19px;flex:none;display:flex;align-items:center;justify-content:center;background:none;border:1px solid color-mix(in srgb,var(--color-text) 16%,transparent);border-radius:999px;font-size:13px;line-height:1;cursor:pointer;color:inherit;padding:0" style-hover="background:color-mix(in srgb,var(--color-accent) 16%,transparent)">+</button></span>
+                    </div>
+                    <input class="sg-range" type="range" min="{{ s.min }}" max="{{ s.max }}" step="{{ s.step }}" value="{{ s.value }}" onChange="{{ s.set }}" onInput="{{ s.set }}">
+                  </div>
+                </sc-for>
+                <div style="display:flex;gap:6px;flex-wrap:wrap">
+                  <button class="btn btn-secondary" style="border-radius:999px;font-size:11.5px;padding:5px 11px" onClick="{{ rangeFull }}">Full range</button>
+                  <button class="btn btn-secondary" style="border-radius:999px;font-size:11.5px;padding:5px 11px" onClick="{{ rangeTrim }}">Trim 5 % edges</button>
+                  <button class="btn btn-secondary" style="border-radius:999px;font-size:11.5px;padding:5px 11px" onClick="{{ rangeFeature }}">Around feature</button>
+                </div>
+                <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                  <button class="btn btn-secondary" style="border-radius:999px;font-size:11.5px;padding:5px 11px" onClick="{{ autoLc }}" title="{{ autoLcTitle }}">Find minimum</button>
+                </div>
+                <div style="font-size:11px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 55%,transparent)">{{ lcNote }}</div>
+                <div style="font-size:11px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 55%,transparent)">Drag across the spectrum to choose the wavelength window. Every method — ESW, IAW, RIFTS and Morlet phase — sees only this window.</div>
+              </div>
+            </sc-if>
+          </div>
+
+          <div class="card elev-sm" style="gap:12px">
+            <div class="card-kicker">Smoothing (display only)</div>
+            <label style="display:flex;align-items:center;gap:9px;font-size:13px;cursor:pointer">
+              <input type="checkbox" checked="{{ sgOn }}" onChange="{{ toggleSg }}" style="width:16px;height:16px;accent-color:var(--color-accent)">
+              Savitzky–Golay on ESW
+            </label>
+            <sc-for list="{{ sgSliders }}" as="s" hint-placeholder-count="2">
+              <div class="field" style="display:flex;flex-direction:column;gap:4px">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:22px">
+                  <label style="margin:0;font-size:12px">{{ s.label }}</label>
+                  <span style="display:flex;align-items:center;gap:3px;flex:none"><sc-if value="{{ s.editing }}" hint-placeholder-val="{{ false }}"><input class="input" type="number" min="{{ s.min }}" max="{{ s.max }}" step="{{ s.step }}" defaultValue="{{ s.raw }}" autoFocus="{{ true }}" onKeyDown="{{ s.keyEdit }}" onBlur="{{ s.endEdit }}" style="width:84px;padding:1px 8px;font-size:12px;border-radius:999px;text-align:right"></sc-if><sc-if value="{{ s.reading }}" hint-placeholder-val="{{ true }}"><button class="sg-num" title="Click to type an exact value" onClick="{{ s.beginEdit }}" style="background:none;border:none;padding:1px 5px;border-radius:7px;font:inherit;font-size:12px;font-weight:600;cursor:text;color:inherit" style-hover="background:color-mix(in srgb,var(--color-accent) 16%,transparent)">{{ s.text }}</button></sc-if><button title="One step down" onClick="{{ s.dec }}" style="width:19px;height:19px;flex:none;display:flex;align-items:center;justify-content:center;background:none;border:1px solid color-mix(in srgb,var(--color-text) 16%,transparent);border-radius:999px;font-size:13px;line-height:1;cursor:pointer;color:inherit;padding:0" style-hover="background:color-mix(in srgb,var(--color-accent) 16%,transparent)">−</button><button title="One step up" onClick="{{ s.inc }}" style="width:19px;height:19px;flex:none;display:flex;align-items:center;justify-content:center;background:none;border:1px solid color-mix(in srgb,var(--color-text) 16%,transparent);border-radius:999px;font-size:13px;line-height:1;cursor:pointer;color:inherit;padding:0" style-hover="background:color-mix(in srgb,var(--color-accent) 16%,transparent)">+</button></span>
+                </div>
+                <input class="sg-range" type="range" min="{{ s.min }}" max="{{ s.max }}" step="{{ s.step }}" value="{{ s.value }}" onChange="{{ s.set }}" onInput="{{ s.set }}">
+              </div>
+            </sc-for>
+            <div style="font-size:11.5px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 55%,transparent)">The raw ESW vector is always kept and always plotted. Smoothing never feeds a metric unless the row says so.</div>
+          </div>
+
+          <div class="card elev-sm" style="gap:10px">
+            <button class="btn btn-ghost" style="justify-content:space-between;padding:0;font-size:13px" onClick="{{ toggleAdv }}">
+              <span>Advanced parameters</span><span>{{ advCaret }}</span>
+            </button>
+            <sc-if value="{{ advOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:12px;padding-top:2px">
+                <sc-for list="{{ advSliders }}" as="s" hint-placeholder-count="6">
+                  <div class="field" style="display:flex;flex-direction:column;gap:4px">
+                    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;min-height:22px">
+                      <label style="margin:0;font-size:12px">{{ s.label }}</label>
+                      <span style="display:flex;align-items:center;gap:3px;flex:none"><sc-if value="{{ s.editing }}" hint-placeholder-val="{{ false }}"><input class="input" type="number" min="{{ s.min }}" max="{{ s.max }}" step="{{ s.step }}" defaultValue="{{ s.raw }}" autoFocus="{{ true }}" onKeyDown="{{ s.keyEdit }}" onBlur="{{ s.endEdit }}" style="width:84px;padding:1px 8px;font-size:12px;border-radius:999px;text-align:right"></sc-if><sc-if value="{{ s.reading }}" hint-placeholder-val="{{ true }}"><button class="sg-num" title="Click to type an exact value" onClick="{{ s.beginEdit }}" style="background:none;border:none;padding:1px 5px;border-radius:7px;font:inherit;font-size:12px;font-weight:600;cursor:text;color:inherit" style-hover="background:color-mix(in srgb,var(--color-accent) 16%,transparent)">{{ s.text }}</button></sc-if><button title="One step down" onClick="{{ s.dec }}" style="width:19px;height:19px;flex:none;display:flex;align-items:center;justify-content:center;background:none;border:1px solid color-mix(in srgb,var(--color-text) 16%,transparent);border-radius:999px;font-size:13px;line-height:1;cursor:pointer;color:inherit;padding:0" style-hover="background:color-mix(in srgb,var(--color-accent) 16%,transparent)">−</button><button title="One step up" onClick="{{ s.inc }}" style="width:19px;height:19px;flex:none;display:flex;align-items:center;justify-content:center;background:none;border:1px solid color-mix(in srgb,var(--color-text) 16%,transparent);border-radius:999px;font-size:13px;line-height:1;cursor:pointer;color:inherit;padding:0" style-hover="background:color-mix(in srgb,var(--color-accent) 16%,transparent)">+</button></span>
+                    </div>
+                    <input class="sg-range" type="range" min="{{ s.min }}" max="{{ s.max }}" step="{{ s.step }}" value="{{ s.value }}" onChange="{{ s.set }}" onInput="{{ s.set }}">
+                  </div>
+                </sc-for>
+                <div class="field">
+                  <label style="font-size:12px">ESW denominator</label>
+                  <div class="seg" style="border-radius:999px;width:100%">
+                    <label class="seg-opt" style="font-size:12px;padding:6px 10px;flex:1;justify-content:center"><input type="radio" name="sgden" checked="{{ denNext }}" onChange="{{ setDenNext }}" style="position:absolute;opacity:0;pointer-events:none">Next sample</label>
+                    <label class="seg-opt" style="font-size:12px;padding:6px 10px;flex:1;justify-content:center"><input type="radio" name="sgden" checked="{{ denPick }}" onChange="{{ setDenPick }}" style="position:absolute;opacity:0;pointer-events:none">Chosen λ₂</label>
+                  </div>
+                </div>
+                <div class="field">
+                  <label style="font-size:12px">Phase → ΔEOT conversion</label>
+                  <div class="seg" style="border-radius:999px;width:100%">
+                    <label class="seg-opt" style="font-size:12px;padding:6px 10px;flex:1;justify-content:center"><input type="radio" name="sgconv" checked="{{ convTheory }}" onChange="{{ setConvTheory }}" style="position:absolute;opacity:0;pointer-events:none">Theoretical</label>
+                    <label class="seg-opt" style="font-size:12px;padding:6px 10px;flex:1;justify-content:center"><input type="radio" name="sgconv" checked="{{ convEmp }}" onChange="{{ setConvEmp }}" style="position:absolute;opacity:0;pointer-events:none">Empirical</label>
+                  </div>
+                  <div style="font-size:11.5px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 55%,transparent);margin-top:6px">{{ convNote }}</div>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+          </sc-if>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:18px;min-width:0">
+
+          <sc-if value="{{ progOn }}" hint-placeholder-val="{{ false }}">
+            <div class="card elev-lg" style="position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:40;width:min(460px,calc(100vw - 40px));gap:8px;padding:var(--space-3)">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+                <div style="font-size:13px">{{ progLabel }}</div>
+                <button class="btn btn-ghost" style="font-size:12px;padding:0" onClick="{{ cancelRun }}">Cancel</button>
+              </div>
+              <div style="height:7px;border-radius:999px;background:color-mix(in srgb,var(--color-text) 12%,transparent);overflow:hidden">
+                <div style="height:100%;border-radius:999px;background:var(--color-accent);width:{{ progPct }};transition:width .12s linear"></div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ tabData }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px">
+                <sc-for list="{{ dropZones }}" as="z" hint-placeholder-count="2">
+                  <div style="border:2px dashed {{ z.border }};border-radius:var(--radius-lg);padding:24px 22px;display:flex;flex-direction:column;align-items:flex-start;gap:10px;background:{{ z.bg }}" onDrop="{{ z.onDrop }}" onDragOver="{{ z.onDragOver }}" onDragLeave="{{ z.onDragLeave }}">
+                    <h3 style="font-size:21px;margin:0">{{ z.title }}</h3>
+                    <p style="margin:0;font-size:13px;line-height:1.55;text-wrap:pretty;color:color-mix(in srgb,var(--color-text) 68%,transparent)">{{ z.body }}</p>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:2px">
+                      <label class="btn btn-primary" style="border-radius:999px;cursor:pointer;font-size:12.5px;padding:6px 14px">
+                        Browse files or ZIP
+                        <input type="file" multiple="" accept=".txt,.csv,.tsv,.dat,.asc,.prn,.xy,.zip" onChange="{{ z.onFiles }}" style="display:none">
+                      </label>
+                      <button class="btn btn-secondary" style="border-radius:999px;font-size:12.5px;padding:6px 14px" onClick="{{ z.loadExample }}">{{ z.exampleLabel }}</button>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+                <button class="btn btn-ghost" style="border-radius:999px;font-size:12.5px" onClick="{{ loadExample }}">Synthetic demo</button>
+                <sc-if value="{{ hasData }}" hint-placeholder-val="{{ false }}">
+                  <button class="btn btn-secondary" style="border-radius:999px;font-size:12.5px;padding:6px 14px" onClick="{{ clearData }}">Clear loaded data</button>
+                </sc-if>
+              </div>
+              <p style="margin:0;font-size:12.5px;line-height:1.6;color:color-mix(in srgb,var(--color-text) 58%,transparent);max-width:60em">Either zone accepts a <strong>ZIP archive</strong>, a folder's worth of <strong>two-column</strong> TXT / CSV / TSV / DAT files, or a single <strong>matrix file</strong> with wavelength in column one and one column per time point. Comma, tab, semicolon and whitespace delimiters are detected; comment lines beginning <code>#</code>, <code>%</code> or <code>//</code> and one optional header row are skipped; files are ordered by natural filename sort, so <code>spectrum2</code> precedes <code>spectrum10</code>. Telling the page which film it is only sets the starting window and which reflectance feature the ESW wavelength snaps to — you can override both. Spectra are processed locally in this browser and are not uploaded.</p>
+
+              <sc-if value="{{ hasReport }}" hint-placeholder-val="{{ false }}">
+                <div class="card elev-sm" style="padding:var(--space-4);gap:10px">
+                  <div class="card-kicker">Validation report</div>
+                  <sc-for list="{{ reportRows }}" as="w" hint-placeholder-count="3">
+                    <div style="display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.5">
+                      <span class="tag" style="flex:none;background:{{ w.bg }};color:{{ w.fg }}">{{ w.level }}</span>
+                      <span>{{ w.text }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ hasData }}" hint-placeholder-val="{{ false }}">
+                <div class="card elev-sm" style="padding:var(--space-4);gap:12px">
+                  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                    <div class="card-kicker">Order in time — {{ fileCount }} spectra</div>
+                    <div style="display:flex;gap:8px">
+                      <button class="btn btn-secondary" style="border-radius:999px;font-size:12px;padding:5px 12px" onClick="{{ reverseOrder }}">Reverse order</button>
+                    </div>
+                  </div>
+                  <div style="font-size:12px;color:color-mix(in srgb,var(--color-text) 58%,transparent)">{{ timesNote }} The first row is the reference unless you pick another.</div>
+                  <div style="max-height:420px;overflow-y:auto;display:flex;flex-direction:column;gap:2px">
+                    <sc-for list="{{ fileRows }}" as="f" hint-placeholder-count="6">
+                      <div style="display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:center;gap:10px;padding:6px 8px;border-radius:10px;border:1px solid color-mix(in srgb,var(--color-text) 8%,transparent)">
+                        <span class="sg-num" style="font-size:12px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">{{ f.num }}</span>
+                        <span style="min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px">{{ f.name }}<span class="sg-num" style="color:color-mix(in srgb,var(--color-text) 50%,transparent);font-size:11.5px"> · {{ f.meta }}</span></span>
+                        <span style="display:flex;gap:4px;align-items:center">
+                          <button class="btn btn-ghost" style="padding:2px 8px;font-size:12px" onClick="{{ f.makeRef }}">ref</button>
+                          <button class="btn btn-ghost" style="padding:2px 8px;font-size:12px" onClick="{{ f.up }}">↑</button>
+                          <button class="btn btn-ghost" style="padding:2px 8px;font-size:12px" onClick="{{ f.down }}">↓</button>
+                          <button class="btn btn-ghost" style="padding:2px 8px;font-size:12px" onClick="{{ f.remove }}">✕</button>
+                        </span>
+                      </div>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ tabOverview }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column;gap:18px">
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px">
+                <sc-for list="{{ summary }}" as="s" hint-placeholder-count="5">
+                  <div class="card elev-sm" style="padding:var(--space-3);gap:5px">
+                    <div class="card-kicker">{{ s.kicker }}</div>
+                    <div class="sg-num" style="font-size:23px;font-weight:600;line-height:1.1">{{ s.value }}</div>
+                    <div style="font-size:11.5px;line-height:1.5;color:color-mix(in srgb,var(--color-text) 58%,transparent)">{{ s.note }}</div>
+                  </div>
+                </sc-for>
+              </div>
+              <div class="card elev-sm" style="padding:var(--space-4)" data-comment-anchor="6dc8602914-div">
+                <dc-import name="Plot" plot="{{ normPlot }}" hint-size="100%,320px"></dc-import>
+              </div>
+              <div class="card elev-sm" style="gap:12px;padding:var(--space-4)">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap">
+                  <div class="card-kicker">Computation cost per spectrum</div>
+                  <div class="sg-num" style="font-size:12px;color:color-mix(in srgb,var(--color-text) 58%,transparent)">{{ timingHead }}</div>
+                </div>
+                
+                <div style="display:flex;flex-direction:column;gap:7px">
+                  <div style="display:grid;grid-template-columns:minmax(150px,1.1fr) minmax(90px,1fr) 78px 54px;align-items:center;gap:10px;font-size:10.5px;letter-spacing:0.04em;text-transform:uppercase;color:color-mix(in srgb,var(--color-text) 45%,transparent)">
+                    <span>Method</span>
+                    <span></span>
+                    <span style="text-align:right">Per spectrum</span>
+                    <span style="text-align:right">Share</span>
+                  </div>
+                  <sc-for list="{{ timingRows }}" as="t" hint-placeholder-count="7">
+                    <div style="display:grid;grid-template-columns:minmax(150px,1.1fr) minmax(90px,1fr) 78px 54px;align-items:center;gap:10px">
+                      <span style="display:flex;align-items:flex-start;gap:7px;min-width:0">
+                        <span style="width:10px;height:10px;border-radius:999px;flex:none;background:{{ t.color }};margin-top:4px"></span>
+                        <span style="min-width:0;display:flex;flex-direction:column;gap:1px">
+                          <span style="font-size:12.5px;line-height:1.3">{{ t.label }}</span>
+                          <span style="font-size:11px;line-height:1.35;color:color-mix(in srgb,var(--color-text) 50%,transparent)">{{ t.note }}</span>
+                        </span>
+                      </span>
+                      <span style="height:8px;border-radius:999px;background:color-mix(in srgb,var(--color-text) 8%,transparent);overflow:hidden;display:block">
+                        <span style="display:block;height:100%;border-radius:999px;width:{{ t.barW }};background:{{ t.color }}"></span>
+                      </span>
+                      <span class="sg-num" style="font-size:12.5px;font-weight:600;text-align:right">{{ t.ms }}</span>
+                      <span class="sg-num" style="font-size:11.5px;text-align:right;color:color-mix(in srgb,var(--color-text) 52%,transparent)">{{ t.rel }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+                
+              </div>
+              <div class="card elev-sm" style="padding:var(--space-4);gap:8px">
+                <div class="card-kicker">What this run shows</div>
+                <p style="margin:0;font-size:14px;line-height:1.65;text-wrap:pretty">{{ verdict }}</p>
+              </div>
+              
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ tabSens }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:18px">
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:18px">
+                <sc-for list="{{ physPlots }}" as="p" hint-placeholder-count="4">
+                  <div class="card elev-sm" style="padding:var(--space-3)">
+                    <dc-import name="Plot" plot="{{ p.spec }}" hint-size="100%,250px"></dc-import>
+                  </div>
+                </sc-for>
+              </div>
+              <div class="card elev-sm" style="padding:var(--space-4);gap:10px">
+                <div class="card-kicker">Intervals</div>
+                <div style="font-size:12px;line-height:1.55;color:color-mix(in srgb,var(--color-text) 60%,transparent);max-width:62em">The sage band is the buffer pre-run the baseline is taken over; the terracotta band is the rinse window the response is read from. Type exact minutes here, or drag either band’s edges directly on the sensograms above.</div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px">
+                  <sc-for list="{{ windowSliders }}" as="s" hint-placeholder-count="4">
+                    <div class="field" style="display:flex;flex-direction:column;gap:4px">
+                      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                        <label style="margin:0;font-size:12px">{{ s.label }}</label>
+                        <span style="display:flex;align-items:center;gap:4px;flex:none">
+                          <input class="input" type="number" min="{{ s.min }}" max="{{ s.max }}" step="{{ s.step }}" value="{{ s.value }}" onChange="{{ s.set }}" style="width:82px;padding:2px 9px;font-size:12px;border-radius:999px;text-align:right">
+                          <span style="font-size:11.5px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">{{ s.unit }}</span>
+                        </span>
+                      </div>
+                      <input class="sg-range" type="range" min="{{ s.min }}" max="{{ s.max }}" step="{{ s.step }}" value="{{ s.value }}" onChange="{{ s.set }}" onInput="{{ s.set }}">
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ tabSpectra }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <div class="card elev-sm" style="padding:var(--space-4);gap:14px">
+                <dc-import name="Plot" plot="{{ spectraPlot }}" hint-size="100%,340px"></dc-import>
+                <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+                  <div style="flex:1;min-width:240px;display:flex;flex-direction:column;gap:4px">
+                    <div style="display:flex;justify-content:space-between;font-size:12px">
+                      <span>Time point</span><span class="sg-num" style="font-weight:600">{{ timeLabel }}</span>
+                    </div>
+                    <input class="sg-range" type="range" min="0" max="{{ maxIdx }}" step="1" value="{{ timeIdx }}" onChange="{{ setTime }}" onInput="{{ setTime }}">
+                  </div>
+                  <div class="seg" style="border-radius:999px">
+                    <label class="seg-opt" style="font-size:12.5px;padding:6px 14px"><input type="radio" name="sgax" checked="{{ axLambda }}" onChange="{{ setAxLambda }}" style="position:absolute;opacity:0;pointer-events:none">λ</label>
+                    <label class="seg-opt" style="font-size:12.5px;padding:6px 14px"><input type="radio" name="sgax" checked="{{ axK }}" onChange="{{ setAxK }}" style="position:absolute;opacity:0;pointer-events:none">1/λ</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ tabDiag }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:18px">
+                <div class="card elev-sm" style="padding:var(--space-3);gap:10px">
+                  <dc-import name="Plot" plot="{{ fftPlot }}" hint-size="100%,250px"></dc-import>
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px">
+                    <sc-for list="{{ eotSliders }}" as="s" hint-placeholder-count="2">
+                      <div class="field" style="display:flex;flex-direction:column;gap:4px">
+                        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+                          <label style="margin:0;font-size:12px">{{ s.label }}</label>
+                          <span style="display:flex;align-items:center;gap:4px;flex:none">
+                            <input class="input" type="number" min="{{ s.min }}" max="{{ s.max }}" step="{{ s.step }}" value="{{ s.value }}" onChange="{{ s.set }}" style="width:78px;padding:2px 9px;font-size:12px;border-radius:999px;text-align:right">
+                            <span style="font-size:11.5px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">µm</span>
+                          </span>
+                        </div>
+                        <input class="sg-range" type="range" min="{{ s.min }}" max="{{ s.max }}" step="{{ s.step }}" value="{{ s.value }}" onChange="{{ s.set }}" onInput="{{ s.set }}">
+                      </div>
+                    </sc-for>
+                  </div>
+                  <div style="font-size:12px;line-height:1.55;color:color-mix(in srgb,var(--color-text) 62%,transparent)">The shaded band is the EOT search range: only peaks inside it are tracked. Drag its edges on the plot or type the bounds here.</div>
+                </div>
+                <div class="card elev-sm" style="padding:var(--space-3);gap:10px">
+                  <dc-import name="Plot" plot="{{ phasePlot }}" hint-size="100%,250px"></dc-import>
+                  <div style="font-size:12px;line-height:1.55;color:color-mix(in srgb,var(--color-text) 62%,transparent)">The green curve shows phase differences across the spectrum; the dashed line is their weighted mean. A smooth curve, including a gentle slope, is expected. If jumps or strong irregularities appear, check the wavelength window and EOT range, then verify that small changes to these settings do not substantially alter the result.</div>
+                </div>
+              </div>
+              <div class="card elev-sm" style="padding:var(--space-4);gap:12px">
+                <div class="card-kicker">Per-spectrum diagnostics — {{ timeLabel }}</div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px">
+                  <sc-for list="{{ diagRows }}" as="d" hint-placeholder-count="8">
+                    <div style="display:flex;flex-direction:column;gap:2px;padding:8px 0;border-top:1px solid color-mix(in srgb,var(--color-text) 10%,transparent)">
+                      <span style="font-size:11.5px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">{{ d.label }}</span>
+                      <span class="sg-num" style="font-size:15px">{{ d.value }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+              <div class="card elev-sm" style="padding:var(--space-4);gap:10px">
+                <div class="card-kicker">Validation &amp; warnings — {{ warnCount }}</div>
+                <sc-for list="{{ warnings }}" as="w" hint-placeholder-count="2">
+                  <div style="display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.5">
+                    <span class="tag" style="flex:none;background:{{ w.bg }};color:{{ w.fg }}">{{ w.level }}</span>
+                    <span>{{ w.text }}</span>
+                  </div>
+                </sc-for>
+              </div>
+              <div class="card elev-sm" style="padding:var(--space-4);gap:8px">
+                <button onClick="{{ toggleParams }}" style="display:flex;align-items:center;gap:8px;background:none;border:none;padding:0;font:inherit;cursor:pointer;color:inherit;text-align:left" style-hover="color:var(--color-accent-700)">
+                  <span class="card-kicker">Parameters used</span>
+                  <span class="sg-num" style="font-size:11px;color:color-mix(in srgb,var(--color-text) 55%,transparent)">{{ paramsCaret }}</span>
+                </button>
+                <sc-if value="{{ paramsOpen }}" hint-placeholder-val="{{ false }}">
+                  <pre class="sg-num" style="margin:0;font-size:11.5px;line-height:1.6;white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:color-mix(in srgb,var(--color-text) 78%,transparent)">{{ paramsText }}</pre>
+                </sc-if>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ tabExport }}" hint-placeholder-val="{{ false }}">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px">
+              <div class="card elev-sm" style="gap:12px;padding:var(--space-4)">
+                <div class="card-kicker">results.csv</div>
+                <div class="card-title">One row per time point</div>
+                <p style="margin:0;font-size:13.5px;line-height:1.6">Time, raw ESW, smoothed ESW, IAW, RIFTS ΔEOT, Morlet ΔEOT, the simulated response and a warning column.</p>
+                <button class="btn btn-primary" style="border-radius:999px" onClick="{{ dlCsv }}">Download CSV</button>
+              </div>
+              <div class="card elev-sm" style="gap:12px;padding:var(--space-4)">
+                <div class="card-kicker">parameters.json</div>
+                <div class="card-title">Everything needed to reproduce</div>
+                <p style="margin:0;font-size:13.5px;line-height:1.6">Data provenance — synthetic seed or the loaded file names and common grid — plus the spectral filter, reference spectrum, smoothing settings, EOT search window and phase-conversion mode.</p>
+                <button class="btn btn-primary" style="border-radius:999px" onClick="{{ dlJson }}">Download JSON</button>
+              </div>
+              <div class="card elev-sm" style="gap:12px;padding:var(--space-4)">
+                <div class="card-kicker">diagnostics.csv</div>
+                <div class="card-title">Per-spectrum FFT and phase</div>
+                <p style="margin:0;font-size:13.5px;line-height:1.6">Refined dominant EOT, peak amplitude and width, raw mean phase difference, applied phase-cycle correction and the confidence flag for every spectrum.</p>
+                <button class="btn btn-secondary" style="border-radius:999px" onClick="{{ dlDiag }}">Download CSV</button>
+              </div>
+              <div class="card" style="gap:10px;padding:var(--space-4);background:var(--color-accent-2-100)">
+                <div class="card-kicker" style="color:var(--color-accent-2-800)">Plots</div>
+                <p style="margin:0;font-size:13.5px;line-height:1.6">Every figure carries a save button in its toolbar — the download icon writes a 2× PNG of that figure exactly as shown, zoom and all. For a vector copy, print the page to PDF.</p>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;plotPalette&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Article figure&quot;,&quot;Colour-blind safe (Okabe–Ito)&quot;,&quot;Design-system warm&quot;],&quot;default&quot;:&quot;Article figure&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Figures&quot;},&quot;showGroundTruth&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Figures&quot;},&quot;plotDensity&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Comfortable&quot;,&quot;Compact&quot;],&quot;default&quot;:&quot;Comfortable&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Figures&quot;}}">
+const DEFAULTS = {
+  lamMin: 900, lamMax: 1700, nSpec: 181, dt: 1,
+  lc: 1200, resp: 0.35, noise: 0.0003, lampSd: 0.002, stretchSd: 0.000008, add: 0.005, mult: 0.02, seed: 12345,
+  sgWin: 21, sgPoly: 3, eswLc: 1200, eswLam2: 1210,
+  eotMin: 8000, eotMax: 25000, nCyc: 2, slope: 0.0105, intercept: 0,
+  baseA: 0, baseB: 38, respA: 95, respB: 112,
+  refIdx: 0, anaMin: 0, anaMax: 0, dtU: 15
+};
+const NK = 512, NPAD = 4096;
+
+const PALETTES = {
+  // matches the article figure: ESW light pink, ESW filtered crimson-pink, EOT blue,
+  // MWP green, IAW orange.
+  article: { eswRaw: '#f9a7c8', eswSm: '#e33d86', iaw: '#f4a259', rifts: '#4a72c8', mwp: '#5aa845', truth: '#201e1d', ref: '#8d8578', cur: '#4a72c8' },
+  cool: { eswRaw: '#8fcdf0', eswSm: '#0072b2', iaw: '#009e73', rifts: '#cc79a7', mwp: '#d55e00', truth: '#201e1d', ref: '#7a8a5e', cur: '#0072b2' },
+  warm: { eswRaw: '#b7c295', eswSm: '#7a8a5e', iaw: '#9a6b4f', rifts: '#5f6b45', mwp: '#8f3d16', truth: '#201e1d', ref: '#a8968a', cur: '#c67139' }
+};
+
+const REFS = {
+  eot: { text: 'K.P.S. Dancil, D.P. Greiner, M.J. Sailor, J. Am. Chem. Soc. 121 (1999) 7925–7930.', doi: '10.1021/ja991421n' },
+  iaw1: { text: 'S. Mariani, L.M. Strambini, G. Barillaro, Anal. Chem. 88 (2016) 8502–8509.', doi: '10.1021/acs.analchem.6b01228' },
+  iaw2: { text: 'S. Mariani, L. Pino, L.M. Strambini, L. Tedeschi, G. Barillaro, ACS Sens. 1 (2016) 1471–1479.', doi: '10.1021/acssensors.6b00634' },
+  mwp: { text: 'S.J. Ward, R. Layouni, S. Arshavsky-Graham, E. Segal, S.M. Weiss, ACS Sens. 6 (2021) 2967–2978.', doi: '10.1021/acssensors.1c00787' }
+};
+const METHODS = [
+  { key: 'esw', abbr: 'ESW', title: 'Effective shift in wavelength (ESW)', formula: 'ESW = R(λc) / R(λc + Δλ)',
+    summary: 'A ratio of two reflectance values: one at a characteristic wavelength λc on a well-defined dip or peak, the other one spectrometer pixel further. As the spectrum shifts, the two values move in opposite directions and the ratio changes continuously — even while the feature is still inside a single pixel.',
+    reads: 'two neighbouring pixels of each spectrum',
+    watch: 'shot noise at the dip, which is why the trace is usually smoothed (ESW-filtered)',
+    steps: [
+      'In the first buffer spectrum, pick λc on a well-defined reflectance minimum or maximum.',
+      'Read the reflectance at λc and at the next pixel, λc + Δλ.',
+      'Divide the two. On a peak rather than a dip, invert the ratio so the response keeps its sign.',
+      'Optionally smooth the ratio over time with a Savitzky–Golay filter — the ESW-filtered trace.'
+    ],
+    pros: [
+      'Changes that hit both pixels alike — lamp intensity, detector gain, a uniform offset — cancel in the ratio.',
+      'Resolves shifts below the spectrometer resolution, where tracking the minimum registers nothing.',
+      'Two numbers and one division: it runs live inside the acquisition software.',
+      'Works on single layers, microcavities and Bragg mirrors alike.'
+    ],
+    cons: [
+      'It reads the spectrum where reflectance is lowest, so the raw trace carries the most shot noise.',
+      'The output is a dimensionless ratio, not nanometres of optical thickness.'
+    ],
+    capA: 'Around one fringe minimum. The dashed lines are λc and the next pixel; the dots show where each spectrum is read. A shift of less than half a pixel already changes both values.',
+    capB: 'The ratio against the shift of the spectrum, in pixels. It rises smoothly through the sub-pixel range — the shift is measured, not rounded to the grid.',
+    refs: [], series: 'esw' },
+  { key: 'eot', abbr: 'EOT', title: 'Effective optical thickness (EOT) by RIFTS', formula: 'EOT = 2nL = peak position of FFT{ R(1/λ) }',
+    summary: 'The fringes of a porous film are evenly spaced in reciprocal wavelength, so a Fourier transform turns them into a single peak whose position is the effective optical thickness. Binding raises n and moves that peak. This is reflective interferometric Fourier transform spectroscopy, RIFTS — the conventional method.',
+    reads: 'the Fourier peak of the whole spectrum',
+    watch: 'high baseline noise, and slow baseline distortions that drag the peak',
+    steps: [
+      'Resample the spectrum onto an even grid in 1/λ.',
+      'Remove the slow baseline and apply a window.',
+      'Fourier-transform and find the dominant peak inside the expected EOT range; refine its position between bins.',
+      'Report ΔEOT against the reference spectrum.'
+    ],
+    pros: [
+      'Physical units — nanometres of optical thickness — and the longest track record.',
+      'Simple, fast, and unaffected by a uniform change of brightness.'
+    ],
+    cons: [
+      'The highest baseline noise of the four, which limits detection at low concentration.',
+      'Slowly varying baseline distortions in complex media — scattering, absorption — move the peak without any binding.',
+      'In multilayers several Fourier components coexist, and the dominant peak becomes ambiguous.'
+    ],
+    capA: 'Against 1/λ the single-layer fringes become one clean sinusoid. Buffer and bound spectra overlaid.',
+    capB: 'Fourier magnitude against optical thickness. Binding moves the peak by ΔEOT.',
+    refs: ['eot'], series: 'rifts' },
+  { key: 'iaw', abbr: 'IAW', title: 'Interferogram average over wavelength (IAW)', formula: 'IAW = ⟨ |R(t) − Rref| ⟩λ',
+    summary: 'Subtract the reference spectrum and average what is left across the whole wavelength window. Every pixel contributes, so random noise averages away — but so does the distinction between a shift and any other change.',
+    reads: 'the whole difference spectrum',
+    watch: 'amplitude and offset changes, which it counts as signal',
+    steps: [
+      'Record a reference spectrum in buffer.',
+      'Subtract it from each new spectrum, leaving the interferogram of the change.',
+      'Average the magnitude of that difference across the analysis window.',
+      'Track the average over time.'
+    ],
+    pros: [
+      'Averaging hundreds of pixels suppresses random noise; the original report improved the detection limit by orders of magnitude over EOT.',
+      'No Fourier transform or fringe model is needed.'
+    ],
+    cons: [
+      'Responds to amplitude and offset changes as readily as to shifts, so lamp drift or non-specific adsorption can look like binding.',
+      'Baseline subtraction and averaging are done after acquisition.'
+    ],
+    capA: 'Buffer and bound spectra, zoomed onto a few fringes.',
+    capB: 'The difference spectrum for a real shift (solid) and for a 2 % brightness change with no shift at all (dashed). Both average to a non-zero value, so IAW registers each as a response.',
+    refs: ['iaw1', 'iaw2'], series: 'iaw' },
+  { key: 'mwp', abbr: 'MWP', title: 'Morlet wavelet phase (MWP)', formula: 'ΔEOT = Δφ / (2π · k̄)',
+    summary: 'Filter the fringes with a complex Morlet wavelet tuned to their own frequency, then compare the phase of each spectrum with the reference. The phase moves with the fringes but ignores their brightness.',
+    reads: 'the phase of the wavelet-filtered fringes',
+    watch: 'computation cost, and phase jumps in multilayer spectra',
+    steps: [
+      'Resample onto an even grid in 1/λ, as for EOT.',
+      'Convolve with a complex Morlet wavelet centred on the fringe frequency — a narrow band-pass that removes white noise and the slow envelope together.',
+      'Take the phase difference against the reference at every sample and average it, weighted by amplitude.',
+      'Resolve whole 2π cycles with the coarse EOT value and convert Δφ to ΔEOT.'
+    ],
+    pros: [
+      'Insensitive to intensity changes — lamp fluctuation, optical drift, bulk index steps.',
+      'Low baseline noise; the current state of the art for single-layer films.'
+    ],
+    cons: [
+      'The heaviest pipeline — Fourier transform, convolution, phase extraction and unwrapping — and the slowest per spectrum.',
+      'Built on a single-frequency fringe model; multilayers with several close Fourier components can make the phase jump.'
+    ],
+    capA: 'Detrended fringes (thin) and the wavelet-filtered signal (bold) against 1/λ.',
+    capB: 'Phase difference between bound and buffer spectra across the window. The dashed line is the weighted mean that becomes Δφ.',
+    refs: ['mwp'], series: 'mwp' }
+];
+
+class Component extends DCLogic {
+  state = {
+    view: 'home', tab: 'spectra', method: 'esw', src: 'synth', p: { ...DEFAULTS },
+    sgOn: true, denMode: 'next', convMode: 'theory',
+    timeIdx: 110, axis: 'lambda', synthModel: 'cavity', nzShot: true, nzLamp: true, nzStretch: true, advOpen: false, paramsOpen: false, busy: false, ms: 0,
+    dataset: null, files: [], report: [], parsing: false, useImported: false, timeUnit: 'min', dtUnit: 's', filmKind: 'cavity', drag: null
+  };
+
+  componentDidMount() { this.compute(); }
+
+  // Any navigation to a different page — Home, Methods, or one of the experiment tabs —
+  // lands at the top, so the page's heading and main figure are what the reader sees
+  // first. In-page switches (method tabs, sliders, toggles) keep the scroll position.
+  toTop() { requestAnimationFrame(() => window.scrollTo(0, 0)); }
+
+  // ---------- numerics ----------
+  rng(seed) { let a = seed | 0; return () => { a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  gaussGen(rnd) { let sp = null; return () => { if (sp !== null) { const v = sp; sp = null; return v; } let u = 0, v = 0; while (u === 0) u = rnd(); while (v === 0) v = rnd(); const r = Math.sqrt(-2 * Math.log(u)), th = 2 * Math.PI * v; sp = r * Math.sin(th); return r * Math.cos(th); }; }
+
+  fft(re, im, inv) {
+    const n = re.length;
+    for (let i = 1, j = 0; i < n; i++) { let bit = n >> 1; for (; j & bit; bit >>= 1) j ^= bit; j ^= bit; if (i < j) { const tr = re[i]; re[i] = re[j]; re[j] = tr; const ti = im[i]; im[i] = im[j]; im[j] = ti; } }
+    for (let len = 2; len <= n; len <<= 1) {
+      const ang = (inv ? 2 : -2) * Math.PI / len, wr = Math.cos(ang), wi = Math.sin(ang);
+      for (let i = 0; i < n; i += len) {
+        let cr = 1, ci = 0;
+        for (let k = 0; k < len / 2; k++) {
+          const ur = re[i + k], ui = im[i + k];
+          const xr = re[i + k + len / 2], xi = im[i + k + len / 2];
+          const vr = xr * cr - xi * ci, vi = xr * ci + xi * cr;
+          re[i + k] = ur + vr; im[i + k] = ui + vi;
+          re[i + k + len / 2] = ur - vr; im[i + k + len / 2] = ui - vi;
+          const ncr = cr * wr - ci * wi; ci = cr * wi + ci * wr; cr = ncr;
+        }
+      }
+    }
+    if (inv) for (let i = 0; i < n; i++) { re[i] /= n; im[i] /= n; }
+  }
+
+  savGol(y, win, poly) {
+    const n = y.length, half = (win - 1) >> 1, out = new Array(n);
+    if (win > n || win < 3 || poly >= win) return y.slice();
+    for (let i = 0; i < n; i++) {
+      let a = i - half, b = i + half;
+      if (a < 0) { a = 0; b = win - 1; } if (b > n - 1) { b = n - 1; a = n - win; }
+      const m = poly + 1, A = [], rhs = [];
+      for (let r = 0; r < m; r++) { A.push(new Array(m).fill(0)); rhs.push(0); }
+      for (let j = a; j <= b; j++) {
+        const x = j - i, pw = [];
+        for (let q = 0; q < 2 * m; q++) pw.push(Math.pow(x, q));
+        for (let r = 0; r < m; r++) { for (let c = 0; c < m; c++) A[r][c] += pw[r + c]; rhs[r] += pw[r] * y[j]; }
+      }
+      for (let c = 0; c < m; c++) {
+        let piv = c; for (let r = c + 1; r < m; r++) if (Math.abs(A[r][c]) > Math.abs(A[piv][c])) piv = r;
+        const tA = A[c]; A[c] = A[piv]; A[piv] = tA; const tb = rhs[c]; rhs[c] = rhs[piv]; rhs[piv] = tb;
+        if (Math.abs(A[c][c]) < 1e-12) continue;
+        for (let r = c + 1; r < m; r++) { const f = A[r][c] / A[c][c]; for (let k = c; k < m; k++) A[r][k] -= f * A[c][k]; rhs[r] -= f * rhs[c]; }
+      }
+      const sol = new Array(m).fill(0);
+      for (let r = m - 1; r >= 0; r--) { let s = rhs[r]; for (let k = r + 1; k < m; k++) s -= A[r][k] * sol[k]; sol[r] = Math.abs(A[r][r]) < 1e-12 ? 0 : s / A[r][r]; }
+      out[i] = sol[0];
+    }
+    return out;
+  }
+
+  detrend(y) {
+    const n = y.length; let sx = 0, sy = 0, sxx = 0, sxy = 0;
+    for (let i = 0; i < n; i++) { sx += i; sy += y[i]; sxx += i * i; sxy += i * y[i]; }
+    const b = (n * sxy - sx * sy) / (n * sxx - sx * sx), a = (sy - b * sx) / n;
+    return y.map((v, i) => v - (a + b * i));
+  }
+
+  // ---------- file input ----------
+  natCmp(a, b) {
+    const chunk = s => { const out = []; String(s).replace(/(\d+)|(\D+)/g, (_, n, t) => { out.push(n !== undefined ? { n: +n } : { t: t }); return ''; }); return out; };
+    const ax = chunk(a), bx = chunk(b);
+    for (let i = 0; i < Math.min(ax.length, bx.length); i++) {
+      const p1 = ax[i], p2 = bx[i];
+      if (p1.n !== undefined && p2.n !== undefined) { if (p1.n !== p2.n) return p1.n - p2.n; }
+      else if (p1.t !== undefined && p2.t !== undefined) { const d = p1.t.localeCompare(p2.t); if (d) return d; }
+      else return p1.n !== undefined ? -1 : 1;
+    }
+    return ax.length - bx.length;
+  }
+  sniffDelim(lines) {
+    const c = { ',': 0, ';': 0, '\t': 0 };
+    lines.forEach(l => { c[','] += (l.match(/,/g) || []).length; c[';'] += (l.match(/;/g) || []).length; c['\t'] += (l.match(/\t/g) || []).length; });
+    const best = Object.keys(c).sort((a, b) => c[b] - c[a])[0];
+    return c[best] > 0 ? best : 'ws';
+  }
+  parseFile(text) {
+    const lines = []; let comments = 0, blanks = 0;
+    for (const raw of String(text).split(/\r?\n/)) {
+      const t = raw.trim();
+      if (!t) { blanks++; continue; }
+      if (t[0] === '#' || t[0] === '%' || t.slice(0, 2) === '//') { comments++; continue; }
+      lines.push(t);
+    }
+    if (lines.length < 3) return { error: 'fewer than three data lines once blanks and comment lines are removed' };
+    const delim = this.sniffDelim(lines.slice(0, 20));
+    const tok = l => (delim === 'ws' ? l.split(/\s+/) : l.split(delim)).map(s => s.trim()).filter(s => s !== '');
+    const num = s => (s === '' || s == null) ? NaN : parseFloat(delim === ',' ? s : String(s).replace(',', '.'));
+    let header = null, start = 0;
+    const first = tok(lines[0]);
+    if (first.some(s => !Number.isFinite(num(s)))) { header = first; start = 1; }
+    const cells = []; let bad = 0, cols = 0;
+    for (let i = start; i < lines.length; i++) {
+      const row = tok(lines[i]).map(num);
+      if (row.length < 2 || !Number.isFinite(row[0]) || !Number.isFinite(row[1])) { bad++; continue; }
+      cells.push(row); cols = Math.max(cols, row.length);
+    }
+    if (cells.length < 3) return { error: 'no numeric rows found — check the delimiter and the decimal separator' };
+    return { cells, cols, delim: delim === 'ws' ? 'whitespace' : delim === '\t' ? 'tab' : delim, header, comments, blanks, bad };
+  }
+  interp(xs, ys, grid) {
+    const n = xs.length, out = new Array(grid.length);
+    for (let g = 0; g < grid.length; g++) {
+      const x = grid[g];
+      let a = 0, b = n - 1;
+      if (x <= xs[0]) { out[g] = ys[0]; continue; }
+      if (x >= xs[n - 1]) { out[g] = ys[n - 1]; continue; }
+      while (b - a > 1) { const m = (a + b) >> 1; if (xs[m] <= x) a = m; else b = m; }
+      const f = (x - xs[a]) / (xs[b] - xs[a]);
+      out[g] = ys[a] + f * (ys[b] - ys[a]);
+    }
+    return out;
+  }
+  estimateEOT(lam, row) {
+    const kmin = 1 / lam[lam.length - 1], kmax = 1 / lam[0], dk = (kmax - kmin) / (NK - 1);
+    const lamQ = []; for (let i = 0; i < NK; i++) lamQ.push(1 / (kmin + i * dk));
+    const y = this.detrend(this.interp(lam, row, lamQ));
+    const re = new Float64Array(NPAD), im = new Float64Array(NPAD);
+    for (let i = 0; i < NK; i++) re[i] = y[i] * (0.5 - 0.5 * Math.cos(2 * Math.PI * i / (NK - 1)));
+    this.fft(re, im, false);
+    let bi = -1, bm = 0;
+    for (let i = 3; i < NPAD / 2; i++) {
+      const e = i / (NPAD * dk); if (e < 800 || e > 200000) continue;
+      const m = Math.hypot(re[i], im[i]); if (m > bm) { bm = m; bi = i; }
+    }
+    return bi > 0 ? bi / (NPAD * dk) : 15000;
+  }
+
+  async unzip(file) {
+    const buf = new Uint8Array(await file.arrayBuffer());
+    const dv = new DataView(buf.buffer);
+    let eocd = -1;
+    for (let i = buf.length - 22; i >= Math.max(0, buf.length - 66000); i--) if (dv.getUint32(i, true) === 0x06054b50) { eocd = i; break; }
+    if (eocd < 0) throw new Error(file.name + ' is not a readable ZIP archive');
+    const count = dv.getUint16(eocd + 10, true);
+    let off = dv.getUint32(eocd + 16, true);
+    const dec = new TextDecoder(), out = [];
+    let skipped = 0;
+    for (let e = 0; e < count; e++) {
+      if (off + 46 > buf.length || dv.getUint32(off, true) !== 0x02014b50) break;
+      const method = dv.getUint16(off + 10, true);
+      const csize = dv.getUint32(off + 20, true), usize = dv.getUint32(off + 24, true);
+      const nlen = dv.getUint16(off + 28, true), elen = dv.getUint16(off + 30, true), clen = dv.getUint16(off + 32, true);
+      const lho = dv.getUint32(off + 42, true);
+      const name = dec.decode(buf.subarray(off + 46, off + 46 + nlen));
+      off += 46 + nlen + elen + clen;
+      const leaf = name.split('/').pop();
+      if (name.slice(-1) === '/' || name.indexOf('__MACOSX') === 0 || leaf.charAt(0) === '.') continue;
+      if (!/\.(txt|csv|tsv|dat|asc|prn|xy)$/i.test(leaf)) { skipped++; continue; }
+      if (csize === 0xffffffff || usize === 0xffffffff) throw new Error('ZIP64 archives are not supported — please expand ' + file.name + ' locally first');
+      if (method !== 0 && method !== 8) throw new Error('unsupported compression method in ' + leaf + ' — only stored and deflated entries can be read');
+      const ln = dv.getUint16(lho + 26, true), le = dv.getUint16(lho + 28, true), start = lho + 30 + ln + le;
+      out.push({ name: leaf, method, data: buf.subarray(start, start + csize) });
+    }
+    return { entries: out, skipped };
+  }
+  async inflateRaw(bytes) {
+    if (typeof DecompressionStream === 'undefined') throw new Error('this browser cannot expand deflated ZIP entries — expand the archive locally and drop the files');
+    const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+    return new Uint8Array(await new Response(stream).arrayBuffer());
+  }
+
+  async handleFiles(fileList) {
+    const files = Array.from(fileList || []);
+    if (!files.length) return;
+    this.setState({ parsing: true, drag: false, report: [], progress: 'Reading ' + files.length + ' file' + (files.length === 1 ? '' : 's') + '…' });
+    const raw = [], pre = [], dec = new TextDecoder();
+    try {
+      for (const f of files) {
+        if (/\.zip$/i.test(f.name)) {
+          const { entries, skipped } = await this.unzip(f);
+          if (!entries.length) { pre.push({ level: 'error', text: f.name + ' — no TXT, CSV, TSV, DAT, ASC, PRN or XY entries inside the archive.' }); continue; }
+          pre.push({ level: 'ok', text: f.name + ' — ' + entries.length + ' spectrum file' + (entries.length === 1 ? '' : 's') + ' expanded in this browser' + (skipped ? ', ' + skipped + ' non-spectral entr' + (skipped === 1 ? 'y' : 'ies') + ' ignored' : '') + '.' });
+          for (let i = 0; i < entries.length; i++) {
+            const en = entries[i];
+            const bytes = en.method === 0 ? en.data : await this.inflateRaw(en.data);
+            raw.push({ name: en.name, text: dec.decode(bytes) });
+            if (i % 40 === 0) this.setState({ progress: 'Expanding ' + f.name + ' — ' + (i + 1) + ' of ' + entries.length + '…' });
+          }
+        } else {
+          let text = ''; try { text = await f.text(); } catch (e) { text = ''; }
+          raw.push({ name: f.name, text });
+        }
+      }
+    } catch (err) {
+      this.setState({ parsing: false, progress: '', dataset: null, report: [{ level: 'error', text: 'Could not read the archive — ' + (err && err.message ? err.message : String(err)) }] });
+      return;
+    }
+    this.setState({ progress: 'Parsing ' + raw.length + ' spectra…' });
+    setTimeout(() => this.ingest(raw, pre), 16);
+  }
+
+  ingest(raw, pre) {
+    const report = (pre || []).slice(), parsed = raw.map(f => Object.assign({ name: f.name }, this.parseFile(f.text)));
+    parsed.filter(f => f.error).forEach(f => report.push({ level: 'error', text: f.name + ' — ' + f.error }));
+    const good = parsed.filter(f => !f.error);
+    const fail = extra => { if (extra) report.push(extra); this.setState({ report, dataset: null, parsing: false, files: [] }); };
+    if (!good.length) return fail();
+
+    let sets = [], importedTimes = null, shape = 'files';
+    if (good.length === 1 && good[0].cols > 2) {
+      const f = good[0]; shape = 'matrix';
+      const wl = f.cells.map(rw => rw[0]), m = f.cols - 1;
+      for (let c = 1; c <= m; c++) sets.push({ name: (f.header && f.header[c]) || ('column ' + (c + 1)), wl, r: f.cells.map(rw => rw[c]) });
+      if (f.header) { const t = f.header.slice(1, m + 1).map(x => parseFloat(x)); if (t.length === m && t.every(Number.isFinite)) importedTimes = t; }
+      report.push({ level: 'ok', text: 'Matrix file read: ' + m + ' spectra × ' + wl.length + ' wavelength rows, ' + f.delim + '-delimited' + (importedTimes ? '. The numeric header row was taken as time values.' : (f.header ? '. The header row was taken as spectrum names.' : '.')) });
+    } else {
+      const sorted = good.slice().sort((a, b) => this.natCmp(a.name, b.name));
+      sorted.forEach(f => {
+        if (f.cols > 2) report.push({ level: 'warn', text: f.name + ' — ' + f.cols + ' columns present; columns 1 and 2 were used as wavelength and reflectance.' });
+        sets.push({ name: f.name, wl: f.cells.map(rw => rw[0]), r: f.cells.map(rw => rw[1]) });
+      });
+      report.push({ level: 'ok', text: sets.length + ' file' + (sets.length === 1 ? '' : 's') + ' read as two columns, ordered by natural filename sort: ' + sorted.slice(0, 3).map(f => f.name).join(', ') + (sorted.length > 3 ? ' … ' + sorted[sorted.length - 1].name : '') + '. Delimiter detected: ' + good[0].delim + '.' });
+      const hdr = good.filter(f => f.header).length;
+      if (hdr) report.push({ level: 'ok', text: hdr + ' file' + (hdr === 1 ? '' : 's') + ' carried a header row, which was skipped.' });
+      const cm = good.reduce((s, f) => s + (f.comments || 0), 0);
+      if (cm) report.push({ level: 'ok', text: cm + ' comment line' + (cm === 1 ? '' : 's') + ' ignored (#, % or //).' });
+    }
+    const badRows = good.reduce((s, f) => s + (f.bad || 0), 0);
+    if (badRows) report.push({ level: 'warn', text: badRows + ' row' + (badRows === 1 ? '' : 's') + ' skipped as non-numeric or incomplete.' });
+
+    let nonFinite = 0, dups = 0, unsorted = 0;
+    const clean = sets.map(s => {
+      const pts = [];
+      for (let i = 0; i < s.wl.length; i++) { const w = s.wl[i], y = s.r[i]; if (!Number.isFinite(w) || !Number.isFinite(y)) { nonFinite++; continue; } pts.push([w, y]); }
+      for (let i = 1; i < pts.length; i++) if (pts[i][0] < pts[i - 1][0]) { unsorted++; break; }
+      pts.sort((a, b) => a[0] - b[0]);
+      const out = [];
+      for (const pt of pts) {
+        const last = out[out.length - 1];
+        if (last && Math.abs(pt[0] - last[0]) < 1e-9) { dups++; last[1] = (last[1] + pt[1]) / 2; continue; }
+        out.push([pt[0], pt[1]]);
+      }
+      return { name: s.name, wl: out.map(q => q[0]), r: out.map(q => q[1]) };
+    }).filter(s => s.wl.length > 8);
+    if (nonFinite) report.push({ level: 'warn', text: nonFinite + ' non-finite value' + (nonFinite === 1 ? '' : 's') + ' dropped.' });
+    if (unsorted) report.push({ level: 'warn', text: unsorted + ' spectra were not monotonically increasing in wavelength and have been sorted.' });
+    if (dups) report.push({ level: 'warn', text: dups + ' duplicated wavelength value' + (dups === 1 ? '' : 's') + ' averaged.' });
+    if (clean.length < 2) return fail({ level: 'error', text: 'Reference-based analysis needs at least two spectra; ' + clean.length + ' usable spectrum was found.' });
+
+    const lo = Math.max(...clean.map(s => s.wl[0])), hi = Math.min(...clean.map(s => s.wl[s.wl.length - 1]));
+    if (!(hi - lo > 0)) return fail({ level: 'error', text: 'The spectra share no overlapping wavelength range, so no common grid can be built.' });
+    const steps = clean.map(s => { const d = []; for (let i = 1; i < s.wl.length; i++) d.push(s.wl[i] - s.wl[i - 1]); d.sort((a, b) => a - b); return d[Math.floor(d.length / 2)] || 1; });
+    let step = Math.max(...steps), nPts = Math.floor((hi - lo) / step) + 1;
+    if (nPts > 4000) { step = (hi - lo) / 3999; nPts = 4000; }
+    if (nPts < 32) return fail({ level: 'error', text: 'Only ' + nPts + ' wavelength samples fall inside the common range — too few for FFT or wavelet analysis.' });
+    const grid = []; for (let i = 0; i < nPts; i++) grid.push(lo + i * step);
+    const spec = clean.map(s => this.interp(s.wl, s.r, grid));
+    const differing = clean.some(s => Math.abs(s.wl[0] - lo) > 1e-6 || Math.abs(s.wl[s.wl.length - 1] - hi) > 1e-6 || s.wl.length !== nPts);
+    report.push({
+      level: differing ? 'warn' : 'ok', text: differing
+        ? 'Wavelength grids differed, so every spectrum was linearly interpolated onto the common overlap ' + lo.toFixed(2) + '–' + hi.toFixed(2) + ' nm at ' + step.toFixed(3) + ' nm (' + nPts + ' samples). Nothing was extrapolated beyond the measured range.'
+        : 'All spectra share one grid: ' + lo.toFixed(2) + '–' + hi.toFixed(2) + ' nm at ' + step.toFixed(3) + ' nm (' + nPts + ' samples).'
+    });
+    if (clean.length < 21) report.push({ level: 'warn', text: 'Only ' + clean.length + ' time points, so the default 21-point Savitzky–Golay window cannot be used; shorten it or leave smoothing off.' });
+
+    const ref = spec[0];
+    // Two measurement regimes get their own defaults. A multilayer run reaching past
+    // ~1300 nm is analysed over 1000-1400 nm with the feature and ESW wavelength at
+    // 1164 nm; if that sample is unavailable the sample's own resonance minimum is used.
+    // Anything in the visible falls back to the 500-800 nm window with the 611 nm feature.
+    const singleFilm = this.state.filmKind === 'single';
+    const REGIMES = singleFilm ? [
+      { id: 'sl', min: 1000, max: 1400, prefLc: null, label: 'single layer, 1000–1400 nm', needsAbove: 1300 },
+      { id: 'vis', min: 500, max: 800, prefLc: null, label: 'single layer, visible 500–800 nm', needsAbove: 0 }
+    ] : [
+      { id: 'mc', min: 1000, max: 1400, prefLc: 1164, label: 'multilayer, 1000–1400 nm', needsAbove: 1300 },
+      { id: 'vis', min: 500, max: 800, prefLc: 611, label: 'visible, 500–800 nm', needsAbove: 0 }
+    ];
+    let regime = null, anaMin = lo, anaMax = hi;
+    for (const rg of REGIMES) {
+      if (hi < rg.needsAbove) continue;
+      const a = Math.max(lo, Math.min(hi, rg.min)), b = Math.min(hi, Math.max(lo, rg.max));
+      if (b - a > 12 * step) { regime = rg; anaMin = a; anaMax = b; break; }
+    }
+    const usesPref = !!regime;
+    let mi = 0, md = Infinity;
+    const prefLc = regime && regime.prefLc;
+    if (prefLc) for (let i = 0; i < nPts; i++) { const d = Math.abs(grid[i] - prefLc); if (d < md) { md = d; mi = i; } }
+    const lcPref = !!prefLc && md <= 5 * step && grid[mi] >= anaMin && grid[mi] <= anaMax;
+    if (!lcPref) {
+      const iA = Math.max(1, Math.round((anaMin - lo) / step)), iB = Math.min(nPts - 2, Math.round((anaMax - lo) / step));
+      mi = this.pickLc(grid, ref, singleFilm, iA, iB);
+    }
+    const lc = grid[mi];
+    const est = this.estimateEOT(grid, ref);
+    const cyc = est * (1 / lo - 1 / hi);
+    report.push({
+      level: 'ok', text: 'Defaults: analysis window ' + anaMin.toFixed(1) + '–' + anaMax.toFixed(1) + ' nm' +
+        (usesPref ? ' (' + regime.label + ')' : ' (neither the 1000–1400 nm multilayer window nor the 500–800 nm visible window fits this dataset, so the full range is used)') +
+        '; feature and ESW wavelength ' + lc.toFixed(2) + ' nm' +
+        (lcPref ? ' (nearest sample to ' + prefLc + ' nm).' : singleFilm ? ' (the fringe minimum nearest the middle of the window).' : ' (the sharpest reflectance notch in the window — this sample’s resonance).')
+    });
+    report.push(cyc < 3
+      ? { level: 'warn', text: 'Only about ' + cyc.toFixed(1) + ' fringe periods are visible at the estimated optical thickness of ' + (est / 1000).toFixed(2) + ' µm. FFT and wavelet phase need roughly three or more.' }
+      : { level: 'ok', text: 'Estimated effective optical thickness ' + (est / 1000).toFixed(3) + ' µm — about ' + cyc.toFixed(1) + ' fringe periods in range.' });
+    if (est < 2000 || est > 20000) report.push({ level: 'warn', text: 'The estimated optical thickness of ' + (est / 1000).toFixed(2) + ' µm falls outside the default 2–20 µm EOT search bracket. Widen it under Advanced parameters or RIFTS will lock onto the wrong peak.' });
+    if (report.some(w => w.level === 'error')) return fail();
+
+    const dtMin0 = this.state.dtUnit === 's' ? 15 / 60 : 15;
+    const n = spec.length, tt = importedTimes || spec.map((_, j) => j * dtMin0);
+    const derived = {
+      refIdx: 0, anaMin, anaMax, lc, eswLc: lc, eswLam2: Math.min(anaMax, lc + step), dtU: 15,
+      eotMin: 2000, eotMax: 20000,
+      baseA: tt[0], baseB: tt[Math.max(1, Math.round((n - 1) * 0.2))],
+      respA: tt[Math.round((n - 1) * 0.6)], respB: tt[n - 1]
+    };
+    this.setState(s => ({
+      report, parsing: false, progress: '', useImported: !!importedTimes, timeUnit: importedTimes ? 'u' : 'steps',
+      dataset: { lam: grid, spec, names: clean.map(q => q.name), importedTimes, shape, step, lo, hi, est, derived },
+      files: clean.map((q, i) => ({ name: q.name, meta: q.wl.length + ' pts · ' + q.wl[0].toFixed(1) + '–' + q.wl[q.wl.length - 1].toFixed(1) + ' nm', idx: i, first: i === 0, last: i === clean.length - 1 })),
+      timeIdx: n - 1, tab: 'overview',
+      p: { ...s.p, ...derived, sgWin: Math.min(s.p.sgWin, n % 2 === 1 ? n : n - 1) }
+    }));
+    this.schedule();
+  }
+
+  reorder(kind, i) {
+    const d = this.state.dataset; if (!d) return;
+    const order = d.spec.map((_, q) => q);
+    if (kind === 'reverse') order.reverse();
+    else if (kind === 'up' && i > 0) { order[i] = i - 1; order[i - 1] = i; }
+    else if (kind === 'down' && i < order.length - 1) { order[i] = i + 1; order[i + 1] = i; }
+    else if (kind === 'remove') { if (order.length < 3) return; order.splice(i, 1); }
+    else return;
+    const files = this.state.files;
+    this.setState({
+      dataset: { ...d, spec: order.map(q => d.spec[q]), names: order.map(q => d.names[q]), importedTimes: d.importedTimes ? order.map(q => d.importedTimes[q]) : null },
+      files: order.map((q, k) => ({ name: d.names[q], meta: files[q] ? files[q].meta : '', idx: k, first: k === 0, last: k === order.length - 1 }))
+    });
+    this.schedule();
+  }
+
+  loadExample() {
+    const s = this.synth({ ...DEFAULTS, nSpec: 61, dt: 3 });
+    this.ingest(s.spec.map((row, j) => ({
+      name: 'spectrum' + (j + 1) + '.txt',
+      text: '# exported demo — two columns: wavelength (nm), reflectance\n% acquired at t = ' + (j * 3) + ' min\nwavelength\treflectance\n' +
+        s.lam.map((l, i) => l.toFixed(1) + '\t' + row[i].toFixed(6)).join('\n')
+    })));
+  }
+
+  async loadBundled(id) {
+    if (this.state.parsing) return;
+    this.setState({ parsing: true, progress: 'Loading the bundled example…' });
+    try {
+      const res = await fetch('examples/' + id + '.json');
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const d = await res.json();
+      const pre = [{ level: 'ok', text: d.label + ' (' + d.file + ') — ' + d.note }];
+      this.ingest(d.spec.map((row, j) => ({
+        name: d.names[j],
+        text: '# ' + d.file + ' — two columns: wavelength (nm), intensity (counts)\nwavelength\tintensity\n' +
+          d.lam.map((l, i) => l + '\t' + row[i]).join('\n')
+      })), pre);
+    } catch (e) {
+      this.setState({
+        parsing: false, progress: null,
+        report: [{ level: 'error', text: 'The bundled example could not be loaded (' + e.message + '). Open the page over http rather than from the file system, or drop your own spectra.' }]
+      });
+    }
+  }
+
+  // ---------- synthetic optics ----------
+  // Normal-incidence transfer matrix for a stack of (n, d) layers between air and a
+  // silicon substrate. Every layer matrix has the form [[A, iB], [iC, D]] with A…D real,
+  // and that form survives multiplication, so the product is carried as four real
+  // numbers instead of a complex-number class in the hot loop.
+  stackR(layers, lam, nSub) {
+    let A = 1, B = 0, C = 0, D = 1;
+    for (let q = 0; q < layers.length; q++) {
+      const L = layers[q], dl = 2 * Math.PI * L.n * L.d / lam;
+      const cs = Math.cos(dl), sn = Math.sin(dl), b2 = sn / L.n, c2 = L.n * sn;
+      const A2 = A * cs - B * c2, B2 = A * b2 + B * cs;
+      const C2 = C * cs + D * c2, D2 = -C * b2 + D * cs;
+      A = A2; B = B2; C = C2; D = D2;
+    }
+    // [B_; C_] = M · [1; nSub], then r = (n0·B_ − C_)/(n0·B_ + C_) with n0 = 1
+    const nr = A - D * nSub, ni = B * nSub - C;
+    const dr = A + D * nSub, di = B * nSub + C;
+    return (nr * nr + ni * ni) / (dr * dr + di * di);
+  }
+
+  // The two films this tool is about, each described the way it is actually fabricated.
+  // 'single' is one porous layer on silicon — a Fabry–Pérot etalon whose reflectance is a
+  // cosine in 1/λ. 'cavity' is a porous-silicon microcavity: two quarter-wave Bragg
+  // mirrors of alternating porosity enclosing a half-wave defect layer, which opens a
+  // narrow resonance inside the stopband. λc sets the quarter-wave design wavelength, so
+  // the defect mode sits there.
+  stack(model, lc) {
+    const nH = 1.78, nL = 1.36, nSub = 3.55;
+    if (model === 'single') {
+      // 2·n·d = EOT: a ~4.6 µm film reads ~15 µm of effective optical thickness
+      const n = 1.62, d = 15000 / (2 * n);
+      return { layers: [{ n, d }], nSub, eot: 2 * n * d };
+    }
+    const dH = lc / (4 * nH), dL = lc / (4 * nL), N = 6;
+    const layers = [];
+    for (let i = 0; i < N; i++) { layers.push({ n: nH, d: dH }); layers.push({ n: nL, d: dL }); }
+    layers.push({ n: nL, d: lc / (2 * nL) });
+    for (let i = 0; i < N; i++) { layers.push({ n: nL, d: dL }); layers.push({ n: nH, d: dH }); }
+    const opt = layers.reduce((s, L) => s + L.n * L.d, 0);
+    return { layers, nSub, eot: 2 * opt };
+  }
+
+  synth(p) {
+    const model = this.state.synthModel === 'single' ? 'single' : 'cavity';
+    const lam = []; for (let l = p.lamMin; l <= p.lamMax; l += 1) lam.push(l);
+    const st0 = this.stack(model, p.lc);
+    // Analyte infiltration raises the index of every porous layer by the same fraction,
+    // so the whole spectrum scales in wavelength: Δλ/λ = ΔEOT/EOT = eps.
+    const g = t => t < 40 ? 0 : (t < 110 ? 1 - Math.exp(-(t - 40) / 15) : (1 - Math.exp(-70 / 15)) * Math.exp(-(t - 110) / 25));
+    const rnd = this.rng(p.seed), gs = this.gaussGen(rnd);
+    // Three independent noise sources, each switchable, because they enter the
+    // measurement at different points and the methods are not equally vulnerable to them:
+    //   shot    — per pixel, variance proportional to the signal (photon counting)
+    //   lamp    — one random factor per spectrum, scaling the whole curve at once
+    //   stretch — a random fractional change of the optical thickness itself, so the
+    //             fringe period jitters exactly like a real thermal or etch fluctuation
+    const st_ = this.state;
+    const spec = [], truthL = [], truthE = [], epsAll = [], times = [];
+    for (let j = 0; j < p.nSpec; j++) {
+      const t = j * p.dt, eps0 = p.resp * g(t) / p.lc, f = j / (p.nSpec - 1);
+      const eps = eps0 + (st_.nzStretch ? p.stretchSd * gs() : 0);
+      const lamp = (1 + p.mult * f) * (st_.nzLamp ? 1 + p.lampSd * gs() : 1);
+      const layers = st0.layers.map(L => ({ n: L.n * (1 + eps), d: L.d }));
+      // additive offset = stray light, multiplicative factor = lamp drift
+      spec.push(lam.map(l => {
+        const R = this.stackR(layers, l, st0.nSub);
+        const shot = st_.nzShot ? p.noise * Math.sqrt(Math.max(R, 1e-4)) * gs() : 0;
+        return (R + p.add * f) * lamp + shot;
+      }));
+      // the stretch fluctuation is part of the film state, so it belongs in the simulated response
+      truthL.push(p.lc * eps); truthE.push(st0.eot * eps); epsAll.push(eps); times.push(t);
+    }
+    return { lam, spec, truthL, truthE, eps: epsAll, times, model, eot0: st0.eot };
+  }
+
+  // ---------- k-domain kernels ----------
+  fftMag(y, hann) {
+    const re = new Float64Array(NPAD), im = new Float64Array(NPAD);
+    for (let i = 0; i < NK; i++) re[i] = y[i] * hann[i];
+    this.fft(re, im, false);
+    const mag = new Float64Array(NPAD / 2);
+    for (let i = 0; i < NPAD / 2; i++) mag[i] = Math.hypot(re[i], im[i]);
+    return mag;
+  }
+  fftPeak(y, hann, dk, emin, emax) {
+    const mag = this.fftMag(y, hann), eotOf = m => m / (NPAD * dk);
+    let bi = -1;
+    for (let i = 1; i < NPAD / 2 - 1; i++) { const e = eotOf(i); if (e < emin || e > emax) continue; if (bi < 0 || mag[i] > mag[bi]) bi = i; }
+    if (bi < 1) return { eot: NaN, amp: 0, width: NaN, snr: 0 };
+    const l0 = Math.log(mag[bi - 1] + 1e-18), l1 = Math.log(mag[bi] + 1e-18), l2 = Math.log(mag[bi + 1] + 1e-18);
+    const den = l0 - 2 * l1 + l2, d = den !== 0 ? 0.5 * (l0 - l2) / den : 0;
+    const half = mag[bi] / Math.SQRT2; let lo = bi, hi = bi;
+    while (lo > 1 && mag[lo] > half) lo--; while (hi < NPAD / 2 - 2 && mag[hi] > half) hi++;
+    let noise = 0, cnt = 0;
+    for (let i = 1; i < NPAD / 2; i++) { const e = eotOf(i); if (e > emax * 1.4 && e < emax * 3) { noise += mag[i]; cnt++; } }
+    return { eot: eotOf(bi + d), amp: mag[bi], width: eotOf(hi) - eotOf(lo), snr: mag[bi] / ((noise / (cnt || 1)) || 1e-18) };
+  }
+  wavelet(f0, sk, dk) {
+    const Wre = new Float64Array(NK), Wim = new Float64Array(NK);
+    for (let i = 0; i < NK; i++) {
+      const nn = i < NK / 2 ? i : i - NK, k = nn * dk, env = Math.exp(-k * k / (2 * sk * sk));
+      Wre[i] = Math.cos(2 * Math.PI * f0 * k) * env; Wim[i] = Math.sin(2 * Math.PI * f0 * k) * env;
+    }
+    this.fft(Wre, Wim, false);
+    return { Wre, Wim };
+  }
+  filt(y, Wre, Wim) {
+    const re = Float64Array.from(y), im = new Float64Array(NK);
+    this.fft(re, im, false);
+    for (let i = 0; i < NK; i++) { const a = re[i], b = im[i]; re[i] = a * Wre[i] - b * Wim[i]; im[i] = a * Wim[i] + b * Wre[i]; }
+    this.fft(re, im, true);
+    return { re, im };
+  }
+  phaseDiff(y, Wre, Wim, yr, lo, hi, mmax, keepK) {
+    const ys = this.filt(y, Wre, Wim);
+    let sw = 0, sp = 0, used = 0;
+    const dphiK = keepK ? new Array(NK).fill(NaN) : null;
+    for (let i = lo; i < hi; i++) {
+      const mr = Math.hypot(yr.re[i], yr.im[i]), ms = Math.hypot(ys.re[i], ys.im[i]);
+      if (mr < 0.2 * mmax) continue;
+      const cr = ys.re[i] * yr.re[i] + ys.im[i] * yr.im[i], ci = ys.im[i] * yr.re[i] - ys.re[i] * yr.im[i];
+      const dp = Math.atan2(ci, cr);
+      if (dphiK) dphiK[i] = dp;
+      const w = mr * ms; sw += w; sp += w * dp; used++;
+    }
+    return { dphi: sw > 0 ? sp / sw : NaN, used, dphiK };
+  }
+  magFor(j) {
+    const r = this.res; if (!r) return null;
+    if (this._magIdx !== j || !this._mag) { this._mag = this.fftMag(r.kSig[j], r.hann); this._magIdx = j; }
+    return this._mag;
+  }
+  phaseKFor(j) {
+    const r = this.res; if (!r) return null;
+    if (this._phIdx !== j || !this._ph) { this._ph = this.phaseDiff(r.kSig[j], r.Wre, r.Wim, r.yr, r.lo, r.hi, r.mmax, true).dphiK; this._phIdx = j; }
+    return this._ph;
+  }
+  cancelRun() { this._token = (this._token || 0) + 1; this.setState({ prog: null, busy: false }); }
+
+  // Identity of everything the heavy pass (k-resample, FFT peak, wavelet phase) depends
+  // on. The two interval pairs are deliberately absent: moving a band cannot change a
+  // single fringe measurement, only the statistics taken over them.
+  heavyKey(p, st) {
+    const skip = { baseA: 1, baseB: 1, respA: 1, respB: 1 };
+    const pk = Object.keys(p).filter(k => !skip[k]).sort().map(k => k + '=' + p[k]).join(',');
+    return [st.src, st.sgOn, st.convMode, st.denMode, st.useImported, st.dtUnit, st.synthModel, st.filmKind, st.nzShot, st.nzLamp, st.nzStretch,
+      st.dataset ? st.dataset.spec.length + 'x' + st.dataset.lam.length + ':' + (st.dataset.names || []).join('|') : '-',
+      pk].join('~');
+  }
+
+  // Window-only derivation: interval membership, the baseline-referenced ESW, its
+  // Savitzky-Golay copy, and every per-series statistic. Cheap enough to run on every
+  // frame of a band drag.
+  windowStats(r, p, st) {
+    const n = r.n, times = r.times, warn = [];
+    const bIdx = [], rIdx = [];
+    for (let j = 0; j < n; j++) { if (times[j] >= p.baseA && times[j] <= p.baseB) bIdx.push(j); if (times[j] >= p.respA && times[j] <= p.respB) rIdx.push(j); }
+    if (bIdx.length < 2) { bIdx.length = 0; for (let j = 0; j < Math.max(2, Math.round(n * 0.2)); j++) bIdx.push(j); warn.push({ level: 'check', text: 'The baseline interval held fewer than two points, so the first ' + bIdx.length + ' time points were used instead.' }); }
+    if (rIdx.length < 1) { rIdx.length = 0; for (let j = Math.max(0, n - Math.max(2, Math.round(n * 0.2))); j < n; j++) rIdx.push(j); warn.push({ level: 'check', text: 'The response interval held no points, so the last ' + rIdx.length + ' time points were used instead.' }); }
+    const mean = a => a.reduce((s, v) => s + v, 0) / (a.length || 1);
+    const eswBase = mean(bIdx.map(j => r.esw[j]).filter(Number.isFinite));
+    const eswRel = r.esw.map(v => v - eswBase);
+    const canSg = n >= p.sgWin && p.sgWin > p.sgPoly && p.sgWin % 2 === 1;
+    const sgApplied = canSg && st.sgOn !== false;
+    const tSg0 = performance.now();
+    const eswSm = sgApplied ? this.savGol(eswRel.map(v => Number.isFinite(v) ? v : 0), p.sgWin, p.sgPoly) : eswRel.slice();
+    const sgMs = performance.now() - tSg0;
+    if (st.sgOn !== false && !canSg) warn.push({ level: 'check', text: 'Savitzky–Golay disabled: the window must be odd, larger than the polynomial order and no longer than the ' + n + ' available time points.' });
+
+    const sd = a => { const q = a.filter(Number.isFinite); const m = mean(q); return Math.sqrt(q.reduce((s, v) => s + (v - m) ** 2, 0) / (q.length || 1)); };
+    const madOf = a => { const q = a.filter(Number.isFinite); const m = mean(q); const dev = q.map(v => Math.abs(v - m)).sort((x, y2) => x - y2); return 1.4826 * (dev[Math.floor(dev.length / 2)] || 0); };
+    const slopeOf = (a, idx) => { const xs = idx.map(j => times[j]), ys = idx.map(j => a[j]); const nn = xs.length; if (nn < 2) return 0; const sx = xs.reduce((s, v) => s + v, 0), sy = ys.reduce((s, v) => s + v, 0), sxx = xs.reduce((s, v) => s + v * v, 0), sxy = xs.reduce((s, v, i) => s + v * ys[i], 0); return (nn * sxy - sx * sy) / (nn * sxx - sx * sx); };
+    const rmseOf = (a, b) => { let s = 0, c = 0; for (let j = 0; j < n; j++) if (Number.isFinite(a[j]) && Number.isFinite(b[j])) { s += (a[j] - b[j]) ** 2; c++; } return Math.sqrt(s / (c || 1)); };
+    const normOf = a => { const bm = mean(bIdx.map(j => a[j]).filter(Number.isFinite)); const rm = mean(rIdx.map(j => a[j]).filter(Number.isFinite)); const amp = rm - bm; return a.map(v => (v - bm) / (Math.abs(amp) < 1e-15 ? 1 : amp)); };
+
+    const series = [
+      { key: 'eswRaw', label: 'ESW, raw', unit: 'ratio', y: eswRel, color: 'eswRaw', truth: null },
+      { key: 'eswSm', label: 'ESW, Savitzky–Golay', unit: 'ratio', y: eswSm, color: 'eswSm', truth: null, off: !sgApplied },
+      { key: 'iaw', label: 'IAW', unit: 'reflectance', y: r.iaw, color: 'iaw', truth: null },
+      { key: 'rifts', label: 'RIFTS ΔEOT', unit: 'nm (ΔEOT)', y: r.rifts, color: 'rifts', truth: r.truthE },
+      { key: 'mwp', label: 'Morlet phase ΔEOT', unit: 'nm (ΔEOT)', y: r.mwp, color: 'mwp', truth: r.truthE }
+    ];
+    const truthNorm = r.hasTruth ? normOf(r.truthE) : null;
+    for (const s of series) {
+      s.norm = normOf(s.y);
+      s.sd = sd(bIdx.map(j => s.y[j])); s.mad = madOf(bIdx.map(j => s.y[j]));
+      s.slope = slopeOf(s.y, bIdx);
+      s.response = mean(rIdx.map(j => s.y[j]).filter(Number.isFinite)) - mean(bIdx.map(j => s.y[j]).filter(Number.isFinite));
+      s.snr = s.sd > 0 ? Math.abs(s.response) / s.sd : Infinity;
+      s.rmse = s.truth ? rmseOf(s.y, s.truth) : null;
+      s.rmseNorm = truthNorm ? rmseOf(s.norm, truthNorm) : null;
+    }
+    Object.assign(r, { bIdx, rIdx, eswBase, eswRel, eswSm, sgApplied, series, truthNorm, sgMs, windowWarn: warn });
+    return r;
+  }
+
+  async compute() {
+    const token = this._token = (this._token || 0) + 1;
+    const t0 = performance.now();
+    const st = this.state, p = st.p;
+    if (this.res && this._heavyKey && this._heavyKey === this.heavyKey(p, st)) {
+      const r = this.res;
+      this.windowStats(r, p, st);
+      r.warn = (r.warnBase || []).concat(r.windowWarn);
+      if (!r.warn.length) r.warn.push({ level: 'ok', text: 'All validation checks passed: monotonic wavelength grid, no duplicate samples, ESW wavelength inside the common range, every spectrum covers the analysis range.' });
+      if (r.cost) r.cost.sg = r.sgMs;
+      this.setState({ ms: Math.round(performance.now() - t0), prog: null, busy: false });
+      return;
+    }
+    const base = st.src === 'synth' ? this.synth(p) : st.dataset;
+    if (!base) { this.res = null; this.setState({ ms: 0, prog: null, busy: false }); return; }
+    let lam = base.lam, spec = base.spec, times = base.times || null;
+    let truthL = base.truthL || null, truthE = base.truthE || null;
+    const warn = [];
+    const fullLam = lam, fullRef = spec[Math.max(0, Math.min(spec.length - 1, st.src === 'synth' ? 0 : Math.round(p.refIdx)))];
+    {
+      const a = p.anaMin || lam[0], b = p.anaMax || lam[lam.length - 1];
+      let ia = 0; while (ia < lam.length - 26 && lam[ia] < a - 1e-9) ia++;
+      let ib = lam.length - 1; while (ib > ia + 25 && lam[ib] > b + 1e-9) ib--;
+      if (ia > 0 || ib < lam.length - 1) {
+        lam = lam.slice(ia, ib + 1); spec = spec.map(row => row.slice(ia, ib + 1));
+      }
+    }
+    // uploaded scans are indexed by acquisition order; the interval field converts that
+    // order into minutes, whatever unit the user typed it in
+    const dtMin = st.dtUnit === 's' ? p.dtU / 60 : p.dtU;
+    if (st.src !== 'synth') times = (st.useImported && base.importedTimes) ? base.importedTimes : spec.map((_, j) => j * dtMin);
+    const hasTruth = !!(truthE && truthL);
+    const n = spec.length, dl = lam[1] - lam[0];
+    const refI = st.src === 'synth' ? 0 : Math.max(0, Math.min(n - 1, Math.round(p.refIdx)));
+    const big = n > 48;
+    // setTimeout is clamped to >=1s in hidden/background frames, which stalls the
+    // batched passes below; a MessageChannel macrotask is not throttled, and when
+    // the page is hidden there is nothing to paint, so run straight through.
+    const chan = typeof MessageChannel !== 'undefined' ? new MessageChannel() : null;
+    const yieldNow = () => {
+      if (document.hidden || !chan) return Promise.resolve();
+      return new Promise(res => { chan.port1.onmessage = () => res(); chan.port2.postMessage(0); });
+    };
+    const tick = (phase, done) => { if (!document.hidden) this.setState({ prog: { phase, done, total: n, pct: Math.max(2, Math.round(100 * done / n)) + '%' } }); };
+    if (big) tick('Preparing', 0);
+
+    // --- window indices ---
+    const ic = Math.max(0, Math.min(lam.length - 2, Math.round((p.eswLc - lam[0]) / dl)));
+    const i2 = st.denMode === 'next' ? ic + 1 : Math.max(0, Math.min(lam.length - 1, Math.round((p.eswLam2 - lam[0]) / dl)));
+    const kmin = 1 / lam[lam.length - 1], kmax = 1 / lam[0], dk = (kmax - kmin) / (NK - 1);
+    const kg = [], lamQ = [];
+    for (let i = 0; i < NK; i++) { const k = kmin + i * dk; kg.push(k); lamQ.push(1 / k); }
+    const kbar = (kmin + kmax) / 2;
+    const eotOf = m => m / (NPAD * dk);
+    const hann = new Float64Array(NK);
+    for (let i = 0; i < NK; i++) hann[i] = 0.5 - 0.5 * Math.cos(2 * Math.PI * i / (NK - 1));
+    const ref = spec[refI];
+    const batch = Math.max(1, Math.min(24, Math.ceil(n / 40)));
+
+    // --- pass one: ESW, IAW, k-transform, FFT peak ---
+    const esw = new Array(n), iaw = new Array(n), kSig = new Array(n), riftsAll = new Array(n);
+    let zeroDen = 0;
+    const lamSpan = lam[lam.length - 1] - lam[0];
+    // per-method cost accumulators (ms, summed over all spectra)
+    const cost = { esw: 0, iaw: 0, kres: 0, rifts: 0, mwp: 0, sg: 0, wav: 0 };
+    const now = () => performance.now();
+    for (let j0 = 0; j0 < n; j0 += batch) {
+      for (let j = j0; j < Math.min(n, j0 + batch); j++) {
+        const row = spec[j];
+        let tA = now();
+        let tB;
+        const dn = row[i2];
+        if (Math.abs(dn) < 1e-6) { zeroDen++; esw[j] = NaN; } else esw[j] = row[ic] / dn;
+        tB = now(); cost.esw += tB - tA;
+        let sm = 0; for (let i = 0; i < row.length; i++) sm += ref[i] - row[i];
+        sm /= row.length;
+        let acc = 0;
+        for (let i = 1; i < row.length; i++) acc += 0.5 * (Math.abs(ref[i] - row[i] - sm) + Math.abs(ref[i - 1] - row[i - 1] - sm)) * (lam[i] - lam[i - 1]);
+        iaw[j] = acc / lamSpan;
+        tA = now(); cost.iaw += tA - tB;
+        kSig[j] = this.detrend(this.interp(lam, row, lamQ));
+        tB = now(); cost.kres += tB - tA;
+        riftsAll[j] = this.fftPeak(kSig[j], hann, dk, p.eotMin, p.eotMax);
+        cost.rifts += now() - tB;
+      }
+      if (big) { tick('Fourier transforms', Math.min(n, j0 + batch)); await yieldNow(); if (this._token !== token) return; }
+    }
+    if (zeroDen) warn.push({ level: 'warn', text: zeroDen + ' spectra had a near-zero ESW denominator at λ₂ = ' + lam[i2].toFixed(2) + ' nm; those points are flagged, not returned as infinity.' });
+    if (i2 === ic) warn.push({ level: 'warn', text: 'The ESW numerator and denominator resolve to the same sample. Choose a different λ₂.' });
+    if (st.src === 'synth' && p.add > 0.02) warn.push({ level: 'check', text: 'Additive baseline drift of ' + p.add.toFixed(3) + ' R shifts an intensity ratio directly, so ESW will show drift comparable to its response. Multiplicative lamp drift cancels in the ratio and does not.' });
+    if (p.eswLc < lam[0] || p.eswLc > lam[lam.length - 1]) warn.push({ level: 'warn', text: 'The selected centre wavelength lies outside the analysis range ' + lam[0].toFixed(1) + '–' + lam[lam.length - 1].toFixed(1) + ' nm.' });
+    if (n < 2) warn.push({ level: 'warn', text: 'Reference-based analysis needs at least two spectra.' });
+    const mean = a => a.reduce((s, v) => s + v, 0) / (a.length || 1);
+
+    // --- reference wavelet, then per-spectrum phase ---
+    const eotRef = riftsAll[refI].eot;
+    const rifts = riftsAll.map(q => q.eot - eotRef);
+    if (base.eps && Number.isFinite(eotRef)) truthE = base.eps.map(e => eotRef * e);
+    const cycles = eotRef * (kmax - kmin);
+    if (!(cycles > 2)) warn.push({ level: 'warn', text: 'Only ' + cycles.toFixed(1) + ' fringes fall inside the analysis range. FFT and wavelet results need roughly three or more.' });
+    const sk = p.nCyc / (4 * eotRef);
+    const tWav0 = performance.now();
+    const wav = this.wavelet(eotRef, sk, dk), Wre = wav.Wre, Wim = wav.Wim;
+    const yr = this.filt(kSig[refI], Wre, Wim);
+    cost.wav = performance.now() - tWav0;
+    const lo = Math.floor(NK * 0.28), hi = Math.floor(NK * 0.72);
+    let mmax = 0; for (let i = lo; i < hi; i++) mmax = Math.max(mmax, Math.hypot(yr.re[i], yr.im[i]));
+    const scaleTh = 2 * Math.PI * kbar;
+    const mwp = new Array(n), mwDiag = new Array(n);
+    let lowConf = 0, cycCorr = 0;
+    for (let j0 = 0; j0 < n; j0 += batch) {
+      for (let j = j0; j < Math.min(n, j0 + batch); j++) {
+        const tP0 = performance.now();
+        const ph = this.phaseDiff(kSig[j], Wre, Wim, yr, lo, hi, mmax, false);
+        cost.mwp += performance.now() - tP0;
+        const nCycCorr = Number.isFinite(rifts[j]) && Number.isFinite(ph.dphi) ? Math.round((rifts[j] * scaleTh - ph.dphi) / (2 * Math.PI)) : 0;
+        if (nCycCorr !== 0) cycCorr++;
+        const total = ph.dphi + 2 * Math.PI * nCycCorr;
+        const dEOT = st.convMode === 'theory' ? total / scaleTh : p.slope * total * 1000 + p.intercept;
+        const conf = riftsAll[j].snr > 4 && ph.used > (hi - lo) * 0.4 ? 'high' : (riftsAll[j].snr > 2 ? 'medium' : 'low');
+        if (conf === 'low') lowConf++;
+        mwp[j] = dEOT;
+        mwDiag[j] = { dphi: ph.dphi, nCycCorr, dEOT, used: ph.used, conf };
+      }
+      if (big) { tick('Wavelet phase', Math.min(n, j0 + batch)); await yieldNow(); if (this._token !== token) return; }
+    }
+    if (cycCorr) warn.push({ level: 'check', text: cycCorr + ' spectra needed a non-zero 2π phase-cycle correction, selected from the coarse RIFTS estimate.' });
+    if (lowConf) warn.push({ level: 'warn', text: lowConf + ' spectra carry a low-confidence flag: weak FFT peak relative to the out-of-band background.' });
+    // Everything past this point depends only on the two intervals, so it is derived by
+    // windowStats() — the same call the band-drag fast path uses against cached arrays.
+    const warnBase = warn.slice();
+    const wr = { n, times, esw, iaw, rifts, mwp, truthE, hasTruth };
+    this.windowStats(wr, p, st);
+    warn.push(...wr.windowWarn);
+    if (!warn.length) warn.push({ level: 'ok', text: 'All validation checks passed: monotonic wavelength grid, no duplicate samples, ESW wavelength inside the common range, every spectrum covers the analysis range.' });
+    const bIdx = wr.bIdx, rIdx = wr.rIdx, eswBase = wr.eswBase, eswRel = wr.eswRel, eswSm = wr.eswSm;
+    const sgApplied = wr.sgApplied, series = wr.series, truthNorm = wr.truthNorm;
+    cost.sg = wr.sgMs;
+    // per-spectrum cost: total of each stage divided by the number of spectra.
+    // The k-domain resample is a prerequisite of both RIFTS and Morlet phase, so it is
+    // charged to each of them (either method alone would have to pay it) and also listed.
+    // Morlet phase additionally needs the RIFTS peak to choose its 2π cycle, so the MWP
+    // row carries the full RIFTS cost plus its own wavelet and filtering work.
+    const per = ms => ms / (n || 1);
+    // performance.now() is clamped to ~0.1 ms, so a stage whose whole-dataset total is
+    // only a few ticks cannot be reported honestly from the run above. Those stages are
+    // re-timed over repeated passes until the elapsed time is far above the clock tick.
+    const FLOOR = 3;
+    const sink = [];
+    const benchers = {
+      esw: () => { let a = 0; for (let j = 0; j < n; j++) { const row = spec[j], dn = row[i2]; a += Math.abs(dn) < 1e-6 ? 0 : row[ic] / dn; } return a; },
+      iaw: () => { let a = 0; for (let j = 0; j < n; j++) { const row = spec[j]; let sm = 0; for (let i = 0; i < row.length; i++) sm += ref[i] - row[i]; sm /= row.length; let acc = 0; for (let i = 1; i < row.length; i++) acc += 0.5 * (Math.abs(ref[i] - row[i] - sm) + Math.abs(ref[i - 1] - row[i - 1] - sm)) * (lam[i] - lam[i - 1]); a += acc / lamSpan; } return a; },
+      kres: () => { let a = 0; for (let j = 0; j < n; j++) a += this.detrend(this.interp(lam, spec[j], lamQ))[0]; return a; },
+      sg: () => (sgApplied ? this.savGol(eswRel.map(v => Number.isFinite(v) ? v : 0), p.sgWin, p.sgPoly) : eswRel.slice())[0]
+    };
+    const benchMs = fn => {
+      let reps = 1;
+      for (let guard = 0; guard < 24; guard++) {
+        let acc = 0;
+        const t = performance.now();
+        for (let q = 0; q < reps; q++) acc += fn();
+        const el = performance.now() - t;
+        sink.push(acc); sink.length = 0;
+        if (el >= 25 || reps >= 8192) return el / reps;
+        reps = Math.min(8192, Math.max(reps * 2, Math.ceil(reps * 30 / Math.max(el, 0.05))));
+      }
+      return 0;
+    };
+    let benchedAny = false;
+    const resolve = (key, inRun) => {
+      if (inRun >= FLOOR || !benchers[key]) return { ms: inRun, benched: false };
+      benchedAny = true;
+      return { ms: benchMs(benchers[key]), benched: true };
+    };
+    if (big) { tick('Timing the methods', n); await yieldNow(); if (this._token !== token) return; }
+    const sEsw = resolve('esw', cost.esw);
+    const sSg = resolve('sg', cost.sg);
+    const sIaw = resolve('iaw', cost.iaw);
+    const sKres = resolve('kres', cost.kres);
+    // composed additively, so a superset of work can never read as cheaper than its subset
+    const timing = [
+      { key: 'esw', color: 'eswRaw', label: 'ESW', ms: per(sEsw.ms), note: 'one intensity ratio between two samples' },
+      { key: 'eswSm', color: 'eswSm', label: 'ESW + Savitzky\u2013Golay', ms: per(sEsw.ms + sSg.ms), note: sgApplied ? 'ratio plus the ' + p.sgWin + '-point, order-' + p.sgPoly + ' filter over the whole series' : 'filter disabled, ratio only' },
+      { key: 'iaw', color: 'iaw', label: 'IAW', ms: per(sIaw.ms), note: 'trapezoidal integral over ' + lam.length + ' samples' },
+      { key: 'rifts', color: 'rifts', label: 'RIFTS \u0394EOT', ms: per(sKres.ms + cost.rifts), note: 'k-resample plus a ' + NPAD + '-point FFT and parabolic peak fit' },
+      { key: 'mwp', color: 'mwp', label: 'Morlet wavelet phase', ms: per(sKres.ms + cost.rifts + cost.wav + cost.mwp), note: 'the whole RIFTS cost, which supplies the 2π cycle count, plus the wavelet kernel and two ' + NK + '-point FFTs per spectrum' }
+    ].sort((a, b) => a.ms - b.ms);
+    const tTotal = per(sEsw.ms + sSg.ms + sIaw.ms + sKres.ms + cost.rifts + cost.mwp + cost.wav);
+    timing.forEach(q => { q.share = tTotal > 0 ? 100 * q.ms / tTotal : 0; });
+    const timingMeta = {
+      n, nSamples: lam.length, benchedAny,
+      kres: per(sKres.ms), wav: cost.wav, total: tTotal,
+      fastest: timing[0], slowest: timing[timing.length - 1]
+    };
+    this._magIdx = -1; this._phIdx = -1;
+    this.res = {
+      timing, timingMeta,
+      sgApplied, lam, spec, times, truthL, truthE, hasTruth, refI, fullLam, fullRef, kg, kSig, kbar, dk, kmin, kmax, series, bIdx, rIdx,
+      riftsAll, mwDiag, eotRef, cycles, sk, warn, eotOf, lamUsed: [lam[ic], lam[i2]], truthNorm, hann, Wre, Wim,
+      lo, hi, yr, mmax, esw, eswRel, eswSm, iaw, rifts, mwp, eswBase, scaleTh, dl,
+      warnBase, cost, i2, ic, n,
+      names: (st.src === 'synth' ? null : (st.dataset ? st.dataset.names : null)), shape: st.src === 'synth' ? 'synthetic' : (st.dataset ? st.dataset.shape : '')
+    };
+    this._heavyKey = this.heavyKey(p, st);
+    if (st.src === 'synth') this.demoRes = this.res;
+    this.setState({ ms: Math.round(performance.now() - t0), prog: null, busy: false, timeIdx: Math.min(this.state.timeIdx, n - 1) });
+  }
+
+  // Index of the reflectance feature the ESW wavelength should sit on, searched between
+  // iA and iB. A multilayer has one feature worth tracking — the defect resonance — and
+  // it is the SHARPEST notch, not the deepest point: the fringe minima outside the
+  // stopband can go lower but belong to a slow oscillation, so local contrast against a
+  // ±20 nm neighbourhood separates them. A single layer is a plain fringe train where
+  // every minimum is equivalent, so the one nearest the middle of the window is the
+  // stable choice — it stays furthest from both edges as the film swells.
+  pickLc(lam, ref, single, iA, iB) {
+    const n = lam.length;
+    const a = Math.max(1, iA === undefined ? 1 : iA), b = Math.min(n - 2, iB === undefined ? n - 2 : iB);
+    if (b <= a) return a;
+    const isMin = i => ref[i] <= ref[i - 1] && ref[i] <= ref[i + 1];
+    if (single) {
+      const c = Math.round((a + b) / 2);
+      for (let d = 0; d <= b - a; d++) {
+        if (c - d >= a && isMin(c - d)) return c - d;
+        if (c + d <= b && isMin(c + d)) return c + d;
+      }
+    }
+    const dl = (lam[n - 1] - lam[0]) / (n - 1), w = Math.max(2, Math.round(20 / (dl || 1)));
+    let mi = -1, best = -Infinity;
+    for (let i = a; i <= b; i++) {
+      if (!isMin(i)) continue;
+      let s = 0, c = 0;
+      for (let q = Math.max(0, i - w); q <= Math.min(n - 1, i + w); q++) { s += ref[q]; c++; }
+      const prom = s / c - ref[i];
+      if (prom > best) { best = prom; mi = i; }
+    }
+    if (mi < 0) { mi = a; for (let i = a; i <= b; i++) if (ref[i] < ref[mi]) mi = i; }
+    return mi;
+  }
+
+  // Noise-free illustration spectra for the Home and Methods pages. Computed once from the
+  // same transfer-matrix model the generator uses; the binding shift is exaggerated so
+  // each processing step is visible at page scale.
+  eduData() {
+    if (this._edu) return this._edu;
+    const spec = (model, lam, eps) => {
+      const s = this.stack(model, 1200), L = s.layers.map(q => ({ n: q.n * (1 + eps), d: q.d }));
+      return lam.map(l => this.stackR(L, l, s.nSub));
+    };
+    const grid = (a, b, st) => { const o = []; for (let i = 0; a + i * st <= b + 1e-9; i++) o.push(+(a + i * st).toFixed(3)); return o; };
+    const EPS = 0.004, mean = a => a.reduce((s, v) => s + v, 0) / a.length;
+    const slLam = grid(500, 800, 0.5), mlLam = grid(900, 1700, 1.5);
+    const sl0 = spec('single', slLam, 0), sl1 = spec('single', slLam, EPS);
+    const ml0 = spec('cavity', mlLam, 0), ml1 = spec('cavity', mlLam, EPS);
+    const mlRes = mlLam[this.pickLc(mlLam, ml0, false)];
+
+    // ESW: the single-layer minimum nearest 611 nm, read on a 1 nm pixel grid
+    let mi = -1;
+    for (let i = 1; i < slLam.length - 1; i++) {
+      if (!(sl0[i] <= sl0[i - 1] && sl0[i] <= sl0[i + 1])) continue;
+      if (mi < 0 || Math.abs(slLam[i] - 611) < Math.abs(slLam[mi] - 611)) mi = i;
+    }
+    const lc = Math.round(slLam[mi]), shiftPx = 0.4, epsZ = shiftPx / lc;
+    const zLam = grid(lc - 10, lc + 11, 0.1);
+    const z0 = spec('single', zLam, 0), z1 = spec('single', zLam, epsZ);
+    const pA = spec('single', [lc, lc + 1], 0), pB = spec('single', [lc, lc + 1], epsZ);
+    const shX = grid(0, 2, 0.05), ratio = shX.map(s => { const a = spec('single', [lc, lc + 1], s / lc); return a[0] / a[1]; });
+
+    // k domain, shared by EOT and MWP
+    const kmin = 1 / 800, kmax = 1 / 500, dk = (kmax - kmin) / (NK - 1);
+    const kg = [], lamQ = [];
+    for (let i = 0; i < NK; i++) { const k = kmin + i * dk; kg.push(k); lamQ.push(1 / k); }
+    const k0 = this.detrend(this.interp(slLam, sl0, lamQ)), k1 = this.detrend(this.interp(slLam, sl1, lamQ));
+    const hann = new Float64Array(NK);
+    for (let i = 0; i < NK; i++) hann[i] = 0.5 - 0.5 * Math.cos(2 * Math.PI * i / (NK - 1));
+    const m0 = this.fftMag(k0, hann), m1 = this.fftMag(k1, hann);
+    const p0 = this.fftPeak(k0, hann, dk, 2000, 30000), p1 = this.fftPeak(k1, hann, dk, 2000, 30000);
+    const eAx = [], e0 = [], e1 = [];
+    for (let i = 1; i < NPAD / 2; i++) {
+      const e = i / (NPAD * dk);
+      if (e > p0.eot - 2500 && e < p0.eot + 2500) { eAx.push(e / 1000); e0.push(m0[i]); e1.push(m1[i]); }
+    }
+
+    // IAW: a real shift against a pure 2 % brightness change
+    const dShift = sl1.map((v, i) => Math.abs(v - sl0[i])), dAmp = sl0.map(v => Math.abs(v * 0.02));
+
+    // MWP
+    const { Wre, Wim } = this.wavelet(p0.eot, 2 / (4 * p0.eot), dk);
+    const yr = this.filt(k0, Wre, Wim);
+    const lo = Math.floor(NK * 0.28), hi = Math.floor(NK * 0.72);
+    let mmax = 0; for (let i = lo; i < hi; i++) mmax = Math.max(mmax, Math.hypot(yr.re[i], yr.im[i]));
+    const ph = this.phaseDiff(k1, Wre, Wim, yr, lo, hi, mmax, true);
+    const kMax = Math.max(...k0.map(Math.abs)), fMax = Math.max(...Array.from(yr.re).slice(lo, hi).map(Math.abs)) || 1;
+    const filtRe = Array.from(yr.re).map((v, i) => i >= lo && i < hi ? v * kMax / fMax : NaN);
+    const phX = [], phY = [];
+    for (let i = lo; i < hi; i++) { phX.push(kg[i] * 1e4); phY.push(Number.isFinite(ph.dphiK[i]) ? ph.dphiK[i] * 1000 : NaN); }
+
+    const iz0 = slLam.findIndex(l => l >= 585), iz1 = slLam.findIndex(l => l >= 665);
+    this._edu = {
+      slLam, sl0, sl1, mlLam, ml0, ml1, mlRes,
+      lc, shiftPx, zLam, z0, z1, pA, pB, shX, ratio,
+      kx: kg.map(k => k * 1e4), k0, k1, eAx, e0, e1, eot0: p0.eot, eot1: p1.eot,
+      izLam: slLam.slice(iz0, iz1), iz0s: sl0.slice(iz0, iz1), iz1s: sl1.slice(iz0, iz1),
+      dShift, dAmp, mShift: mean(dShift), mAmp: mean(dAmp),
+      filtRe, phX, phY, dphi: ph.dphi * 1000
+    };
+    return this._edu;
+  }
+
+  // Which film the current data is: the synthetic model, or the drop zone it arrived in.
+  isSingleFilm() {
+    return this.state.src === 'synth' ? this.state.synthModel === 'single' : this.state.filmKind === 'single';
+  }
+
+  autoLc() {
+    const r = this.res; if (!r) return;
+    const lam = r.lam, ref = r.spec[r.refI];
+    if (lam.length < 5) return;
+    const mi = this.pickLc(lam, ref, this.isSingleFilm());
+    this.setP('eswLc', +lam[mi].toFixed(3));
+  }
+
+  schedule() { clearTimeout(this._t); this.setState({ busy: true }); this._t = setTimeout(() => this.compute(), 50); }
+  setP(k, v) { this.setState(s => ({ p: { ...s.p, [k]: v } })); this.schedule(); }
+  setPs(obj) { this.setState(s => ({ p: { ...s.p, ...obj } })); this.schedule(); }
+  edit(fn) { this.setState(fn); this.schedule(); }
+  // The baseline and response windows are stored in minutes, so changing the scan
+  // interval has to carry them along or they stop matching the run they describe.
+  setDt(val, unit) {
+    const st = this.state, oldMin = (st.dtUnit === 's' ? st.p.dtU / 60 : st.p.dtU) || 1;
+    const newMin = (unit === 's' ? val / 60 : val) || 1, k = newMin / oldMin;
+    this.edit(s => ({
+      dtUnit: unit,
+      p: { ...s.p, dtU: val, baseA: s.p.baseA * k, baseB: s.p.baseB * k, respA: s.p.respA * k, respB: s.p.respB * k }
+    }));
+  }
+  pick(src) {
+    const keys = ['refIdx', 'anaMin', 'anaMax', 'dtU', 'lc', 'eswLc', 'eswLam2', 'noise', 'lampSd', 'stretchSd', 'eotMin', 'eotMax', 'baseA', 'baseB', 'respA', 'respB', 'sgWin'];
+    const out = {}; keys.forEach(k => { out[k] = src[k]; }); return out;
+  }
+
+  // ---------- plotting ----------
+  pal() {
+    const s = String(this.props.plotPalette || 'Article figure');
+    return PALETTES[s.indexOf('Design') > -1 || s.indexOf('warm') > -1 ? 'warm' : (s.indexOf('Okabe') > -1 || s.indexOf('blind') > -1 ? 'cool' : 'article')];
+  }
+
+  ticks(min, max, want) {
+    const span = max - min; if (!(span > 0)) return [min];
+    const raw = span / want, mag = Math.pow(10, Math.floor(Math.log10(raw))), norm = raw / mag;
+    const step = (norm < 1.5 ? 1 : norm < 3 ? 2 : norm < 7 ? 5 : 10) * mag;
+    const out = []; for (let v = Math.ceil(min / step) * step; v <= max + step * 1e-6; v += step) out.push(Math.abs(v) < step * 1e-6 ? 0 : v);
+    return out;
+  }
+  fmtTick(v, span) { const a = Math.abs(span); const d = a >= 100 ? 0 : a >= 10 ? 1 : a >= 1 ? 2 : a >= 0.1 ? 3 : a >= 0.01 ? 4 : 5; return v.toFixed(d); }
+
+  // Returns a data spec; the Plot component owns projection, zoom, pan and the readout.
+  mk(o) {
+    return {
+      title: o.title || '', note: o.note || '',
+      h: o.h, L: o.L, legend: o.legend, zero: o.zero, reader: o.reader,
+      x: o.x, series: (o.series || []).filter(s => s && s.y && s.y.length),
+      bands: o.bands || [], onBand: o.onBand, dots: o.dots || [], vlines: o.vlines || [], onVline: o.onVline,
+      xmin: o.xmin, xmax: o.xmax, ymin: o.ymin, ymax: o.ymax,
+      xlabel: o.xlabel || '', ylabel: o.ylabel || '', xfmt: o.xfmt, xunit: o.xunit
+    };
+  }
+
+  fmt(v, d) { return Number.isFinite(v) ? v.toFixed(d) : '—'; }
+
+  // ---------- render inputs ----------
+  renderVals() {
+    this._pid = 0;
+    const st = this.state, p = st.p, C = this.pal(), r = this.res;
+    const set = (k, num) => e => this.setP(k, num ? +e.target.value : e.target.value);
+    const snap = (min, max, step, v) => {
+      let x = Math.min(max, Math.max(min, v));
+      if (step > 0) { x = min + Math.round((x - min) / step) * step; x = Math.min(max, Math.max(min, x)); }
+      return +(+x).toPrecision(12);
+    };
+    const mkBase = (k, label, min, max, step, fmt, vOver) => {
+      const cur = vOver === undefined ? p[k] : vOver;
+      return {
+        key: k, label, min, max, step, value: cur, text: fmt(cur),
+        raw: +(+cur).toPrecision(10),
+        set: e => this.setP(k, +e.target.value),
+        editing: st.editSlider === k, reading: st.editSlider !== k,
+        beginEdit: () => this.setState({ editSlider: k }),
+        endEdit: e => {
+          const x = parseFloat(String(e.target.value).replace(',', '.'));
+          if (Number.isFinite(x)) this.setP(k, snap(min, max, step, x));
+          this.setState({ editSlider: null });
+        },
+        keyEdit: e => { if (e.key === 'Enter') e.target.blur(); else if (e.key === 'Escape') this.setState({ editSlider: null }); },
+        dec: () => this.setP(k, snap(min, max, step, cur - step)),
+        inc: () => this.setP(k, snap(min, max, step, cur + step))
+      };
+    };
+    const mkSlider = mkBase;
+    const D = st.dataset, up = st.src === 'upload';
+    const hasTruth = r ? r.hasTruth : true;
+    const showTruth = this.props.showGroundTruth !== false && hasTruth;
+    const compact = String(this.props.plotDensity || '').indexOf('Compact') > -1;
+    const hMain = compact ? 240 : 300, hSmall = compact ? 200 : 240;
+    const lmin = D ? D.lam[0] : 1000, lmax = D ? D.lam[D.lam.length - 1] : 1400, NS = D ? D.spec.length : 1;
+    const tv = r ? r.times : [0, 180], tA = tv[0], tB = tv[tv.length - 1];
+    const tStep = tv.length > 1 ? Math.abs(tv[1] - tv[0]) || 1 : 1;
+    // label precision follows the scan spacing so sub-minute windows stay readable
+    const tDec = tStep >= 10 ? 0 : tStep >= 1 ? 1 : tStep >= 0.1 ? 2 : 3;
+    const U = up && st.useImported ? 'u' : 'min';
+    const lStep = D ? D.step : 1;
+    const mkS = mkBase;
+
+    const v = {
+      isHome: st.view === 'home', isExp: st.view === 'exp', isMethods: st.view === 'methods',
+      goHome: () => { this.setState({ view: 'home' }); this.toTop(); },
+      goMethods: () => { this.setState({ view: 'methods' }); this.toTop(); },
+      goExp: () => { this.edit(s => ({ view: 'exp', tab: 'spectra', src: 'synth', p: { ...s.p, ...this.pick(DEFAULTS) } })); this.toTop(); },
+      goExpUpload: () => { this.edit(s => ({ view: 'exp', src: 'upload', tab: s.dataset ? 'overview' : 'data' })); this.toTop(); },
+      srcSynth: st.src === 'synth', srcUpload: st.src === 'upload',
+      setSrcSynth: () => this.edit(s => ({ src: 'synth', tab: s.tab === 'data' ? 'overview' : s.tab, p: { ...s.p, ...this.pick(DEFAULTS) } })),
+      setSrcUpload: () => this.edit(s => ({ src: 'upload', tab: s.dataset ? s.tab : 'data', p: { ...s.p, ...(s.dataset && s.dataset.derived ? s.dataset.derived : {}), sgWin: Math.min(s.p.sgWin, s.dataset ? (s.dataset.spec.length % 2 ? s.dataset.spec.length : s.dataset.spec.length - 1) : s.p.sgWin) } })),
+      controlsOn: !up || !!D,
+      srcNote: st.src === 'synth'
+        ? 'Reproducible in-browser experiment, seed ' + p.seed + '. The simulated response is known, so RMSE is real.'
+        : (D ? D.spec.length + ' spectra loaded from ' + (D.shape === 'matrix' ? 'a matrix file' : 'individual files') + ' · ' + D.lo.toFixed(1) + '–' + D.hi.toFixed(1) + ' nm · processed locally, never uploaded'
+          : 'Drop TXT, CSV, TSV or a ZIP archive of spectra. Everything is parsed and analysed in this tab — no upload, no server.'),
+      sgOn: st.sgOn, toggleSg: () => this.edit(s => ({ sgOn: !s.sgOn })),
+      advOpen: st.advOpen, advCaret: st.advOpen ? '▾' : '▸',
+      toggleAdv: () => this.setState(s => ({ advOpen: !s.advOpen })),
+      busyLabel: st.busy || st.prog ? 'computing…' : st.ms + ' ms · ' + (r ? r.times.length : 0) + ' spectra',
+      progOn: !!(st.prog || st.parsing),
+      progLabel: st.parsing ? (st.progress || 'Reading files…')
+        : (st.prog ? st.prog.phase + ' — ' + st.prog.done + ' of ' + st.prog.total + ' spectra' : ''),
+      progPct: st.prog ? st.prog.pct : '100%',
+      progIndeterminate: st.parsing,
+      cancelRun: () => this.cancelRun(),
+      // ESW denominator: 'next' takes the adjacent spectrometer sample (λ₂ = λc + one grid
+      // step), which is self-calibrating against lamp drift; 'pick' uses the eswLam2 slider.
+      denNext: st.denMode === 'next', denPick: st.denMode === 'pick',
+      setDenNext: () => this.edit(s => ({ denMode: 'next' })),
+      setDenPick: () => this.edit(s => ({ denMode: 'pick' })),
+      // Phase → ΔEOT conversion: 'theory' divides the unwrapped phase by 2π·mean k, which
+      // follows from the fringe physics and needs no calibration; 'emp' substitutes the
+      // user's own linear fit for instruments with a known offset.
+      convTheory: st.convMode === 'theory', convEmp: st.convMode === 'emp',
+      setConvTheory: () => this.edit(s => ({ convMode: 'theory' })),
+      setConvEmp: () => this.edit(s => ({ convMode: 'emp' })),
+      convNote: st.convMode === 'theory'
+        ? 'ΔEOT = Δφ / (2π·mean k), computed from the reciprocal-wavelength grid in use. No calibration constants.'
+        : 'ΔEOT = slope·Δφ + intercept, using the values below. Supply calibration from your own instrument — the published example constants are not universal.',
+      axLambda: st.axis === 'lambda', axK: st.axis === 'k',
+      setAxLambda: () => this.setState({ axis: 'lambda' }), setAxK: () => this.setState({ axis: 'k' }),
+      timeIdx: st.timeIdx, setTime: e => this.setState({ timeIdx: +e.target.value }),
+      synthMode: !up, uploadMode: up, hasData: !!D,
+      noiseRows: [
+        { key: 'nzShot', pk: 'noise', label: 'Photon / read noise', unit: '× 10⁻⁴ R', step: 1, scale: 1e4,
+          note: 'Per pixel, scaled by √R — the quantum count in each detector element fluctuates.' },
+        { key: 'nzLamp', pk: 'lampSd', label: 'Lamp intensity jitter', unit: '%', step: 0.05, scale: 100,
+          note: 'One random factor per spectrum, multiplying the whole curve at once.' },
+        { key: 'nzStretch', pk: 'stretchSd', label: 'Optical-thickness jitter', unit: 'ppm', step: 1, scale: 1e6,
+          note: 'The fringe period itself wanders, as under a drifting temperature.' }
+      ].map(q => ({
+        label: q.label, unit: q.unit, step: q.step, note: q.note,
+        on: !!st[q.key], off: !st[q.key],
+        value: +(p[q.pk] * q.scale).toFixed(3),
+        toggle: () => this.edit(s => ({ [q.key]: !s[q.key] })),
+        set: e => { const x = parseFloat(e.target.value); if (Number.isFinite(x) && x >= 0) this.setP(q.pk, x / q.scale); }
+      })),
+      modelCavity: st.synthModel !== 'single', modelSingle: st.synthModel === 'single',
+      setModelCavity: () => this.edit(s => ({ synthModel: 'cavity', p: { ...s.p, lamMin: 900, lamMax: 1700, anaMin: 0, anaMax: 0, eotMin: 8000, eotMax: 25000 } })),
+      setModelSingle: () => this.edit(s => ({ synthModel: 'single', p: { ...s.p, lamMin: 1000, lamMax: 1400, anaMin: 0, anaMax: 0, eotMin: 8000, eotMax: 25000 } })),
+      modelNote: st.synthModel === 'single'
+        ? 'One porous layer on silicon — a Fabry–Pérot etalon, so the reflectance is a cosine in 1/λ with no resonance. Generated over 1000–1400 nm.'
+        : 'Two quarter-wave Bragg mirrors around a half-wave defect layer, which opens a narrow resonance inside the stopband. Generated over 900–1700 nm, where the full-stack fringes fall outside that band.',
+      dtRaw: p.dtU, dtInSec: st.dtUnit === 's', dtInMin: st.dtUnit !== 's',
+      setDtRaw: e => { const q = parseFloat(e.target.value); if (Number.isFinite(q) && q > 0) this.setDt(q, st.dtUnit); },
+      setDtSec: () => this.setDt(p.dtU, 's'),
+      setDtMin: () => this.setDt(p.dtU, 'min'),
+      dtNote: st.useImported
+        ? 'Imported times from the file headers are in use, so this interval is ignored.'
+        : 'Spectrum order \u00d7 this interval, plotted in minutes \u2014 ' + ((st.dtUnit === 's' ? p.dtU / 60 : +p.dtU) * Math.max(0, ((D ? D.spec.length : 1) - 1))).toFixed(2) + ' min over the whole run.',
+      showWork: !up || !!D,
+      tabData: up && st.tab === 'data',
+      tabOverview: st.tab === 'overview' && (!up || !!D), tabSens: st.tab === 'sens' && (!up || !!D),
+      tabSpectra: st.tab === 'spectra' && (!up || !!D),
+      tabDiag: st.tab === 'diag' && (!up || !!D), tabExport: st.tab === 'export' && (!up || !!D),
+      tabs: (up ? [['data', D ? 'Data · ' + D.spec.length : 'Data']] : []).concat(
+        (!up || D) ? [['spectra', 'Spectra'], ['sens', 'Sensograms'], ['overview', 'Overview'], ['diag', 'Diagnostics'], ['export', 'Export']] : [])
+        .map(([k, label]) => ({ label, active: st.view === 'exp' && st.tab === k, go: () => { const nav = this.state.view !== 'exp' || this.state.tab !== k; this.setState({ view: 'exp', tab: k }); if (nav) this.toTop(); } })),
+      sliders: up ? [
+        mkS('refIdx', 'Reference spectrum', 0, Math.max(0, NS - 1), 1, x => '#' + (Math.round(x) + 1) + (D && D.names[Math.round(x)] ? ' · ' + String(D.names[Math.round(x)]).slice(0, 18) : ''))
+      ] : [
+        mkSlider('resp', 'Response magnitude', 0, 1.2, 0.01, x => x.toFixed(2) + ' nm'),
+        mkSlider('add', 'Additive baseline drift', 0, 0.05, 0.001, x => x.toFixed(3) + ' R'),
+        mkSlider('mult', 'Multiplicative lamp drift', 0, 0.2, 0.005, x => (100 * x).toFixed(1) + ' %')
+      ],
+      sgSliders: [
+        mkSlider('sgWin', 'Window length', 5, Math.min(41, Math.max(5, (NS % 2 ? NS : NS - 1))), 2, x => x.toFixed(0) + ' pts'),
+        mkSlider('sgPoly', 'Polynomial order', 1, 5, 1, x => x.toFixed(0))
+      ],
+      advSliders: [
+        // ESW denominator wavelength, used only when denMode === 'pick'. On the opposite
+        // flank of the resonance from λc the ratio swings hardest per nm of shift; far
+        // from the resonance ESW degenerates into a lamp-drift monitor.
+        mkS('eswLam2', 'ESW second wavelength λ₂', up ? lmin : 1100, up ? lmax : 1300, up ? lStep : 1, x => x.toFixed(up ? 2 : 0) + ' nm'),
+        // Bracket for the RIFTS FFT peak search, in nm of effective optical thickness.
+        // Peaks outside it are ignored, which is what keeps the tracker off harmonics and
+        // off low-frequency baseline curvature. 2–20 µm covers typical porous silicon;
+        // this is the shaded band on the Diagnostics FFT plot.
+        mkS('eotMin', 'EOT search minimum', 500, Math.max(1000, p.eotMax), 250, x => (x / 1000).toFixed(2) + ' µm'),
+        mkS('eotMax', 'EOT search maximum', Math.max(1000, p.eotMin), up ? 120000 : 40000, 250, x => (x / 1000).toFixed(2) + ' µm'),
+        // Wavelet bandwidth expressed in fringe cycles: σk = nCyc / (4·EOT_ref). Narrow
+        // (1–2) tracks fast change and tolerates a drifting fringe frequency; wide (3–4)
+        // averages more fringes for less noise but smears the response and needs more
+        // k-span to sit inside the analysis window.
+        mkSlider('nCyc', 'Morlet width', 1, 4, 0.25, x => x.toFixed(2) + ' cycles'),
+        // Active only under the empirical conversion: ΔEOT = slope·Δφ + intercept, in nm
+        // per mrad. Instrument-specific calibration — the defaults are the published
+        // example values, not universal constants.
+        mkSlider('slope', 'Empirical slope', 0, 0.05, 0.0005, x => x.toFixed(4) + ' nm/mrad'),
+        mkSlider('intercept', 'Empirical intercept', -1, 1, 0.005, x => x.toFixed(3) + ' nm')
+      ],
+      eotSliders: [
+        { key: 'eotMinUm', label: 'EOT from', min: 0.5, max: Math.max(1, p.eotMax / 1000), step: 0.25, value: +(p.eotMin / 1000).toFixed(2), set: e => this.setP('eotMin', Math.max(500, +e.target.value * 1000)) },
+        { key: 'eotMaxUm', label: 'EOT to', min: Math.max(1, p.eotMin / 1000), max: 120, step: 0.25, value: +(p.eotMax / 1000).toFixed(2), set: e => this.setP('eotMax', +e.target.value * 1000) }
+      ],
+      windowSliders: [
+        mkS('baseA', 'Baseline start', tA, tB, tStep, x => x.toFixed(tDec) + ' ' + U),
+        mkS('baseB', 'Baseline end', tA, tB, tStep, x => x.toFixed(tDec) + ' ' + U),
+        mkS('respA', 'Response start', tA, tB, tStep, x => x.toFixed(tDec) + ' ' + U),
+        mkS('respB', 'Response end', tA, tB, tStep, x => x.toFixed(tDec) + ' ' + U)
+      ].map(s => ({ ...s, unit: U })),
+      dropZones: [
+        { kind: 'cavity', title: 'Multilayer', example: 'multilayer', exampleLabel: 'PrS-47-MC example',
+          body: 'Bragg mirrors around a defect layer. The ESW wavelength snaps to the sharpest notch — the resonance.' },
+        { kind: 'single', title: 'Single layer', example: 'single-layer', exampleLabel: 'SL-P2-MA example',
+          body: 'One porous film, a plain fringe train. The ESW wavelength snaps to the fringe minimum nearest the window centre.' }
+      ].map(z => ({
+        title: z.title, body: z.body, exampleLabel: z.exampleLabel,
+        border: st.drag === z.kind ? 'var(--color-accent)' : 'color-mix(in srgb,var(--color-text) 22%,transparent)',
+        bg: st.drag === z.kind ? 'color-mix(in srgb,var(--color-accent) 8%,#fdfaf3)' : 'color-mix(in srgb,#fdfaf3 70%,transparent)',
+        onFiles: e => { this.setState({ filmKind: z.kind }); this.handleFiles(e.target.files); e.target.value = ''; },
+        onDrop: e => { e.preventDefault(); this.setState({ drag: null, filmKind: z.kind }); this.handleFiles(e.dataTransfer.files); },
+        onDragOver: e => { e.preventDefault(); if (st.drag !== z.kind) this.setState({ drag: z.kind }); },
+        onDragLeave: e => { e.preventDefault(); this.setState({ drag: null }); },
+        loadExample: () => { this.setState({ filmKind: z.kind }); this.loadBundled(z.example); }
+      })),
+      loadExample: () => this.loadExample(),
+      loadMultilayer: () => this.loadBundled('multilayer'),
+      loadSingleLayer: () => this.loadBundled('single-layer'),
+      clearData: () => { this.res = null; this._heavyKey = null; this._token = (this._token || 0) + 1; this.setState(s => ({ dataset: null, files: [], report: [], tab: 'data', prog: null, busy: false, ms: 0, p: { ...s.p, anaMin: 0, anaMax: 0 } })); },
+      reverseOrder: () => this.reorder('reverse'),
+      reportRows: (st.report || []).map(w => ({
+        text: w.text,
+        level: w.level === 'ok' ? 'pass' : w.level === 'warn' ? 'check' : 'error',
+        bg: w.level === 'ok' ? 'var(--color-accent-2-100)' : w.level === 'warn' ? 'var(--color-accent-100)' : 'color-mix(in srgb,#b3261e 14%,transparent)',
+        fg: w.level === 'ok' ? 'var(--color-accent-2-800)' : w.level === 'warn' ? 'var(--color-accent-800)' : '#7a1a12'
+      })),
+      hasReport: !!(st.report && st.report.length),
+      fileRows: (st.files || []).map((f, i) => ({
+        name: f.name, meta: f.meta, num: '#' + (i + 1),
+        isRef: up && Math.round(p.refIdx) === i,
+        up: () => this.reorder('up', i), down: () => this.reorder('down', i),
+        remove: () => this.reorder('remove', i), makeRef: () => this.setP('refIdx', i)
+      })),
+      fileCount: (st.files || []).length,
+      timesNote: st.useImported ? 'Times imported from the file header are in use.' : 'Times are the spectrum order multiplied by the scan interval, in minutes.',
+      useImported: st.useImported, hasImported: !!(D && D.importedTimes),
+      timeSourceNext: st.useImported ? 'index × step' : 'imported times',
+      toggleImported: () => this.edit(s => ({ useImported: !s.useImported })),
+      randomize: () => this.setP('seed', Math.floor(Math.random() * 1e6) + 1),
+      autoLc: () => this.autoLc(),
+      lcNote: 'ESW wavelength λc = ' + (+p.eswLc).toFixed(2) + ' nm — ' + (this.isSingleFilm() ? 'fringe minimum nearest the window centre' : 'sharpest reflectance notch') + '. Drag the pink marker on the Spectra plot, set it here, or use Find minimum.',
+      autoLcTitle: this.isSingleFilm()
+        ? 'Move the ESW wavelength to the fringe minimum nearest the middle of the analysis window'
+        : 'Move the ESW wavelength to the deepest reflectance minimum in the analysis window',
+      resetDefaults: () => this.edit(s => ({ p: { ...DEFAULTS, ...(s.src === 'upload' && s.dataset && s.dataset.derived ? s.dataset.derived : {}) }, sgOn: true, denMode: 'next', convMode: 'theory', dtUnit: 's', nzShot: true, nzLamp: true, nzStretch: true })),
+      maxIdx: 0, timeLabel: '—',
+      baseWinLabel: (+p.baseA).toFixed(tDec) + '–' + (+p.baseB).toFixed(tDec) + ' ' + U,
+      respWinLabel: (+p.respA).toFixed(tDec) + '–' + (+p.respB).toFixed(tDec) + ' ' + U,
+      methodCards: [], summary: [], metricRows: [], diagRows: [], warnings: [], physPlots: [],
+      warnCount: '', verdict: '', paramsText: '',
+      heroSpec: this.mk({ x: [0, 1], series: [], title: 'Reflectance' }), heroSens: this.mk({ x: [0, 1], series: [], title: 'Sensograms' }),
+      eduML: this.mk({ x: [0, 1], series: [] }), eduSL: this.mk({ x: [0, 1], series: [] }), mth: {}, methodTabs: [], methodRefs: [],
+      spectraPlot: this.mk({ x: [0, 1], series: [] }),
+      fftPlot: this.mk({ x: [0, 1], series: [] }), phasePlot: this.mk({ x: [0, 1], series: [] }),
+      timingRows: [], timingNote: '', timingFoot: '', timingHead: '—',
+      paramsOpen: st.paramsOpen, paramsCaret: st.paramsOpen ? '▾ hide' : '▸ show',
+      toggleParams: () => this.setState(s => ({ paramsOpen: !s.paramsOpen })),
+      tabsOn: true, rangeOn: false, rangeLabel: '—', rangeMeta: '', rangeSliders: [],
+      rangeTool: { viewBox: '0 0 760 96', d: '', ticks: [], leftX: 0, leftW: 0, rightX: 760, rightW: 0, handleA: 14, handleB: 746, top: 10, bottom: 74, plotH: 64 },
+      onBrushDown: () => {}, onBrushMove: () => {}, onBrushUp: () => {},
+      rangeFull: () => this.setPs({ anaMin: 0, anaMax: 0 }), rangeTrim: () => {}, rangeFeature: () => {},
+      controlsKicker: up ? 'Dataset' : 'Experiment',
+      dlCsv: () => this.download('results.csv', this.csv(), 'text/csv'),
+      dlJson: () => this.download('parameters.json', this.json(), 'application/json'),
+      dlDiag: () => this.download('diagnostics.csv', this.diagCsv(), 'text/csv')
+    };
+    // ---- illustration figures and method pages (independent of any loaded data) ----
+    {
+      const E = this.eduData();
+      const bufL = 'Buffer', bndL = 'After binding';
+      v.eduML = this.mk({
+        title: 'Microcavity: a resonance dip inside the stopband', note: 'two Bragg mirrors around a defect layer',
+        x: E.mlLam, series: [{ y: E.ml0, color: C.ref, label: bufL, width: 1.6 }, { y: E.ml1, color: C.cur, label: bndL, width: 1.6 }],
+        vlines: [{ x: E.mlRes, color: C.eswSm }], xlabel: 'Wavelength (nm)', ylabel: 'Reflectance', h: 250
+      });
+      v.eduSL = this.mk({
+        title: 'Single layer: Fabry–Pérot fringes', note: 'one porous film on silicon',
+        x: E.slLam, series: [{ y: E.sl0, color: C.ref, label: bufL, width: 1.6 }, { y: E.sl1, color: C.cur, label: bndL, width: 1.6 }],
+        xlabel: 'Wavelength (nm)', ylabel: 'Reflectance', h: 250
+      });
+      const fig = {
+        esw: [
+          this.mk({ title: 'Reading two pixels at a fringe minimum', note: 'λc = ' + E.lc + ' nm, Δλ = 1 nm · bound spectrum shifted by ' + E.shiftPx + ' pixel',
+            x: E.zLam, series: [{ y: E.z0, color: C.ref, label: bufL, width: 1.8 }, { y: E.z1, color: C.cur, label: bndL, width: 1.8 }],
+            vlines: [{ x: E.lc, color: C.eswSm }, { x: E.lc + 1, color: C.eswRaw }],
+            dots: [{ x: E.lc, y: E.pA[0], color: C.ref, r: 4.5 }, { x: E.lc + 1, y: E.pA[1], color: C.ref, r: 4.5 }, { x: E.lc, y: E.pB[0], color: C.cur, r: 4.5 }, { x: E.lc + 1, y: E.pB[1], color: C.cur, r: 4.5 }],
+            xlabel: 'Wavelength (nm)', ylabel: 'Reflectance', h: 250 }),
+          this.mk({ title: 'The ratio follows sub-pixel shifts', note: 'R(λc) / R(λc + Δλ) as the spectrum moves',
+            x: E.shX, series: [{ y: E.ratio, color: C.eswSm, label: 'ESW ratio', width: 2.2 }],
+            vlines: [{ x: E.shiftPx, color: C.cur }], xlabel: 'Spectral shift (pixels)', ylabel: 'ESW ratio', h: 250 })
+        ],
+        eot: [
+          this.mk({ title: 'Fringes against reciprocal wavelength', note: 'detrended, even grid in 1/λ',
+            x: E.kx, series: [{ y: E.k0, color: C.ref, label: bufL, width: 1.6 }, { y: E.k1, color: C.cur, label: bndL, width: 1.6 }],
+            xlabel: '1/λ  (10⁻⁴ nm⁻¹)', ylabel: 'Reflectance (detrended)', h: 250 }),
+          this.mk({ title: 'Fourier peak at the optical thickness', note: 'ΔEOT = ' + (E.eot1 - E.eot0).toFixed(1) + ' nm',
+            x: E.eAx, series: [{ y: E.e0, color: C.ref, label: bufL, width: 1.8 }, { y: E.e1, color: C.rifts, label: bndL, width: 1.8 }],
+            vlines: [{ x: E.eot0 / 1000, color: C.ref }, { x: E.eot1 / 1000, color: C.rifts }], xlabel: 'Effective optical thickness (µm)', ylabel: 'FFT magnitude', h: 250 })
+        ],
+        iaw: [
+          this.mk({ title: 'Buffer and bound spectra', note: 'zoomed onto a few fringes',
+            x: E.izLam, series: [{ y: E.iz0s, color: C.ref, label: bufL, width: 1.8 }, { y: E.iz1s, color: C.cur, label: bndL, width: 1.8 }],
+            xlabel: 'Wavelength (nm)', ylabel: 'Reflectance', h: 250 }),
+          this.mk({ title: 'The difference spectrum, averaged', note: 'means: shift ' + (E.mShift * 1e3).toFixed(2) + ' · brightness ' + (E.mAmp * 1e3).toFixed(2) + ' (×10⁻³)',
+            x: E.slLam, series: [{ y: E.dShift, color: C.iaw, label: 'Real shift', width: 1.6 }, { y: E.dAmp, color: C.truth, label: '2 % brighter, no shift', width: 1.5, dash: '5 4' }],
+            xlabel: 'Wavelength (nm)', ylabel: '|R − Rref|', h: 250 })
+        ],
+        mwp: [
+          this.mk({ title: 'Wavelet band-pass on the fringes', note: 'complex Morlet tuned to EOT = ' + (E.eot0 / 1000).toFixed(2) + ' µm',
+            x: E.kx, series: [{ y: E.k0, color: C.ref, label: 'Detrended', width: 1 }, { y: E.filtRe, color: C.mwp, label: 'Filtered', width: 2.2 }],
+            xlabel: '1/λ  (10⁻⁴ nm⁻¹)', ylabel: 'Reflectance (detrended)', h: 250 }),
+          this.mk({ title: 'Phase difference across the spectrum', note: 'weighted mean Δφ = ' + E.dphi.toFixed(0) + ' mrad',
+            x: E.phX, series: [{ y: E.phY, color: C.mwp, label: 'Δφ per sample', width: 2 }, { y: E.phX.map(() => E.dphi), color: C.truth, label: 'Weighted mean', width: 1.4, dash: '6 4' }],
+            xlabel: '1/λ  (10⁻⁴ nm⁻¹)', ylabel: 'Δφ (mrad)', h: 250 })
+        ]
+      };
+      const hr0 = (st.src === 'synth' && r) ? r : (this.demoRes || r);
+      const sens = m => {
+        if (!hr0) return this.mk({ x: [0, 1], series: [], title: 'Sensogram' });
+        const key = m.series === 'esw' ? (hr0.sgApplied ? 'eswSm' : 'eswRaw') : m.series;
+        const s = hr0.series.find(q => q.key === key);
+        const col = m.series === 'esw' ? C.eswSm : m.series === 'rifts' ? C.rifts : m.series === 'iaw' ? C.iaw : C.mwp;
+        return this.mk({
+          title: m.abbr + ' sensogram', note: 'synthetic microcavity run · normalized, baseline 0, response 1',
+          x: hr0.times, series: [{ y: s.norm, color: col, label: m.abbr, width: 2 }, hr0.hasTruth ? { y: hr0.truthNorm, color: C.truth, label: 'Simulated', width: 1.4, dash: '6 4' } : null].filter(Boolean),
+          xlabel: 'Time (min)', ylabel: 'Normalized response', h: 270, ymin: -0.45, ymax: 1.45
+        });
+      };
+      const cur = METHODS.find(m => m.key === st.method) || METHODS[0];
+      const idx = METHODS.indexOf(cur);
+      v.methodTabs = METHODS.map(m => ({ label: m.abbr, long: m.abbr + ' · ' + m.title.replace(/\s*\(.*?\)\s*/, ' ').trim(), active: m.key === cur.key, go: () => this.setState({ method: m.key }) }));
+      v.mth = {
+        ...cur, kicker: 'Method ' + (idx + 1) + ' of 4',
+        figA: fig[cur.key][0], figB: fig[cur.key][1], sens: sens(cur),
+        steps: cur.steps.map((t, i) => ({ n: i + 1, text: t })),
+        refs: cur.refs.map(k => ({ text: REFS[k].text, doi: REFS[k].doi, url: 'https://doi.org/' + REFS[k].doi }))
+      };
+      v.methodRefs = [['EOT', 'eot'], ['IAW', 'iaw1'], ['IAW', 'iaw2'], ['MWP', 'mwp']].map(([abbr, k]) => ({ abbr, text: REFS[k].text, doi: REFS[k].doi, url: 'https://doi.org/' + REFS[k].doi }));
+    }
+    // ---- home figures always come from the synthetic demo ----
+    const hr = (st.src === 'synth' && r) ? r : (this.demoRes || r);
+    if (hr) {
+      const HS = k => hr.series.find(s => s.key === k);
+      const hkx = hr.kg.map(k => k * 1e4);
+      const hTruth = this.props.showGroundTruth !== false && hr.hasTruth;
+      v.heroSpec = this.mk({
+        title: 'One reflectance spectrum', note: 'porous-silicon microcavity, ' + hr.lam[0] + '–' + hr.lam[hr.lam.length - 1] + ' nm',
+        x: hr.lam, series: [{ y: hr.spec[0], color: C.ref, width: 1.6 }], xlabel: 'Wavelength (nm)', ylabel: 'Reflectance', h: 230, legend: false, vlines: [{ x: hr.lamUsed[0], color: C.eswSm }]
+      });
+      v.heroSens = this.mk({
+        title: 'The same ' + hr.times.length + ' spectra, read four ways', note: 'normalized so the shapes can be compared',
+        x: hr.times, series: [
+          { y: HS(hr.sgApplied ? 'eswSm' : 'eswRaw').norm, color: hr.sgApplied ? C.eswSm : C.eswRaw, label: 'ESW', width: 2 },
+          { y: HS('iaw').norm, color: C.iaw, label: 'IAW', width: 1.8 },
+          { y: HS('mwp').norm, color: C.mwp, label: 'Morlet phase', width: 2.2 },
+          hTruth ? { y: hr.truthNorm, color: C.truth, label: 'Simulated', width: 1.6, dash: '6 4' } : null
+        ].filter(Boolean), xlabel: 'Time (min)', ylabel: 'Normalized', h: 230, ymin: -0.45, ymax: 1.45
+      });
+    }
+    if (!r) return v;
+
+    const n = r.times.length, j = Math.min(st.timeIdx, n - 1);
+    const S = k => r.series.find(s => s.key === k);
+    const tf = x => (+x).toFixed(tDec);
+    v.maxIdx = n - 1;
+    v.timeLabel = 't = ' + tf(r.times[j]) + ' ' + U + '  (spectrum ' + (j + 1) + ' of ' + n + (r.names && r.names[j] ? ' · ' + String(r.names[j]).slice(0, 28) : '') + ')';
+
+    const onBand = (key, a, b) => {
+      const q = x => +(+x).toFixed(2);
+      return key === 'base' ? this.setPs({ baseA: q(a), baseB: q(b) }) : this.setPs({ respA: q(a), respB: q(b) });
+    };
+    const bands = [
+      { key: 'base', label: 'Baseline', a: p.baseA, b: p.baseB, fill: 'rgba(122,138,94,0.12)', edge: '#7a8a5e' },
+      { key: 'resp', label: 'Response', a: p.respA, b: p.respB, fill: 'rgba(198,113,57,0.10)', edge: '#c67139' }
+    ];
+
+    // ---- spectral filter brush ----
+    const FL = r.fullLam, FR = r.fullRef, RW = 760, RH = 96, RL = 14, RR = 14, RT = 10, RB = 22;
+    const la = FL[0], lb = FL[FL.length - 1];
+    let fmin = Infinity, fmax = -Infinity;
+    for (const y of FR) { if (Number.isFinite(y)) { if (y < fmin) fmin = y; if (y > fmax) fmax = y; } }
+    const rx = l => RL + (l - la) / ((lb - la) || 1) * (RW - RL - RR);
+    const ry = y => RT + (1 - (y - fmin) / ((fmax - fmin) || 1)) * (RH - RT - RB);
+    const skip = Math.max(1, Math.floor(FL.length / 700));
+    let rd = '';
+    for (let i = 0; i < FL.length; i += skip) rd += (i ? 'L' : 'M') + rx(FL[i]).toFixed(1) + ' ' + ry(FR[i]).toFixed(1) + ' ';
+    const selA = st.brush ? Math.min(st.brush.a, st.brush.b) : (p.anaMin || la);
+    const selB = st.brush ? Math.max(st.brush.a, st.brush.b) : (p.anaMax || lb);
+    const dlFull = FL.length > 1 ? FL[1] - FL[0] : 1;
+    const toLam = e => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / (rect.width || 1)) * RW;
+      return Math.min(lb, Math.max(la, la + (x - RL) / (RW - RL - RR) * (lb - la)));
+    };
+    v.rangeOn = true;
+    v.rangeTool = {
+      viewBox: '0 0 ' + RW + ' ' + RH, d: rd,
+      ticks: this.ticks(la, lb, 5).map(t2 => ({ x: rx(t2), y: RH - 6, label: t2.toFixed(0) })),
+      leftX: RL, leftW: Math.max(0, rx(selA) - RL),
+      rightX: rx(selB), rightW: Math.max(0, RW - RR - rx(selB)),
+      handleA: rx(selA), handleB: rx(selB), top: RT, bottom: RH - RB, plotH: RH - RT - RB,
+      lcX: rx(Math.min(lb, Math.max(la, p.eswLc)))
+    };
+    v.rangeLabel = selA.toFixed(2) + ' – ' + selB.toFixed(2) + ' nm';
+    v.rangeMeta = (selB - selA).toFixed(2) + ' nm wide · ' + (Math.floor((selB - selA) / dlFull) + 1) + ' samples · ' +
+      (r.eotRef * (1 / selA - 1 / selB)).toFixed(1) + ' fringe periods' + (p.anaMin || p.anaMax ? '' : ' · full range');
+    v.onBrushDown = e => {
+      const l = toLam(e);
+      if (e.currentTarget.setPointerCapture && e.pointerId !== undefined) { try { e.currentTarget.setPointerCapture(e.pointerId); } catch (err) {} }
+      this.setState({ brush: { a: l, b: l } });
+    };
+    v.onBrushMove = e => { if (!this.state.brush) return; const l = toLam(e); this.setState(s => ({ brush: { a: s.brush.a, b: l } })); };
+    v.onBrushUp = () => {
+      const br = this.state.brush; if (!br) return;
+      const a = Math.min(br.a, br.b), b = Math.max(br.a, br.b);
+      this.setState({ brush: null });
+      if (b - a > 12 * dlFull) this.setPs({ anaMin: a, anaMax: b });
+    };
+    v.rangeTrim = () => this.setPs({ anaMin: la + (lb - la) * 0.05, anaMax: lb - (lb - la) * 0.05 });
+    v.rangeFeature = () => this.setPs({ anaMin: Math.max(la, p.eswLc - (lb - la) * 0.2), anaMax: Math.min(lb, p.eswLc + (lb - la) * 0.2) });
+    v.rangeSliders = [
+      mkBase('anaMin', 'Filter from', la, lb, dlFull, x => x.toFixed(2) + ' nm', selA),
+      mkBase('anaMax', 'Filter to', la, lb, dlFull, x => x.toFixed(2) + ' nm', selB),
+      mkBase('eswLc', 'ESW wavelength λc', la, lb, dlFull, x => x.toFixed(2) + ' nm')
+    ];
+    const sensSeries = [];
+    const add = (key, on) => { const s = S(key); if (on !== false) sensSeries.push(s); };
+
+    // ---- normalized comparison ----
+    const normSeries = [
+      { y: S('eswRaw').norm, color: C.eswRaw, label: 'ESW raw', width: 1.2, opacity: 0.85 },
+      st.sgOn ? { y: S('eswSm').norm, color: C.eswSm, label: 'ESW smoothed', width: 2 } : null,
+      { y: S('iaw').norm, color: C.iaw, label: 'IAW', width: 1.8 },
+      { y: S('rifts').norm, color: C.rifts, label: 'RIFTS ΔEOT', width: 1.5 },
+      { y: S('mwp').norm, color: C.mwp, label: 'Morlet phase ΔEOT', width: 2.2 },
+      showTruth ? { y: r.truthNorm, color: C.truth, label: 'Simulated', width: 1.6, dash: '6 4' } : null
+    ].filter(Boolean);
+    v.normPlot = this.mk({
+      title: 'All methods, baseline-centred and normalized to the response window',
+      note: 'drag the sage and terracotta edges to set the buffer pre-run and the rinse window',
+      x: r.times, series: normSeries, xlabel: 'Time (' + U + ')', ylabel: 'Normalized response', bands, onBand: onBand, h: hMain, ymin: -0.45, ymax: 1.45
+    });
+
+    // ---- physical-unit panel plots ----
+    const physDefs = [
+      { title: 'ESW — I(λc) / I(λnext)', ylabel: 'ΔESW (ratio)', note: 'λc = ' + r.lamUsed[0].toFixed(2) + ' nm, λ₂ = ' + r.lamUsed[1].toFixed(2) + ' nm', s: [{ y: S('eswRaw').y, color: C.eswRaw, label: 'Raw ESW (always preserved)', width: 1.2 }, r.sgApplied ? { y: S('eswSm').y, color: C.eswSm, label: 'Savitzky–Golay ' + p.sgWin + '/' + p.sgPoly, width: 2.1 } : null] },
+      { title: 'IAW — mean |zeroed interferogram|', ylabel: 'IAW (reflectance)', note: 'trapezoidal integration over λ', s: [{ y: S('iaw').y, color: C.iaw, label: 'IAW', width: 1.9 }] },
+      { title: 'RIFTS ΔEOT from the FFT peak', ylabel: 'ΔEOT (nm)', note: 'parabolic peak refinement, no heavy zero-padding', s: [{ y: S('rifts').y, color: C.rifts, label: 'RIFTS', width: 1.5 }, showTruth ? { y: r.truthE, color: C.truth, label: 'Simulated ΔEOT', width: 1.5, dash: '6 4' } : null] },
+      { title: 'Morlet wavelet phase ΔEOT', ylabel: 'ΔEOT (nm)', note: p.nCyc.toFixed(2) + '-cycle wavelet at ' + (r.eotRef / 1000).toFixed(3) + ' µm', s: [{ y: S('mwp').y, color: C.mwp, label: 'MWP / LAMP', width: 2.1 }, showTruth ? { y: r.truthE, color: C.truth, label: 'Simulated ΔEOT', width: 1.5, dash: '6 4' } : null] }
+    ];
+    v.physPlots = physDefs.map(d => ({ spec: this.mk({ title: d.title, note: d.note, x: r.times, series: d.s.filter(Boolean), xlabel: 'Time (' + U + ')', ylabel: d.ylabel, bands, onBand: onBand, h: hSmall, ymin: d.ymin, ymax: d.ymax }) }));
+
+    // ---- spectra ----
+    const refI = r.refI;
+    const kx = r.kg.map(k => k * 1e4);
+    const asX = st.axis === 'k' ? kx : r.lam;
+    const rowOf = i => st.axis === 'k' ? r.kSig[i] : r.spec[i];
+    v.spectraPlot = this.mk({
+      title: st.axis === 'k' ? 'Baseline-removed spectra against reciprocal wavelength' : 'Measured reflectance spectra',
+      note: st.axis === 'k' ? 'uniform k grid, ' + NK + ' samples, linear trend removed' : r.lam[0].toFixed(2) + '–' + r.lam[r.lam.length - 1].toFixed(2) + ' nm at ' + r.dl.toFixed(3) + ' nm',
+      x: asX,
+      series: [
+        { y: rowOf(refI), x: asX, color: C.ref, label: 'Reference — #' + (refI + 1), width: 1.8 },
+        { y: rowOf(j), x: asX, color: C.cur, label: 'Current — ' + tf(r.times[j]) + ' ' + U, width: 1.8 }],
+      xlabel: st.axis === 'k' ? '1/λ  (10⁻⁴ nm⁻¹)' : 'Wavelength (nm)',
+      ylabel: st.axis === 'k' ? 'Reflectance (detrended)' : 'Reflectance',
+      vlines: st.axis === 'k' ? [] : [{ key: 'esw', x: p.eswLc, color: C.eswSm, label: 'λc' }],
+      onVline: (k, x) => this.setP('eswLc', +x.toFixed(3)), h: hMain + 40
+    });
+
+    // ---- diagnostics ----
+    const d = r.riftsAll[j], md = r.mwDiag[j];
+    const magJ = this.magFor(j) || [];
+    const eAxis = [], eMag = [];
+    for (let i = 1; i < NPAD / 2; i++) { const e = r.eotOf(i); if (e > Math.min(2000, p.eotMin * 0.4) && e < p.eotMax * 1.6) { eAxis.push(e / 1000); eMag.push(magJ[i]); } }
+    v.fftPlot = this.mk({
+      title: 'FFT power against effective optical thickness',
+      note: 'Hann window · peak refined to ' + this.fmt(d.eot / 1000, 4) + ' µm',
+      x: eAxis, series: [{ y: eMag, color: C.rifts, width: 1.4 }],
+      bands: [{ key: 'eot', label: 'EOT search', a: p.eotMin / 1000, b: p.eotMax / 1000, fill: 'rgba(204,121,167,0.10)', edge: '#cc79a7' }],
+      onBand: (key, a, b) => { const lo = Math.max(500, Math.round(a * 1000)); this.setPs({ eotMin: lo, eotMax: Math.max(lo + 500, Math.round(b * 1000)) }); },
+      vlines: [{ x: d.eot / 1000, color: C.mwp }],
+      xlabel: 'EOT (µm)', ylabel: 'Amplitude', h: hSmall, legend: false
+    });
+    const dphiK = this.phaseKFor(j) || [];
+    const phX = [], phY = [];
+    for (let i = r.lo; i < r.hi; i++) { phX.push(r.kg[i] * 1e4); phY.push(Number.isFinite(dphiK[i]) ? dphiK[i] * 1000 : NaN); }
+    v.phasePlot = this.mk({
+      title: 'Morlet phase difference, sample against reference',
+      note: 'edges excluded · weighted mean ' + this.fmt(md.dphi * 1000, 2) + ' mrad',
+      x: phX,
+      series: [{ y: phY, color: C.mwp, label: 'Δφ(k)', width: 1.4 }, { y: phX.map(() => md.dphi * 1000), color: C.truth, label: 'Weighted mean', width: 1.4, dash: '5 4' }],
+      xlabel: '1/λ  (10⁻⁴ nm⁻¹)', ylabel: 'Δφ (mrad)', h: hSmall
+    });
+    v.diagRows = [
+      { label: 'Refined dominant EOT', value: this.fmt(d.eot / 1000, 4) + ' µm' },
+      { label: 'FFT peak amplitude', value: this.fmt(d.amp, 3) },
+      { label: 'Peak width (FWHM)', value: this.fmt(d.width, 0) + ' nm EOT' },
+      { label: 'Peak / out-of-band', value: this.fmt(d.snr, 1) + '×' },
+      { label: 'Raw mean Δφ', value: this.fmt(md.dphi * 1000, 3) + ' mrad' },
+      { label: 'Phase-cycle correction', value: md.nCycCorr + ' × 2π' },
+      { label: 'k samples used', value: md.used + ' of ' + (r.hi - r.lo) },
+      { label: 'Final MWP ΔEOT', value: this.fmt(md.dEOT, 3) + ' nm' },
+      { label: 'Confidence', value: md.conf },
+      { label: hasTruth ? 'Simulated ΔEOT' : 'RIFTS ΔEOT', value: hasTruth ? this.fmt(r.truthE[j], 3) + ' nm' : this.fmt(r.rifts[j], 3) + ' nm' }
+    ];
+    v.warnings = r.warn.map(w => ({
+      level: w.level === 'ok' ? 'pass' : w.level === 'warn' ? 'warning' : 'check',
+      text: w.text,
+      bg: w.level === 'ok' ? 'var(--color-accent-2-100)' : w.level === 'warn' ? 'var(--color-accent-100)' : 'color-mix(in srgb, var(--color-text) 8%, transparent)',
+      fg: w.level === 'ok' ? 'var(--color-accent-2-800)' : w.level === 'warn' ? 'var(--color-accent-800)' : 'var(--color-text)'
+    }));
+    v.warnCount = r.warn.filter(w => w.level !== 'ok').length + ' item' + (r.warn.filter(w => w.level !== 'ok').length === 1 ? '' : 's');
+    v.paramsText = this.json();
+
+    // ---- per-spectrum computation cost ----
+    {
+      const tm = r.timingMeta, rows = r.timing, C2 = this.pal();
+      const sig3 = (val, unit) => (val >= 100 ? val.toFixed(0) : val >= 10 ? val.toFixed(1) : val.toFixed(2)) + ' ' + unit;
+      const fmtMs = ms => !(ms > 0) ? '—' : ms >= 1 ? sig3(ms, 'ms') : ms >= 1e-3 ? sig3(ms * 1e3, 'µs') : sig3(ms * 1e6, 'ns');
+      const fmtShare = q => q >= 10 ? q.toFixed(0) + '%' : q >= 1 ? q.toFixed(1) + '%' : q >= 0.01 ? q.toFixed(2) + '%' : '<0.01%';
+      const worst = Math.max(...rows.map(q => q.ms)) || 1;
+      v.timingRows = rows.map(q => ({
+        label: q.label, note: q.note,
+        ms: fmtMs(q.ms),
+        rel: fmtShare(q.share),
+        barW: Math.max(1.5, 100 * q.ms / worst) + '%',
+        color: C2[q.color] || C2.truth
+      }));
+      v.timingNote = 'Each stage was timed over all ' + tm.n + ' spectra and divided by ' + tm.n +
+        ', at ' + tm.nSamples + ' samples per spectrum, single-threaded in this browser — the absolute numbers are machine-relative; the ratios are what travel.' +
+        (tm.benchedAny ? ' Stages whose whole-dataset total fell within a few ticks of the ~0.1 ms clock were re-timed over repeated passes, so no figure here is quantization noise.' : '');
+      v.timingFoot = 'The k-domain resample (' + fmtMs(tm.kres) + ' per spectrum) is a prerequisite of both RIFTS and Morlet phase, so it is charged to each of them rather than hidden, and Morlet phase also carries the whole RIFTS cost because it takes its 2\u03c0 cycle count from the RIFTS peak. The share column is each method\u2019s part of the ' + fmtMs(tm.total) + ' it costs to run all five. Sub-microsecond stages are replayed in isolation with the data already in cache, which flatters them relative to the same arithmetic inside a full pipeline \u2014 read them as best-case throughput, not as a budget.';
+      v.timingHead = fmtMs(tm.fastest.ms) + ' to ' + fmtMs(tm.slowest.ms) + ' per spectrum';
+    }
+
+    // ---- summary ----
+    const mwpS = S('mwp');
+    v.summary = [
+      { kicker: up ? 'Loaded data' : 'Dataset', value: n + ' spectra', note: r.lam[0].toFixed(2) + '–' + r.lam[r.lam.length - 1].toFixed(2) + ' nm · ' + r.lam.length + ' samples · Δt ' + (up ? (st.useImported ? 'imported' : (st.dtUnit === 's' ? (+p.dtU / 60) : +p.dtU).toFixed(3) + ' min') : p.dt + ' min') },
+      { kicker: 'Optical thickness', value: (r.eotRef / 1000).toFixed(3) + ' µm', note: r.cycles.toFixed(1) + ' fringe periods in the analysis window' },
+      { kicker: 'MWP response', value: this.fmt(mwpS.response, 3) + ' nm', note: 'ΔEOT from ' + v.baseWinLabel + ' to ' + v.respWinLabel },
+      { kicker: 'RIFTS response', value: this.fmt(S('rifts').response, 2) + ' nm', note: 'ΔEOT over the same two windows' },
+      { kicker: 'Warnings', value: v.warnCount, note: st.busy ? 'recomputing' : 'see the Diagnostics tab' }
+    ];
+    v.verdict = hasTruth
+      ? ('Morlet phase reconstructs the simulated \u0394EOT to ' + this.fmt(mwpS.rmse, 3) + ' nm across this run, where RIFTS manages ' +
+        this.fmt(S('rifts').rmse, 2) + ' nm \u2014 the same fringes, read at two resolutions. ESW and IAW carry no EOT unit at all, so they are shapes to compare, not numbers to rank.')
+      : ('These are measured spectra, so there is no simulated response to score against. Between ' + v.baseWinLabel + ' and ' + v.respWinLabel +
+        ', Morlet phase reports ' + this.fmt(mwpS.response, 3) + ' nm of \u0394EOT against ' + this.fmt(S('rifts').response, 2) +
+        ' nm from RIFTS; where the two disagree strongly, check the FFT peak and the phase-cycle correction in Diagnostics before trusting either.');
+
+    return v;
+  }
+
+  // ---------- export ----------
+  json() {
+    const p = this.state.p, r = this.res, st = this.state, D = st.dataset;
+    const upload = st.src === 'upload';
+    return JSON.stringify({
+      source: upload ? 'uploaded spectra (processed locally, never transmitted)' : 'synthetic',
+      dataset: upload && D ? {
+        shape: D.shape === 'matrix' ? 'single matrix file' : 'individual two-column files',
+        spectra: D.spec.length, fileNames: D.names.slice(0, 400),
+        commonGrid_nm: [D.lo, D.hi], gridStep_nm: D.step, samples: D.lam.length,
+        timeSource: st.useImported ? 'imported from file header' : 'index × time step',
+        scanInterval: p.dtU, scanIntervalUnit: st.dtUnit === 's' ? 'seconds' : 'minutes', timeAxisUnit: st.useImported ? 'imported' : 'minutes', referenceSpectrum: Math.round(p.refIdx) + 1,
+        estimatedEOT_nm: D.est
+      } : null,
+      spectralFilter: { from_nm: p.anaMin || (r ? r.fullLam[0] : null), to_nm: p.anaMax || (r ? r.fullLam[r.fullLam.length - 1] : null), appliedRange_nm: r ? [r.lam[0], r.lam[r.lam.length - 1]] : null, samplesUsed: r ? r.lam.length : null },
+      generator: upload ? null : { model: this.state.synthModel === 'single' ? 'single porous layer on silicon, transfer matrix at normal incidence' : 'porous-silicon microcavity: (HL)^6 · half-wave defect · (LH)^6 on silicon, transfer matrix at normal incidence', designWavelength_nm: p.lc, noiseSources: { photon: this.state.nzShot ? p.noise : null, lampJitter: this.state.nzLamp ? p.lampSd : null, thicknessJitter: this.state.nzStretch ? p.stretchSd : null }, seed: p.seed, nSpectra: p.nSpec, timeStep_min: p.dt, lambda_nm: [p.lamMin, p.lamMax], lambdaStep_nm: 1, responseMagnitude_nm: p.resp, noiseAmplitude: p.noise, additiveDrift: p.add, multiplicativeDrift: p.mult, responseFunction: 'g(t)=0 (t<40); 1−exp(−(t−40)/15) (40≤t<110); g(110)·exp(−(t−110)/25) (t≥110)' },
+      analysis: { eswWavelength_nm: p.eswLc, eswDenominatorMode: this.state.denMode, eswLambda2_nm: p.eswLam2, eswWavelengthsUsed_nm: r ? r.lamUsed : null, referenceSpectrum: r ? r.refI + 1 : 1, kGridSamples: NK, fftLength: NPAD, eotSearch_nm: [p.eotMin, p.eotMax], refinedReferenceEOT_nm: r ? r.eotRef : null, fringesInRange: r ? +r.cycles.toFixed(2) : null, morletCycles: p.nCyc, morletSigmaK: r ? r.sk : null, phaseConversion: this.state.convMode, empiricalSlope_nm_per_mrad: p.slope, empiricalIntercept_nm: p.intercept, edgeExclusion: '28 % of the k range at each end', magnitudeThreshold: '0.2 × reference peak' },
+      smoothing: { applied: !!r.sgApplied, appliesTo: 'display copy of the ESW vector only', window: p.sgWin, polynomial: p.sgPoly, derivative: 0 },
+      intervals: { baseline: [p.baseA, p.baseB], response: [p.respA, p.respB] }
+    }, null, 2);
+  }
+  csv() {
+    const r = this.res, p = this.state.p, S = k => r.series.find(s => s.key === k), up = this.state.src === 'upload';
+    const head = ['time', 'spectrum', 'ESW_raw', 'ESW_relative', 'ESW_smoothed', 'IAW', 'RIFTS_dEOT_nm', 'MWP_dEOT_nm', 'simulated_dEOT_nm', 'confidence', 'warnings'];
+    const rows = r.times.map((t, j) => {
+      const flags = [];
+      if (!Number.isFinite(r.esw[j])) flags.push('esw_denominator');
+      if (r.mwDiag[j].nCycCorr !== 0) flags.push('phase_cycle_' + r.mwDiag[j].nCycCorr);
+      if (r.mwDiag[j].conf === 'low') flags.push('low_confidence');
+      return [t, (r.names && r.names[j]) ? String(r.names[j]).replace(/[,\n]/g, ' ') : (j + 1), r.esw[j], r.eswRel[j], r.sgApplied ? r.eswSm[j] : '', r.iaw[j], r.rifts[j], r.mwp[j], r.hasTruth ? r.truthE[j] : '', r.mwDiag[j].conf, flags.join('|')]
+        .map(x => typeof x === 'number' ? (Number.isFinite(x) ? x.toPrecision(8) : 'NaN') : x).join(',');
+    });
+    return ['# Reflectance Sensogram Method Explorer — results',
+      up ? '# uploaded spectra, reference #' + (r.refI + 1) + ', processed locally' : '# synthetic experiment, seed ' + p.seed,
+      '# analysis range ' + r.lam[0].toFixed(3) + '–' + r.lam[r.lam.length - 1].toFixed(3) + ' nm, ESW λ = ' + r.lamUsed.map(x => x.toFixed(2)).join(' / ') + ' nm',
+      head.join(','), ...rows].join('\n');
+  }
+  diagCsv() {
+    const r = this.res;
+    const head = ['time', 'refined_EOT_nm', 'fft_peak_amplitude', 'fft_peak_fwhm_nm', 'peak_to_background', 'mean_dphi_rad', 'phase_cycles_applied', 'MWP_dEOT_nm', 'k_samples_used', 'confidence'];
+    const rows = r.times.map((t, j) => [t, r.riftsAll[j].eot, r.riftsAll[j].amp, r.riftsAll[j].width, r.riftsAll[j].snr, r.mwDiag[j].dphi, r.mwDiag[j].nCycCorr, r.mwDiag[j].dEOT, r.mwDiag[j].used, r.mwDiag[j].conf]
+      .map(x => typeof x === 'number' ? (Number.isFinite(x) ? x.toPrecision(8) : 'NaN') : x).join(','));
+    return [head.join(','), ...rows].join('\n');
+  }
+  download(name, text, type) {
+    const b = new Blob([text], { type }), u = URL.createObjectURL(b), a = document.createElement('a');
+    a.href = u; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(u), 3000);
+  }
+}
+</script>
+</body>
+</html>
