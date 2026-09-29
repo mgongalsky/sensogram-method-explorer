@@ -20,7 +20,7 @@ Requires Node 20+.
 ## Deploy
 
 `npm run build` produces a fully static `dist/` (HTML, JS, CSS, fonts, images and the two
-bundled example datasets under `dist/examples/`). Asset paths are relative (`base: './'`),
+bundled example ZIP archives under `dist/examples/`). Asset paths are relative (`base: './'`),
 so `dist/` can be served from any directory or sub-path by any static web server
 (nginx, Caddy, Apache, GitHub Pages…). No server-side configuration or routing rules
 are needed — the app has no client-side routes. The bundled examples are fetched over
@@ -43,6 +43,6 @@ src/
   pages/        Home, Methods, Experiments (data, spectra, sensograms, overview,
                 diagnostics, export)
   styles/       Organic design-system tokens + app styles
-public/examples/  bundled PrS-47-MC (multilayer) and SL-P2-MA (single layer) excerpts
+public/examples/  bundled example runs as ZIP archives: Example-ML-2 (multilayer) and Example-SL-serum (single layer)
 project/, chats/, HANDOFF.md   the Claude Design prototype this app implements
 ```

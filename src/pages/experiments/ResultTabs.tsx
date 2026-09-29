@@ -116,8 +116,8 @@ export function SensTab({ r }: { r: AnalysisResult }) {
 }
 
 export function OverviewTab({ r }: { r: AnalysisResult }) {
-  const { C, showTruth, state } = useApp();
-  const { st, p, up, hMain, S, onBand, bands, U, baseWinLabel, respWinLabel } = useResultView(r);
+  const { C, showTruth } = useApp();
+  const { st, hMain, S, onBand, bands, U, baseWinLabel, respWinLabel } = useResultView(r);
   const normSeries = [
     { y: S('eswRaw').norm, color: C.eswRaw, label: 'ESW raw', width: 1.2, opacity: 0.85 },
     st.sgOn ? { y: S('eswSm').norm, color: C.eswSm, label: 'ESW smoothed', width: 2 } : null,
@@ -126,15 +126,7 @@ export function OverviewTab({ r }: { r: AnalysisResult }) {
     { y: S('mwp').norm, color: C.mwp, label: 'Morlet phase ΔEOT', width: 2.2 },
     showTruth && r.hasTruth && r.truthNorm ? { y: r.truthNorm, color: C.truth, label: 'Simulated', width: 1.6, dash: '6 4' } : null
   ];
-  const warnCount = warnCountLabel(r);
   const mwpS = S('mwp');
-  const summary = [
-    { kicker: up ? 'Loaded data' : 'Dataset', value: r.n + ' spectra', note: r.lam[0].toFixed(2) + '–' + r.lam[r.lam.length - 1].toFixed(2) + ' nm · ' + r.lam.length + ' samples · Δt ' + (up ? (st.useImported ? 'imported' : (st.dtUnit === 's' ? (+p.dtU / 60) : +p.dtU).toFixed(3) + ' min') : p.dt + ' min') },
-    { kicker: 'Optical thickness', value: (r.eotRef / 1000).toFixed(3) + ' µm', note: r.cycles.toFixed(1) + ' fringe periods in the analysis window' },
-    { kicker: 'MWP response', value: fmt(mwpS.response, 3) + ' nm', note: 'ΔEOT from ' + baseWinLabel + ' to ' + respWinLabel },
-    { kicker: 'RIFTS response', value: fmt(S('rifts').response, 2) + ' nm', note: 'ΔEOT over the same two windows' },
-    { kicker: 'Warnings', value: warnCount, note: state.busy ? 'recomputing' : 'see the Diagnostics tab' }
-  ];
   const verdict = r.hasTruth
     ? ('Morlet phase reconstructs the simulated ΔEOT to ' + fmt(mwpS.rmse ?? NaN, 3) + ' nm across this run, where RIFTS manages ' +
       fmt(S('rifts').rmse ?? NaN, 2) + ' nm — the same fringes, read at two resolutions. ESW and IAW carry no EOT unit at all, so they are shapes to compare, not numbers to rank.')
@@ -152,15 +144,6 @@ export function OverviewTab({ r }: { r: AnalysisResult }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(170px,1fr))', gap: 12 }}>
-        {summary.map((s, i) => (
-          <div key={i} className="card elev-sm" style={{ padding: 'var(--space-3)', gap: 5 }}>
-            <div className="card-kicker">{s.kicker}</div>
-            <div className="sg-num" style={{ fontSize: 23, fontWeight: 600, lineHeight: 1.1 }}>{s.value}</div>
-            <div style={{ fontSize: 11.5, lineHeight: 1.5, color: muted(58) }}>{s.note}</div>
-          </div>
-        ))}
-      </div>
       <div className="card elev-sm" style={{ padding: 'var(--space-4)' }}>
         <Plot plot={{
           title: 'All methods, baseline-centred and normalized to the response window',

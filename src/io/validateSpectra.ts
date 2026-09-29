@@ -4,7 +4,7 @@
 import type { Params } from '../analysis/constants';
 import { estimateEOT } from '../analysis/kdomain';
 import { interp } from '../analysis/numeric';
-import { pickLc } from '../analysis/synthetic';
+import { eswAutoLc } from '../analysis/methods';
 import type { Dataset, DtUnit, Note } from '../analysis/types';
 import { natCmp, parseFile, type ParsedFile } from './parseSpectra';
 
@@ -15,7 +15,10 @@ export type IngestResult =
   | { ok: false; report: Note[] }
   | { ok: true; report: Note[]; dataset: Dataset; files: FileRow[] };
 
-interface Regime { id: string; min: number; max: number; prefLc: number | null; label: string; needsAbove: number }
+interface Regime { min: number; max: number; label: string }
+
+/** Settings a bundled example fixes instead of the film defaults. */
+export interface IngestPreset { anaMin: number; anaMax: number; eswLc?: number; label: string }
 
 /**
  * Parses, validates and grids a set of files.
@@ -25,7 +28,7 @@ interface Regime { id: string; min: number; max: number; prefLc: number | null; 
  * - spectra are sorted by wavelength, duplicate wavelengths averaged, non-finite values
  *   dropped, and everything is interpolated onto the common overlap — never extrapolated
  */
-export function ingest(raw: readonly RawFile[], pre: readonly Note[], filmKind: 'single' | 'cavity', dtUnit: DtUnit): IngestResult {
+export function ingest(raw: readonly RawFile[], pre: readonly Note[], filmKind: 'single' | 'cavity', dtUnit: DtUnit, preset?: IngestPreset): IngestResult {
   const report: Note[] = pre.slice();
   const parsed = raw.map(f => ({ name: f.name, res: parseFile(f.text) }));
   parsed.forEach(f => { if ('error' in f.res) report.push({ level: 'error', text: f.name + ' — ' + f.res.error }); });
@@ -94,40 +97,34 @@ export function ingest(raw: readonly RawFile[], pre: readonly Note[], filmKind: 
   if (clean.length < 21) report.push({ level: 'warn', text: 'Only ' + clean.length + ' time points, so the default 21-point Savitzky–Golay window cannot be used; shorten it or leave smoothing off.' });
 
   const ref = spec[0];
-  // Two measurement regimes get their own defaults. A multilayer run reaching past
-  // ~1300 nm is analysed over 1000–1400 nm with the feature and ESW wavelength at
-  // 1164 nm; if that sample is unavailable the sample's own resonance minimum is used.
-  // Anything in the visible falls back to the 500–800 nm window with the 611 nm feature.
+  // Each film has a default analysis window — single layer 450–800 nm, multilayer
+  // 1000–1150 nm — used when the data cover it; otherwise the full range. The ESW
+  // wavelength is the local reflectance minimum found by walking downhill from the
+  // centre of the window.
   const singleFilm = filmKind === 'single';
-  const REGIMES: Regime[] = singleFilm ? [
-    { id: 'sl', min: 1000, max: 1400, prefLc: null, label: 'single layer, 1000–1400 nm', needsAbove: 1300 },
-    { id: 'vis', min: 500, max: 800, prefLc: null, label: 'single layer, visible 500–800 nm', needsAbove: 0 }
-  ] : [
-    { id: 'mc', min: 1000, max: 1400, prefLc: 1164, label: 'multilayer, 1000–1400 nm', needsAbove: 1300 },
-    { id: 'vis', min: 500, max: 800, prefLc: 611, label: 'visible, 500–800 nm', needsAbove: 0 }
-  ];
+  const REGIMES: Regime[] = singleFilm
+    ? [{ min: 450, max: 800, label: 'single layer, 450–800 nm' }]
+    : [{ min: 1000, max: 1150, label: 'multilayer, 1000–1150 nm' }];
   let regime: Regime | null = null, anaMin = lo, anaMax = hi;
-  for (const rg of REGIMES) {
-    if (hi < rg.needsAbove) continue;
-    const a = Math.max(lo, Math.min(hi, rg.min)), b = Math.min(hi, Math.max(lo, rg.max));
-    if (b - a > 12 * step) { regime = rg; anaMin = a; anaMax = b; break; }
+  if (preset) {
+    regime = { min: preset.anaMin, max: preset.anaMax, label: preset.label };
+    anaMin = Math.max(lo, preset.anaMin); anaMax = Math.min(hi, preset.anaMax);
+  } else {
+    for (const rg of REGIMES) {
+      if (lo > rg.min + step || hi < rg.max - step) continue;
+      regime = rg; anaMin = Math.max(lo, rg.min); anaMax = Math.min(hi, rg.max);
+      break;
+    }
   }
-  let mi = 0, md = Infinity;
-  const prefLc = regime ? regime.prefLc : null;
-  if (prefLc) for (let i = 0; i < nPts; i++) { const d = Math.abs(grid[i] - prefLc); if (d < md) { md = d; mi = i; } }
-  const lcPref = !!prefLc && md <= 5 * step && grid[mi] >= anaMin && grid[mi] <= anaMax;
-  if (!lcPref) {
-    const iA = Math.max(1, Math.round((anaMin - lo) / step)), iB = Math.min(nPts - 2, Math.round((anaMax - lo) / step));
-    mi = pickLc(grid, ref, singleFilm, iA, iB);
-  }
-  const lc = grid[mi];
+  const lcFixed = !!preset && preset.eswLc !== undefined && preset.eswLc >= anaMin && preset.eswLc <= anaMax;
+  const lc = lcFixed ? (preset as IngestPreset).eswLc as number : grid[eswAutoLc(grid, ref, anaMin, anaMax)];
   const est = estimateEOT(grid, ref);
   const cyc = est * (1 / lo - 1 / hi);
   report.push({
     level: 'ok', text: 'Defaults: analysis window ' + anaMin.toFixed(1) + '–' + anaMax.toFixed(1) + ' nm' +
-      (regime ? ' (' + regime.label + ')' : ' (neither the 1000–1400 nm multilayer window nor the 500–800 nm visible window fits this dataset, so the full range is used)') +
-      '; feature and ESW wavelength ' + lc.toFixed(2) + ' nm' +
-      (lcPref ? ' (nearest sample to ' + prefLc + ' nm).' : singleFilm ? ' (the fringe minimum nearest the middle of the window).' : ' (the sharpest reflectance notch in the window — this sample’s resonance).')
+      (regime ? ' (' + regime.label + ')' : ' (the ' + (singleFilm ? '450–800 nm single-layer' : '1000–1150 nm multilayer') + ' window is not covered by this dataset, so the full range is used)') +
+      '; ESW wavelength ' + lc.toFixed(2) + ' nm' +
+      (lcFixed ? ' (preset for this example).' : ' (the local reflectance minimum found downhill from the window centre).')
   });
   report.push(cyc < 3
     ? { level: 'warn', text: 'Only about ' + cyc.toFixed(1) + ' fringe periods are visible at the estimated optical thickness of ' + (est / 1000).toFixed(2) + ' µm. FFT and wavelet phase need roughly three or more.' }

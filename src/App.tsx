@@ -1,18 +1,25 @@
 import { useEffect, useRef, useState } from 'react';
-import { DEFAULTS, pick } from './analysis/constants';
+import { DEFAULTS, pick, type Params } from './analysis/constants';
 import { fftMag, phaseDiff } from './analysis/kdomain';
 import { heavyKey, refreshWindows, runAnalysis } from './analysis/pipeline';
-import { pickLc, synth, type FilmModel } from './analysis/synthetic';
+import { eswAutoLc } from './analysis/methods';
+import { synth, type FilmModel } from './analysis/synthetic';
 import type { AnalysisResult, Note } from './analysis/types';
 import { FIGURE_SETTINGS, PALETTES } from './content/methods';
 import { unzip, inflateRaw } from './io/unzip';
-import { ingest, type RawFile } from './io/validateSpectra';
+import { ingest, type IngestPreset, type RawFile } from './io/validateSpectra';
 import { ExperimentsPage } from './pages/ExperimentsPage';
 import { HomePage } from './pages/HomePage';
 import { MethodsPage } from './pages/MethodsPage';
-import { Ctx, INITIAL_STATE, isSingleFilm, type Actions, type AppState, type Patch, type Tab } from './state';
+import { Ctx, INITIAL_STATE, type Actions, type AppState, type Patch, type Tab } from './state';
 
 const toTop = () => requestAnimationFrame(() => window.scrollTo(0, 0));
+
+/** The bundled example runs, served as the original ZIP archives from public/examples/. */
+const EXAMPLES: Record<string, { file: string; label: string; preset: IngestPreset }> = {
+  multilayer: { file: 'Example-ML-2.zip', label: 'Multilayer example (Example-ML-2)', preset: { anaMin: 1000, anaMax: 1150, eswLc: 1068.33, label: 'multilayer example preset, 1000–1150 nm' } },
+  'single-layer': { file: 'Example-SL-serum.zip', label: 'Single-layer example (SL, serum)', preset: { anaMin: 450, anaMax: 800, label: 'single-layer example preset, 450–800 nm' } }
+};
 
 export function App() {
   const [state, setState] = useState<AppState>(INITIAL_STATE);
@@ -71,9 +78,9 @@ export function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const applyIngest = (raw: RawFile[], pre: Note[], kind: FilmModel) => {
+  const applyIngest = (raw: RawFile[], pre: Note[], kind: FilmModel, preset?: IngestPreset) => {
     const st = stateRef.current;
-    const out = ingest(raw, pre, kind, st.dtUnit);
+    const out = ingest(raw, pre, kind, st.dtUnit, preset);
     if (!out.ok) {
       set({ report: out.report, dataset: null, parsing: false, files: [] });
       return;
@@ -87,11 +94,53 @@ export function App() {
     schedule();
   };
 
+  // A new analysis range re-runs the ESW wavelength search from its centre, unless the
+  // same edit sets λc itself. The search reads the full reference spectrum.
+  const withAutoLc = (prev: Params, obj: Partial<Params>): Partial<Params> => {
+    const r = resRef.current;
+    if (!r || obj.eswLc !== undefined || (obj.anaMin === undefined && obj.anaMax === undefined)) return obj;
+    const lam = r.fullLam, next = { ...prev, ...obj };
+    if (lam.length < 5) return obj;
+    const i = eswAutoLc(lam, r.fullRef, next.anaMin || lam[0], next.anaMax || lam[lam.length - 1]);
+    return { ...obj, eswLc: +lam[i].toFixed(3) };
+  };
+
+  const readFiles = (files: File[], kind: FilmModel, preset?: IngestPreset, pre0: Note[] = []) => {
+    set({ filmKind: kind, parsing: true, drag: null, report: [], progress: 'Reading ' + files.length + ' file' + (files.length === 1 ? '' : 's') + '…' });
+    void (async () => {
+      const raw: RawFile[] = [], pre: Note[] = pre0.slice(), dec = new TextDecoder();
+      try {
+        for (const f of files) {
+          if (/\.zip$/i.test(f.name)) {
+            const { entries, skipped } = await unzip(f);
+            if (!entries.length) { pre.push({ level: 'error', text: f.name + ' — no TXT, CSV, TSV, DAT, ASC, PRN or XY entries inside the archive.' }); continue; }
+            pre.push({ level: 'ok', text: f.name + ' — ' + entries.length + ' spectrum file' + (entries.length === 1 ? '' : 's') + ' expanded in this browser' + (skipped ? ', ' + skipped + ' non-spectral entr' + (skipped === 1 ? 'y' : 'ies') + ' ignored' : '') + '.' });
+            for (let i = 0; i < entries.length; i++) {
+              const en = entries[i];
+              const bytes = en.method === 0 ? en.data : await inflateRaw(en.data);
+              raw.push({ name: en.name, text: dec.decode(bytes) });
+              if (i % 40 === 0) set({ progress: 'Expanding ' + f.name + ' — ' + (i + 1) + ' of ' + entries.length + '…' });
+            }
+          } else {
+            let text = '';
+            try { text = await f.text(); } catch { text = ''; }
+            raw.push({ name: f.name, text });
+          }
+        }
+      } catch (err) {
+        set({ parsing: false, progress: '', dataset: null, report: [{ level: 'error', text: 'Could not read the archive — ' + (err instanceof Error ? err.message : String(err)) }] });
+        return;
+      }
+      set({ progress: 'Parsing ' + raw.length + ' spectra…' });
+      setTimeout(() => applyIngest(raw, pre, kind, preset), 16);
+    })();
+  };
+
   const actions: Actions = {
     set,
     edit: patch => { set(patch); schedule(); },
-    setP: (k, v) => { set(s => ({ p: { ...s.p, [k]: v } })); schedule(); },
-    setPs: obj => { set(s => ({ p: { ...s.p, ...obj } })); schedule(); },
+    setP: (k, v) => { set(s => ({ p: { ...s.p, ...withAutoLc(s.p, { [k]: v }) } })); schedule(); },
+    setPs: obj => { set(s => ({ p: { ...s.p, ...withAutoLc(s.p, obj) } })); schedule(); },
     // The baseline and response windows are stored in minutes, so changing the scan
     // interval has to carry them along or they stop matching the run they describe.
     setDt: (val, unit) => {
@@ -103,50 +152,19 @@ export function App() {
 
     handleFiles: (fileList, kind) => {
       const files = Array.from(fileList || []);
-      if (!files.length) return;
-      set({ filmKind: kind, parsing: true, drag: null, report: [], progress: 'Reading ' + files.length + ' file' + (files.length === 1 ? '' : 's') + '…' });
-      void (async () => {
-        const raw: RawFile[] = [], pre: Note[] = [], dec = new TextDecoder();
-        try {
-          for (const f of files) {
-            if (/\.zip$/i.test(f.name)) {
-              const { entries, skipped } = await unzip(f);
-              if (!entries.length) { pre.push({ level: 'error', text: f.name + ' — no TXT, CSV, TSV, DAT, ASC, PRN or XY entries inside the archive.' }); continue; }
-              pre.push({ level: 'ok', text: f.name + ' — ' + entries.length + ' spectrum file' + (entries.length === 1 ? '' : 's') + ' expanded in this browser' + (skipped ? ', ' + skipped + ' non-spectral entr' + (skipped === 1 ? 'y' : 'ies') + ' ignored' : '') + '.' });
-              for (let i = 0; i < entries.length; i++) {
-                const en = entries[i];
-                const bytes = en.method === 0 ? en.data : await inflateRaw(en.data);
-                raw.push({ name: en.name, text: dec.decode(bytes) });
-                if (i % 40 === 0) set({ progress: 'Expanding ' + f.name + ' — ' + (i + 1) + ' of ' + entries.length + '…' });
-              }
-            } else {
-              let text = '';
-              try { text = await f.text(); } catch { text = ''; }
-              raw.push({ name: f.name, text });
-            }
-          }
-        } catch (err) {
-          set({ parsing: false, progress: '', dataset: null, report: [{ level: 'error', text: 'Could not read the archive — ' + (err instanceof Error ? err.message : String(err)) }] });
-          return;
-        }
-        set({ progress: 'Parsing ' + raw.length + ' spectra…' });
-        setTimeout(() => applyIngest(raw, pre, kind), 16);
-      })();
+      if (files.length) readFiles(files, kind);
     },
 
     loadBundled: (id, kind) => {
-      if (stateRef.current.parsing) return;
-      set({ filmKind: kind, parsing: true, progress: 'Loading the bundled example…' });
+      const ex = EXAMPLES[id];
+      if (!ex || stateRef.current.parsing) return;
+      set({ filmKind: kind, parsing: true, report: [], progress: 'Loading the bundled example…' });
       void (async () => {
         try {
-          const res = await fetch(import.meta.env.BASE_URL + 'examples/' + id + '.json');
+          const res = await fetch(import.meta.env.BASE_URL + 'examples/' + ex.file);
           if (!res.ok) throw new Error('HTTP ' + res.status);
-          const d = await res.json() as { label: string; file: string; note: string; lam: number[]; spec: number[][]; names: string[] };
-          const pre: Note[] = [{ level: 'ok', text: d.label + ' (' + d.file + ') — ' + d.note }];
-          applyIngest(d.spec.map((row, j) => ({
-            name: d.names[j],
-            text: '# ' + d.file + ' — two columns: wavelength (nm), intensity (counts)\nwavelength\tintensity\n' + d.lam.map((l, i) => l + '\t' + row[i]).join('\n')
-          })), pre, kind);
+          const file = new File([await res.blob()], ex.file);
+          readFiles([file], kind, ex.preset, [{ level: 'ok', text: ex.label + ' — the bundled ' + ex.file + ' archive, read through the same path as an upload.' }]);
         } catch (e) {
           set({
             parsing: false, progress: '',
@@ -191,9 +209,9 @@ export function App() {
 
     autoLc: () => {
       const r = resRef.current; if (!r) return;
-      const lam = r.lam, ref = r.spec[r.refI];
+      const lam = r.fullLam, p = stateRef.current.p;
       if (lam.length < 5) return;
-      const mi = pickLc(lam, ref, isSingleFilm(stateRef.current));
+      const mi = eswAutoLc(lam, r.fullRef, p.anaMin || lam[0], p.anaMax || lam[lam.length - 1]);
       actions.setP('eswLc', +lam[mi].toFixed(3));
     },
 

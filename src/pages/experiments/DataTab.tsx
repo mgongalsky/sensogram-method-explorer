@@ -16,10 +16,10 @@ export const noteStyle = (w: Note, forReport: boolean) => ({
 });
 
 const ZONES: { kind: FilmModel; title: string; example: string; exampleLabel: string; body: string }[] = [
-  { kind: 'cavity', title: 'Multilayer', example: 'multilayer', exampleLabel: 'PrS-47-MC example',
-    body: 'Bragg mirrors around a defect layer. The ESW wavelength snaps to the sharpest notch — the resonance.' },
-  { kind: 'single', title: 'Single layer', example: 'single-layer', exampleLabel: 'SL-P2-MA example',
-    body: 'One porous film, a plain fringe train. The ESW wavelength snaps to the fringe minimum nearest the window centre.' }
+  { kind: 'cavity', title: 'Multilayer', example: 'multilayer', exampleLabel: 'Load ML example',
+    body: 'Bragg mirrors around a defect layer. Default window 1000–1150 nm; the ESW wavelength is the local reflectance minimum found downhill from the window centre.' },
+  { kind: 'single', title: 'Single layer', example: 'single-layer', exampleLabel: 'Load SL example',
+    body: 'One porous film, a plain fringe train. Default window 450–800 nm; the ESW wavelength is the local reflectance minimum found downhill from the window centre.' }
 ];
 
 export function DataTab() {
@@ -56,7 +56,7 @@ export function DataTab() {
         {st.dataset && <button className="btn btn-secondary" style={{ fontSize: 12.5, padding: '6px 14px' }} onClick={actions.clearData}>Clear loaded data</button>}
       </div>
       <p style={{ margin: 0, fontSize: 12.5, lineHeight: 1.6, color: muted(58), maxWidth: '60em' }}>
-        Either zone accepts a <strong>ZIP archive</strong>, a folder's worth of <strong>two-column</strong> TXT / CSV / TSV / DAT files, or a single <strong>matrix file</strong> with wavelength in column one and one column per time point. Comma, tab, semicolon and whitespace delimiters are detected; comment lines beginning <code>#</code>, <code>%</code> or <code>//</code> and one optional header row are skipped; files are ordered by natural filename sort, so <code>spectrum2</code> precedes <code>spectrum10</code>. Telling the page which film it is only sets the starting window and which reflectance feature the ESW wavelength snaps to — you can override both. Spectra are processed locally in this browser and are not uploaded.
+        Either zone accepts a <strong>ZIP archive</strong>, a folder's worth of <strong>two-column</strong> TXT / CSV / TSV / DAT files, or a single <strong>matrix file</strong> with wavelength in column one and one column per time point. Comma, tab, semicolon and whitespace delimiters are detected; comment lines beginning <code>#</code>, <code>%</code> or <code>//</code> and one optional header row are skipped; files are ordered by natural filename sort, so <code>spectrum2</code> precedes <code>spectrum10</code>. Telling the page which film it is only sets the starting window — you can override it, and the ESW wavelength, at any time. Spectra are processed locally in this browser and are not uploaded.
       </p>
 
       {st.report.length > 0 && (

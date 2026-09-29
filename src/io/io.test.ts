@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { natCmp, parseFile } from './parseSpectra';
-import { commonGrid, ingest } from './validateSpectra';
+import { inflateRaw, unzip } from './unzip';
+import { commonGrid, ingest, type RawFile } from './validateSpectra';
+import mlZip from '../../public/examples/Example-ML-2.zip?inline';
+import slZip from '../../public/examples/Example-SL-serum.zip?inline';
 
 const twoCol = (lam: number[], f: (l: number) => number, delim = '\t') => lam.map(l => l + delim + f(l).toFixed(6)).join('\n');
 const range = (a: number, b: number, st: number) => { const o: number[] = []; for (let x = a; x <= b + 1e-9; x += st) o.push(+x.toFixed(6)); return o; };
@@ -91,5 +94,44 @@ describe('validation and gridding', () => {
     expect(out.ok).toBe(true);
     expect(out.report.some(n => /not monotonically increasing/.test(n.text))).toBe(true);
     expect(out.report.some(n => /duplicated wavelength/.test(n.text))).toBe(true);
+  });
+});
+
+describe('bundled examples', { timeout: 30000 }, () => {
+  // the archives arrive as data: URLs, so the test needs no file-system access
+  const load = async (file: string) => {
+    const buf = await (await fetch(file === 'Example-ML-2.zip' ? mlZip : slZip)).arrayBuffer();
+    const { entries } = await unzip(new File([buf], file));
+    const dec = new TextDecoder(), raw: RawFile[] = [];
+    for (const en of entries) raw.push({ name: en.name, text: dec.decode(en.method === 0 ? en.data : await inflateRaw(en.data)) });
+    return raw;
+  };
+
+  it('reads the multilayer run with the 1000–1150 nm window and a λc near 1068 nm', async () => {
+    const raw = await load('Example-ML-2.zip');
+    const out = ingest(raw, [], 'cavity', 's');
+    expect(out.ok).toBe(true);
+    if (!out.ok) return;
+    expect(out.dataset.spec.length).toBe(173);
+    expect(out.dataset.derived.anaMin).toBeCloseTo(1000, 0);
+    expect(out.dataset.derived.anaMax).toBeCloseTo(1150, 0);
+    expect(Math.abs((out.dataset.derived.eswLc as number) - 1068.33)).toBeLessThan(3);
+    const pre = ingest(raw, [], 'cavity', 's', { anaMin: 1000, anaMax: 1150, eswLc: 1068.33, label: 'preset' });
+    expect(pre.ok && pre.dataset.derived.eswLc).toBe(1068.33);
+  });
+
+  it('reads the single-layer run with the 450–800 nm window and λc on a fringe minimum', async () => {
+    const out = ingest(await load('Example-SL-serum.zip'), [], 'single', 's');
+    expect(out.ok).toBe(true);
+    if (!out.ok) return;
+    const { lam, spec, derived } = out.dataset;
+    expect(spec.length).toBe(175);
+    expect(derived.anaMin).toBeCloseTo(450, 0);
+    expect(derived.anaMax).toBeCloseTo(800, 0);
+    // the smoothed reflectance is lowest at λc within ±5 nm
+    const lc = derived.eswLc as number, near = lam.map((l, i) => [l, spec[0][i]]).filter(([l]) => Math.abs(l - lc) < 5);
+    const mean = (q: number[][]) => q.reduce((s, x) => s + x[1], 0) / q.length;
+    const mid = near.filter(([l]) => Math.abs(l - lc) < 1.5), edge = near.filter(([l]) => Math.abs(l - lc) > 3.5);
+    expect(mean(mid)).toBeLessThan(mean(edge));
   });
 });

@@ -7,6 +7,8 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   base: './',
   plugins: [react()],
+  // the bundled example runs are ZIP archives; the tests import them inline
+  assetsInclude: ['**/*.zip'],
   test: {
     include: ['src/**/*.test.ts']
   }

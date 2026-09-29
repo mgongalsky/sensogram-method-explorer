@@ -4,7 +4,7 @@
 import { useRef } from 'react';
 import { DEFAULTS, type Params } from '../../analysis/constants';
 import { NumberInput, Seg, Slider } from '../../components/Controls';
-import { isSingleFilm, useApp } from '../../state';
+import { useApp } from '../../state';
 
 const note = (pct = 55) => ({ fontSize: 11, lineHeight: 1.5, color: `color-mix(in srgb,var(--color-text) ${pct}%,transparent)` });
 
@@ -218,7 +218,6 @@ function SpectralFilter() {
     actions.set({ brush: null });
     if (b - a > 12 * dlFull) actions.setPs({ anaMin: a, anaMax: b });
   };
-  const single = isSingleFilm(st);
 
   return (
     <div className="card elev-sm" style={{ gap: 10 }}>
@@ -265,11 +264,11 @@ function SpectralFilter() {
         </div>
         <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
           <button className="btn btn-secondary" style={{ fontSize: 11.5, padding: '5px 11px' }} onClick={actions.autoLc}
-            title={single ? 'Move the ESW wavelength to the fringe minimum nearest the middle of the analysis window' : 'Move the ESW wavelength to the deepest reflectance minimum in the analysis window'}>
+            title="Move the ESW wavelength to the local reflectance minimum reached downhill from the centre of the analysis window">
             Find minimum
           </button>
         </div>
-        <div style={note()}>{'ESW wavelength λc = ' + (+p.eswLc).toFixed(2) + ' nm — ' + (single ? 'fringe minimum nearest the window centre' : 'sharpest reflectance notch') + '. Drag the pink marker on the Spectra plot, set it here, or use Find minimum.'}</div>
+        <div style={note()}>{'ESW wavelength λc = ' + (+p.eswLc).toFixed(2) + ' nm. Changing the window re-runs the search for the local minimum from its centre; drag the pink marker on the Spectra plot or set λc here to override it, or use Find minimum to search again.'}</div>
         <div style={note()}>Drag across the spectrum to choose the wavelength window. Every method — ESW, IAW, RIFTS and Morlet phase — sees only this window.</div>
       </div>
     </div>

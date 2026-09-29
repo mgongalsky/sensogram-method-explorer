@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULTS, NK } from './constants';
 import { fftPeak, filt, kGrid, maxMagnitude, phaseDiff, phaseWindow, toK, wavelet } from './kdomain';
-import { eswValue, iawValue } from './methods';
+import { eswAutoLc, eswValue, iawValue } from './methods';
 import { savGol, hannWindow } from './numeric';
 import { runAnalysis } from './pipeline';
 import { modelSpectrum, pickLc, synth } from './synthetic';
@@ -143,3 +143,17 @@ function input(o: { p?: typeof DEFAULTS; nz?: typeof NZ_ON } = {}): AnalysisInpu
     synthModel: 'cavity', filmKind: 'cavity', ...(o.nz ?? NZ_ON), dataset: null
   };
 }
+
+describe('ESW wavelength search', () => {
+  it('walks downhill from the window centre to the nearest fringe minimum', () => {
+    const lam = range(1000, 1400, 0.5);
+    const R = lam.map(l => 0.4 + 0.1 * Math.cos(2 * Math.PI * 15000 / l));
+    const i = eswAutoLc(lam, R, 1100, 1300);
+    // minima of cos(2π·15000/λ) sit at λ = 15000/(m + ½)
+    const minima = [11.5, 12.5, 13.5].map(m => 15000 / m);
+    expect(Math.min(...minima.map(x => Math.abs(lam[i] - x)))).toBeLessThanOrEqual(0.5);
+    expect(i).toBe(eswAutoLc(lam, R, 1100, 1300));
+    expect(R[i - 1]).toBeGreaterThanOrEqual(R[i]);
+    expect(R[i + 1]).toBeGreaterThanOrEqual(R[i]);
+  });
+});
