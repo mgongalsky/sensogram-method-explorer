@@ -8,6 +8,20 @@ import type { FileRow } from './io/validateSpectra';
 export type View = 'home' | 'methods' | 'exp';
 export type Tab = 'data' | 'spectra' | 'sens' | 'overview' | 'diag' | 'export';
 
+export interface Nav { view: View; src?: Source; tab?: Tab }
+
+/** Hash for a navigation state, so Back and Forward move between pages of the app. */
+export const navHash = (s: Nav): string => s.view === 'exp' ? '#/' + (s.src || 'synth') + '/' + (s.tab || 'spectra') : s.view === 'methods' ? '#/methods' : '#/';
+
+const TABS: Tab[] = ['data', 'spectra', 'sens', 'overview', 'diag', 'export'];
+
+export function parseHash(h: string): Nav {
+  const [a, b] = h.replace(/^#\/?/, '').split('/');
+  if (a === 'methods') return { view: 'methods' };
+  if (a === 'synth' || a === 'upload') return { view: 'exp', src: a, tab: TABS.includes(b as Tab) ? b as Tab : undefined };
+  return { view: 'home' };
+}
+
 export interface AppState {
   view: View;
   tab: Tab;
@@ -66,6 +80,10 @@ export interface Actions {
   loadBundled: (id: string, kind: FilmModel) => void;
   loadSyntheticAsUpload: () => void;
   clearData: () => void;
+  /** switch between the synthetic example and uploaded spectra */
+  setSrc: (src: Source) => void;
+  /** apply a view/tab from the browser history (Back / Forward) */
+  applyNav: (nav: Nav) => void;
   reorder: (kind: 'reverse' | 'up' | 'down' | 'remove', i?: number) => void;
   autoLc: () => void;
   goHome: () => void;

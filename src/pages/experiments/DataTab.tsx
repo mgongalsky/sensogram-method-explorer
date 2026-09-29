@@ -53,7 +53,6 @@ export function DataTab() {
       </div>
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
         <button className="btn btn-ghost" style={{ fontSize: 12.5 }} onClick={actions.loadSyntheticAsUpload}>Synthetic demo</button>
-        {st.dataset && <button className="btn btn-secondary" style={{ fontSize: 12.5, padding: '6px 14px' }} onClick={actions.clearData}>Clear loaded data</button>}
       </div>
       <p style={{ margin: 0, fontSize: 12.5, lineHeight: 1.6, color: muted(58), maxWidth: '60em' }}>
         Either zone accepts a <strong>ZIP archive</strong>, a folder's worth of <strong>two-column</strong> TXT / CSV / TSV / DAT files, or a single <strong>matrix file</strong> with wavelength in column one and one column per time point. Comma, tab, semicolon and whitespace delimiters are detected; comment lines beginning <code>#</code>, <code>%</code> or <code>//</code> and one optional header row are skipped; files are ordered by natural filename sort, so <code>spectrum2</code> precedes <code>spectrum10</code>. Telling the page which film it is only sets the starting window — you can override it, and the ESW wavelength, at any time. Spectra are processed locally in this browser and are not uploaded.

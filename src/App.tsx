@@ -11,7 +11,7 @@ import { ingest, type IngestPreset, type RawFile } from './io/validateSpectra';
 import { ExperimentsPage } from './pages/ExperimentsPage';
 import { HomePage } from './pages/HomePage';
 import { MethodsPage } from './pages/MethodsPage';
-import { Ctx, INITIAL_STATE, type Actions, type AppState, type Patch, type Tab } from './state';
+import { Ctx, INITIAL_STATE, navHash, parseHash, type Actions, type AppState, type Nav, type Patch, type Tab } from './state';
 
 const toTop = () => requestAnimationFrame(() => window.scrollTo(0, 0));
 
@@ -21,8 +21,21 @@ const EXAMPLES: Record<string, { file: string; label: string; preset: IngestPres
   'single-layer': { file: 'Example-SL-serum.zip', label: 'Single-layer example (SL, serum)', preset: { anaMin: 450, anaMax: 800, label: 'single-layer example preset, 450–800 nm' } }
 };
 
+/** A tab that exists for the given source: upload without data only has the Data tab,
+ *  and the synthetic example has no Data tab. */
+const validTab = (s: AppState, t: Tab | undefined): Tab =>
+  s.src === 'upload' && !s.dataset ? 'data' : s.src === 'synth' && (!t || t === 'data') ? 'overview' : t || s.tab;
+
+/** Start on the page named in the URL hash, so a reload or a shared link keeps its place. */
+function initialState(): AppState {
+  const nav = parseHash(window.location.hash);
+  if (nav.view !== 'exp') return { ...INITIAL_STATE, view: nav.view };
+  const s = { ...INITIAL_STATE, view: nav.view, src: nav.src || INITIAL_STATE.src };
+  return { ...s, tab: validTab(s, nav.tab) };
+}
+
 export function App() {
-  const [state, setState] = useState<AppState>(INITIAL_STATE);
+  const [state, setState] = useState<AppState>(initialState);
   const stateRef = useRef(state);
   stateRef.current = state;
   const resRef = useRef<AnalysisResult | null>(null);
@@ -75,6 +88,28 @@ export function App() {
   useEffect(() => {
     void compute();
     return () => clearTimeout(timerRef.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Every page and tab change is a browser-history entry, so Back returns to the previous
+  // page of the app rather than leaving the site. The first render replaces rather than
+  // pushes; Back/Forward already leave the URL matching the state, so nothing is pushed then.
+  const replaceNextRef = useRef(true);
+  useEffect(() => {
+    const h = navHash(state);
+    const same = window.location.hash === h || (h === '#/' && !window.location.hash);
+    if (!same) {
+      const url = window.location.pathname + window.location.search + h;
+      if (replaceNextRef.current) window.history.replaceState(null, '', url);
+      else window.history.pushState(null, '', url);
+    }
+    replaceNextRef.current = false;
+  }, [state.view, state.src, state.tab]);
+
+  useEffect(() => {
+    const onPop = () => actions.applyNav(parseHash(window.location.hash));
+    window.addEventListener('popstate', onPop);
+    return () => window.removeEventListener('popstate', onPop);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -189,6 +224,30 @@ export function App() {
     clearData: () => {
       resRef.current = null; heavyKeyRef.current = null; tokenRef.current++;
       set(s => ({ dataset: null, files: [], report: [], tab: 'data', prog: null, busy: false, ms: 0, p: { ...s.p, anaMin: 0, anaMax: 0 } }));
+      toTop();
+    },
+
+    setSrc: src => src === 'synth'
+      ? actions.edit(s => ({ src: 'synth', tab: s.tab === 'data' ? 'overview' : s.tab, p: { ...s.p, ...pick(DEFAULTS) } }))
+      : actions.edit(s => ({
+        src: 'upload', tab: s.dataset ? s.tab : 'data',
+        p: { ...s.p, ...(s.dataset ? s.dataset.derived : {}), sgWin: Math.min(s.p.sgWin, s.dataset ? (s.dataset.spec.length % 2 ? s.dataset.spec.length : s.dataset.spec.length - 1) : s.p.sgWin) }
+      })),
+
+    // Back/Forward: show the page named in the restored hash. If that page no longer exists
+    // (e.g. a results tab after the data was cleared), fall back and correct the URL in place.
+    applyNav: (nav: Nav) => {
+      const st = stateRef.current;
+      let next: Nav = { view: nav.view };
+      if (nav.view === 'exp') {
+        const src = nav.src || st.src;
+        next = { view: 'exp', src, tab: validTab({ ...st, src }, nav.tab) };
+        if (src !== st.src) actions.setSrc(src);
+        set({ view: 'exp', tab: next.tab });
+      } else set({ view: nav.view });
+      const h = navHash(next);
+      if (h !== window.location.hash) window.history.replaceState(null, '', window.location.pathname + window.location.search + h);
+      toTop();
     },
 
     reorder: (kind, i = 0) => {

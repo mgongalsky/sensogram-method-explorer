@@ -117,7 +117,7 @@ export function SensTab({ r }: { r: AnalysisResult }) {
 
 export function OverviewTab({ r }: { r: AnalysisResult }) {
   const { C, showTruth } = useApp();
-  const { st, hMain, S, onBand, bands, U, baseWinLabel, respWinLabel } = useResultView(r);
+  const { st, hMain, S, onBand, bands, U } = useResultView(r);
   const normSeries = [
     { y: S('eswRaw').norm, color: C.eswRaw, label: 'ESW raw', width: 1.2, opacity: 0.85 },
     st.sgOn ? { y: S('eswSm').norm, color: C.eswSm, label: 'ESW smoothed', width: 2 } : null,
@@ -126,13 +126,6 @@ export function OverviewTab({ r }: { r: AnalysisResult }) {
     { y: S('mwp').norm, color: C.mwp, label: 'Morlet phase ΔEOT', width: 2.2 },
     showTruth && r.hasTruth && r.truthNorm ? { y: r.truthNorm, color: C.truth, label: 'Simulated', width: 1.6, dash: '6 4' } : null
   ];
-  const mwpS = S('mwp');
-  const verdict = r.hasTruth
-    ? ('Morlet phase reconstructs the simulated ΔEOT to ' + fmt(mwpS.rmse ?? NaN, 3) + ' nm across this run, where RIFTS manages ' +
-      fmt(S('rifts').rmse ?? NaN, 2) + ' nm — the same fringes, read at two resolutions. ESW and IAW carry no EOT unit at all, so they are shapes to compare, not numbers to rank.')
-    : ('These are measured spectra, so there is no simulated response to score against. Between ' + baseWinLabel + ' and ' + respWinLabel +
-      ', Morlet phase reports ' + fmt(mwpS.response, 3) + ' nm of ΔEOT against ' + fmt(S('rifts').response, 2) +
-      ' nm from RIFTS; where the two disagree strongly, check the FFT peak and the phase-cycle correction in Diagnostics before trusting either.');
 
   // ---- per-spectrum computation cost ----
   const tm = r.timingMeta, rows = r.timing;
@@ -180,10 +173,6 @@ export function OverviewTab({ r }: { r: AnalysisResult }) {
             );
           })}
         </div>
-      </div>
-      <div className="card elev-sm" style={{ padding: 'var(--space-4)', gap: 8 }}>
-        <div className="card-kicker">What this run shows</div>
-        <p style={{ margin: 0, fontSize: 14, lineHeight: 1.65, textWrap: 'pretty' }}>{verdict}</p>
       </div>
     </div>
   );

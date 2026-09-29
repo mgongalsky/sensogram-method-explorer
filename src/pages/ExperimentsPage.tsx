@@ -1,5 +1,4 @@
 import { Seg } from '../components/Controls';
-import { DEFAULTS, pick } from '../analysis/constants';
 import { useApp } from '../state';
 import { ControlsColumn } from './experiments/ControlsColumn';
 import { DataTab } from './experiments/DataTab';
@@ -19,13 +18,11 @@ export function ExperimentsPage() {
     <main className="sg-page" style={{ maxWidth: 1440, margin: '0 auto', padding: '22px 26px 90px' }}>
       <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 10 }}>
         <Seg name="sgsrc" value={st.src} size={13} pad="7px 16px" options={[['synth', 'Synthetic example'], ['upload', 'Upload spectra']]}
-          onChange={v => v === 'synth'
-            ? actions.edit(s => ({ src: 'synth', tab: s.tab === 'data' ? 'overview' : s.tab, p: { ...s.p, ...pick(DEFAULTS) } }))
-            : actions.edit(s => ({
-              src: 'upload', tab: s.dataset ? s.tab : 'data',
-              p: { ...s.p, ...(s.dataset ? s.dataset.derived : {}), sgWin: Math.min(s.p.sgWin, s.dataset ? (s.dataset.spec.length % 2 ? s.dataset.spec.length : s.dataset.spec.length - 1) : s.p.sgWin) }
-            }))} />
+          onChange={actions.setSrc} />
         <div style={{ fontSize: 12.5, color: 'color-mix(in srgb,var(--color-text) 55%,transparent)' }}>{srcNote}</div>
+        {up && (D || st.report.length > 0) && !st.parsing && (
+          <button className="btn btn-secondary" style={{ fontSize: 12.5, padding: '6px 14px', marginLeft: 'auto' }} title="Unload these spectra and return to the upload zones" onClick={actions.clearData}>Clear data</button>
+        )}
       </div>
 
       <div className="sg-work">
