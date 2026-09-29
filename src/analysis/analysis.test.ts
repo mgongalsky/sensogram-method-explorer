@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { DEFAULTS, NK } from './constants';
+import { fftFlops } from './flops';
 import { fftPeak, filt, kGrid, maxMagnitude, phaseDiff, phaseWindow, toK, wavelet } from './kdomain';
 import { eswAutoLc, eswValue, iawValue } from './methods';
 import { savGol, hannWindow } from './numeric';
@@ -127,6 +128,16 @@ describe('synthetic experiment', () => {
     const rmse = (k: string) => r!.series.find(s => s.key === k)!.rmse as number;
     expect(rmse('mwp')).toBeLessThan(0.5);
     expect(rmse('mwp')).toBeLessThan(rmse('rifts'));
+  });
+
+  it('reports FLOP counts ordered by the work each method does', async () => {
+    const r = await runAnalysis(input({ nz: NZ_OFF }));
+    const f = (k: string) => r!.timing.find(q => q.key === k)!.flops;
+    expect(f('esw')).toBeGreaterThan(0);
+    expect(f('esw')).toBeLessThan(f('eswSm'));
+    expect(f('iaw')).toBeLessThan(f('rifts'));
+    expect(f('rifts')).toBeLessThan(f('mwp'));
+    expect(fftFlops(8)).toBe(16 * 4 * 3);
   });
 
   it('returns exactly zero change at the reference spectrum', async () => {

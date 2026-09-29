@@ -5,6 +5,7 @@
 
 import { NK, NPAD, type Params } from './constants';
 import { fftPeak, filt, kGrid, maxMagnitude, phaseDiff, phaseWindow, toK, wavelet, type FftPeak } from './kdomain';
+import { eswFlops, iawFlops, kresFlops, mwpOwnFlops, riftsPeakFlops, sgFlopsPerPoint, wavSetupFlops } from './flops';
 import { eswValue, iawValue } from './methods';
 import { windowStats } from './metrics';
 import { hannWindow, savGol } from './numeric';
@@ -215,13 +216,17 @@ export async function runAnalysis(st: AnalysisInput, hooks: RunHooks = {}): Prom
   const sIaw = resolve('iaw', cost.iaw);
   const sKres = resolve('kres', cost.kres);
   void sink;
+  // analytic operation counts, composed the same way as the timings
+  const fEsw = eswFlops(), fSg = ws.sgApplied ? sgFlopsPerPoint(p.sgWin, p.sgPoly) : 0;
+  const fRifts = kresFlops() + riftsPeakFlops();
+  const fMwp = fRifts + wavSetupFlops(hi - lo) / (n || 1) + mwpOwnFlops(hi - lo);
   // composed additively, so a superset of work can never read as cheaper than its subset
   const rows: TimingRow[] = [
-    { key: 'esw', color: 'eswRaw', label: 'ESW', ms: per(sEsw), note: 'one intensity ratio between two samples', share: 0 },
-    { key: 'eswSm', color: 'eswSm', label: 'ESW + Savitzky–Golay', ms: per(sEsw + sSg), note: ws.sgApplied ? 'ratio plus the ' + p.sgWin + '-point, order-' + p.sgPoly + ' filter over the whole series' : 'filter disabled, ratio only', share: 0 },
-    { key: 'iaw', color: 'iaw', label: 'IAW', ms: per(sIaw), note: 'trapezoidal integral over ' + lam.length + ' samples', share: 0 },
-    { key: 'rifts', color: 'rifts', label: 'RIFTS ΔEOT', ms: per(sKres + cost.rifts), note: 'k-resample plus a ' + NPAD + '-point FFT and parabolic peak fit', share: 0 },
-    { key: 'mwp', color: 'mwp', label: 'Morlet wavelet phase', ms: per(sKres + cost.rifts + cost.wav + cost.mwp), note: 'the whole RIFTS cost, which supplies the 2π cycle count, plus the wavelet kernel and two ' + NK + '-point FFTs per spectrum', share: 0 }
+    { key: 'esw', color: 'eswRaw', label: 'ESW', ms: per(sEsw), flops: fEsw, note: 'one intensity ratio between two samples', share: 0 },
+    { key: 'eswSm', color: 'eswSm', label: 'ESW + Savitzky–Golay', ms: per(sEsw + sSg), flops: fEsw + fSg, note: ws.sgApplied ? 'ratio plus the ' + p.sgWin + '-point, order-' + p.sgPoly + ' filter over the whole series' : 'filter disabled, ratio only', share: 0 },
+    { key: 'iaw', color: 'iaw', label: 'IAW', ms: per(sIaw), flops: iawFlops(lam.length), note: 'trapezoidal integral over ' + lam.length + ' samples', share: 0 },
+    { key: 'rifts', color: 'rifts', label: 'RIFTS ΔEOT', ms: per(sKres + cost.rifts), flops: fRifts, note: 'k-resample plus a ' + NPAD + '-point FFT and parabolic peak fit', share: 0 },
+    { key: 'mwp', color: 'mwp', label: 'Morlet wavelet phase', ms: per(sKres + cost.rifts + cost.wav + cost.mwp), flops: fMwp, note: 'the whole RIFTS cost, which supplies the 2π cycle count, plus the wavelet kernel and two ' + NK + '-point FFTs per spectrum', share: 0 }
   ];
   const timing = rows.sort((a, b) => a.ms - b.ms);
   const tTotal = per(sEsw + sSg + sIaw + sKres + cost.rifts + cost.mwp + cost.wav);

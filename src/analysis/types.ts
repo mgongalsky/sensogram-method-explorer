@@ -69,7 +69,12 @@ export interface Series {
 
 export interface MwpDiag { dphi: number; nCycCorr: number; dEOT: number; used: number; conf: 'high' | 'medium' | 'low' }
 
-export interface TimingRow { key: string; color: SeriesKey; label: string; ms: number; note: string; share: number }
+export interface TimingRow {
+  key: string; color: SeriesKey; label: string; ms: number;
+  /** analytic floating-point operations per spectrum (see flops.ts) */
+  flops: number;
+  note: string; share: number;
+}
 export interface TimingMeta {
   n: number; nSamples: number; benchedAny: boolean;
   kres: number; wav: number; total: number;

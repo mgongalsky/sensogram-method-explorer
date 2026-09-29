@@ -131,9 +131,11 @@ export function OverviewTab({ r }: { r: AnalysisResult }) {
   const tm = r.timingMeta, rows = r.timing;
   const sig3 = (val: number, unit: string) => (val >= 100 ? val.toFixed(0) : val >= 10 ? val.toFixed(1) : val.toFixed(2)) + ' ' + unit;
   const fmtMs = (ms: number) => !(ms > 0) ? '—' : ms >= 1 ? sig3(ms, 'ms') : ms >= 1e-3 ? sig3(ms * 1e3, 'µs') : sig3(ms * 1e6, 'ns');
+  const fmtFlops = (f: number) => !(f > 0) ? '—' : f >= 1e9 ? sig3(f / 1e9, 'G') : f >= 1e6 ? sig3(f / 1e6, 'M') : f >= 1e4 ? sig3(f / 1e3, 'k') : Math.round(f).toLocaleString('en-US');
+  const flopsLo = Math.min(...rows.map(q => q.flops)), flopsHi = Math.max(...rows.map(q => q.flops));
   const fmtShare = (q: number) => q >= 10 ? q.toFixed(0) + '%' : q >= 1 ? q.toFixed(1) + '%' : q >= 0.01 ? q.toFixed(2) + '%' : '<0.01%';
   const worst = Math.max(...rows.map(q => q.ms)) || 1;
-  const grid = { display: 'grid', gridTemplateColumns: 'minmax(130px,1.1fr) minmax(60px,1fr) 78px 54px', alignItems: 'center', gap: 10 } as const;
+  const grid = { display: 'grid', gridTemplateColumns: 'minmax(130px,1.1fr) minmax(50px,1fr) 70px 66px 50px', alignItems: 'center', gap: 10 } as const;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
@@ -147,11 +149,11 @@ export function OverviewTab({ r }: { r: AnalysisResult }) {
       <div className="card elev-sm" style={{ gap: 12, padding: 'var(--space-4)' }}>
         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
           <div className="card-kicker">Computation cost per spectrum</div>
-          <div className="sg-num" style={{ fontSize: 12, color: muted(58) }}>{fmtMs(tm.fastest.ms) + ' to ' + fmtMs(tm.slowest.ms) + ' per spectrum'}</div>
+          <div className="sg-num" style={{ fontSize: 12, color: muted(58) }}>{fmtMs(tm.fastest.ms) + ' to ' + fmtMs(tm.slowest.ms) + ' · ' + fmtFlops(flopsLo) + ' to ' + fmtFlops(flopsHi) + ' FLOP per spectrum'}</div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
           <div style={{ ...grid, fontSize: 10.5, letterSpacing: '0.04em', textTransform: 'uppercase', color: muted(45) }}>
-            <span>Method</span><span /><span style={{ textAlign: 'right' }}>Per spectrum</span><span style={{ textAlign: 'right' }}>Share</span>
+            <span>Method</span><span /><span style={{ textAlign: 'right' }}>Time</span><span style={{ textAlign: 'right' }}>FLOP</span><span style={{ textAlign: 'right' }}>Share</span>
           </div>
           {rows.map(q => {
             const color = C[q.color] || C.truth;
@@ -168,11 +170,13 @@ export function OverviewTab({ r }: { r: AnalysisResult }) {
                   <span style={{ display: 'block', height: '100%', borderRadius: 999, width: Math.max(1.5, 100 * q.ms / worst) + '%', background: color }} />
                 </span>
                 <span className="sg-num" style={{ fontSize: 12.5, fontWeight: 600, textAlign: 'right' }}>{fmtMs(q.ms)}</span>
+                <span className="sg-num" style={{ fontSize: 12.5, textAlign: 'right' }} title={Math.round(q.flops).toLocaleString('en-US') + ' floating-point operations'}>{fmtFlops(q.flops)}</span>
                 <span className="sg-num" style={{ fontSize: 11.5, textAlign: 'right', color: muted(52) }}>{fmtShare(q.share)}</span>
               </div>
             );
           })}
         </div>
+        <div style={{ fontSize: 11, lineHeight: 1.5, color: muted(50), maxWidth: '62em' }}>Time is measured in this browser; FLOP is an analytic count of the kernels as implemented here ({r.lam.length} spectral samples, a {NK}-point k grid, a {NPAD}-point FFT), with each add, multiply, divide or elementary function (abs, sqrt, exp, sin, atan2…) counted as one operation and comparisons and indexing counted as none. Savitzky–Golay is the direct per-point least-squares fit; a precomputed convolution kernel would need only {2 * st.p.sgWin} FLOP per point.</div>
       </div>
     </div>
   );

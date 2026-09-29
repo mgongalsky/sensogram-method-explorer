@@ -36,6 +36,7 @@ src/
     methods.ts      ESW and IAW per-spectrum values
     synthetic.ts    transfer-matrix film models, noisy time series, feature picking
     metrics.ts      interval statistics (SD, MAD, drift, response, SNR, RMSE)
+    flops.ts        analytic per-spectrum FLOP counts of each method
     pipeline.ts     the full analysis pass, cooperative yielding, per-method timing
     edu.ts          noise-free illustration data for Home / Methods
   io/           parsing (TXT/CSV/TSV/matrix/ZIP), validation + common grid, export
