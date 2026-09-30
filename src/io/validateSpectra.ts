@@ -18,7 +18,7 @@ export type IngestResult =
 interface Regime { min: number; max: number; label: string }
 
 /** Settings a bundled example fixes instead of the film defaults. */
-export interface IngestPreset { anaMin: number; anaMax: number; eswLc?: number; label: string }
+export interface IngestPreset { anaMin: number; anaMax: number; eswLc?: number; eotMin?: number; eotMax?: number; label: string }
 
 /**
  * Parses, validates and grids a set of files.
@@ -129,14 +129,15 @@ export function ingest(raw: readonly RawFile[], pre: readonly Note[], filmKind: 
   report.push(cyc < 3
     ? { level: 'warn', text: 'Only about ' + cyc.toFixed(1) + ' fringe periods are visible at the estimated optical thickness of ' + (est / 1000).toFixed(2) + ' µm. FFT and wavelet phase need roughly three or more.' }
     : { level: 'ok', text: 'Estimated effective optical thickness ' + (est / 1000).toFixed(3) + ' µm — about ' + cyc.toFixed(1) + ' fringe periods in range.' });
-  if (est < 2000 || est > 20000) report.push({ level: 'warn', text: 'The estimated optical thickness of ' + (est / 1000).toFixed(2) + ' µm falls outside the default 2–20 µm EOT search bracket. Widen it under Advanced parameters or RIFTS will lock onto the wrong peak.' });
+  const eotMin = preset?.eotMin ?? 2000, eotMax = preset?.eotMax ?? 20000;
+  if (est < eotMin || est > eotMax) report.push({ level: 'warn', text: 'The estimated optical thickness of ' + (est / 1000).toFixed(2) + ' µm falls outside the ' + (eotMin / 1000) + '–' + (eotMax / 1000) + ' µm EOT search bracket. Widen it under Advanced parameters or RIFTS will lock onto the wrong peak.' });
   if (report.some(w => w.level === 'error')) return fail();
 
   const dtMin0 = dtUnit === 's' ? 15 / 60 : 15;
   const n = spec.length, tt = importedTimes || spec.map((_, j) => j * dtMin0);
   const derived: Partial<Params> = {
     refIdx: 0, anaMin, anaMax, lc, eswLc: lc, eswLam2: Math.min(anaMax, lc + step), dtU: 15,
-    eotMin: 2000, eotMax: 20000,
+    eotMin, eotMax,
     baseA: tt[0], baseB: tt[Math.max(1, Math.round((n - 1) * 0.2))],
     respA: tt[Math.round((n - 1) * 0.6)], respB: tt[n - 1]
   };

@@ -18,7 +18,7 @@ const toTop = () => requestAnimationFrame(() => window.scrollTo(0, 0));
 /** The bundled example runs, served as the original ZIP archives from public/examples/. */
 const EXAMPLES: Record<string, { file: string; label: string; preset: IngestPreset }> = {
   multilayer: { file: 'Example-ML-2.zip', label: 'Multilayer example (Example-ML-2)', preset: { anaMin: 1000, anaMax: 1150, eswLc: 1068.33, label: 'multilayer example preset, 1000–1150 nm' } },
-  'single-layer': { file: 'Example-SL-serum.zip', label: 'Single-layer example (SL, serum)', preset: { anaMin: 450, anaMax: 800, label: 'single-layer example preset, 450–800 nm' } }
+  'single-layer': { file: 'Example-SL-serum.zip', label: 'Single-layer example (SL, serum)', preset: { anaMin: 450, anaMax: 800, eotMin: 4500, eotMax: 11000, label: 'single-layer example preset, 450–800 nm' } }
 };
 
 /** A tab that exists for the given source: upload without data only has the Data tab,
